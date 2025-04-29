@@ -1,0 +1,27 @@
+Prerequirements:
+- macOS 10.15 Catalina or later
+- Command Line Tools for Xcode
+- Xcode
+- internet connection
+
+Open Terminal
+
+% if [ "$(which rustup)" = "rustup not found" ]; then curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh; fi
+
+Quit Terminal
+Open Terminal again
+
+% cd ~/Documents/
+% git clone --branch 1.0.0 --config advice.detachedHead=false --depth 1 https://github.com/GeographicCone/UefiVarTool
+% cd UefiVarTool/
+% sed -i '' -E 's/^[^\/\/]*(APP_NAME:|APP_TITLE:|APP_VERSION:|BUILD_TYPE:)/\/\/&/' src/config.rs
+% sed -i '' -E 's/^[^\/\/]*(APP_TITLE:|BUILD_TYPE:|VERSION:|VERSION_UNKNOWN:)/\/\/&/;s/Already/Writing skipped/;s/ful/s&/' src/config/locale_en.rs
+% sed -i '' '/Print/,+8d' src/main.rs
+% rustup target add x86_64-unknown-uefi
+% CARGO_BUILD_TARGET=x86_64-unknown-uefi cargo build --release
+% cd ..
+% cp UefiVarTool/target/x86_64-unknown-uefi/release/uvt.efi .
+% chmod 644 uvt.efi
+% rm -rf UefiVarTool
+
+Done! We have our "uvt.efi" file in Documents folder

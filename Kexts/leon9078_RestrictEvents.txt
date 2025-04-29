@@ -1,0 +1,1 @@
+Use my version, which remove 2 duplicates entries (pci8086,8c44 and pci8086,8c4b) and move specific entries in order to follow alphabetical sort.

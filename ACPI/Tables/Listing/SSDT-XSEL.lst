@@ -1,0 +1,65 @@
+
+Intel ACPI Component Architecture
+ASL Optimizing Compiler version 20120711-32 [Jul 11 2012]
+Copyright (c) 2000 - 2012 Intel Corporation
+
+Compilation of "SSDT-XSEL.asl" - Thu Mar 06 13:48:27 2025
+
+       1....DefinitionBlock ("", "SSDT", 2, "HACK", "XSEL", 0x00000000)
+
+00000000....53 53 44 54 52 00 00 00     "SSDTR..."
+00000008....02 74 48 41 43 4B 00 00     ".tHACK.."
+00000010....58 53 45 4C 00 00 00 00     "XSEL...."
+00000018....00 00 00 00 49 4E 54 4C     "....INTL"
+00000020....11 07 12 20 ............    "... "
+
+       2....{
+       3....    External (\_SB_.PCI0.XHC_, DeviceObj)
+       4....    External (\_SB_.PCI0.XHC_.XSEM, MethodObj)    
+       5....
+       6....    Scope (\_SB.PCI0.XHC)
+
+00000024....10 2D 5C 2F 03 5F 53 42     ".-\/._SB"
+0000002C....5F 50 43 49 30 58 48 43     "_PCI0XHC"
+00000034....5F .....................    "_"
+
+       7....    {
+       8....        Method (XSEL, 0, NotSerialized)
+
+00000035....14 1C 58 53 45 4C 00 ...    "..XSEL."
+
+       9....        {
+      10....            If (_OSI ("Darwin"))
+
+0000003C....A0 0F ..................    ".."
+0000003E....5F 4F 53 49 0D 44 61 72     "_OSI.Dar"
+00000046....77 69 6E 00 ............    "win."
+
+      11....            {
+      12....                Return (Zero)
+
+0000004A....A4 00 ..................    ".."
+
+      13....            }
+      14....
+      15....            Return (^XSEM ())
+
+0000004C....A4 .....................    "."
+0000004D....5E 58 53 45 4D .........    "^XSEM"
+      16....        }
+      17....    }
+      18....}
+      19....
+
+
+Summary of errors and warnings
+
+
+ASL Optimizing Compiler version 20120711-32 [Jul 11 2012]
+
+ASL Input:     SSDT-XSEL.asl - 20 lines, 376 bytes, 5 keywords
+AML Output:    SSDT-XSEL.aml - 82 bytes, 2 named objects, 3 executable opcodes
+Listing File:  SSDT-XSEL.lst - 1839 bytes
+
+Compilation complete. 0 Errors, 0 Warnings, 0 Remarks, 0 Optimizations
+
