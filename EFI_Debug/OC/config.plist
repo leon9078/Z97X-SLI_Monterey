@@ -279,29 +279,29 @@
 			</dict>
 			<dict>
 				<key>Base</key>
-				<string>\_SB_.PCI0.RP06.PXSX</string>
+				<string></string>
 				<key>BaseSkip</key>
 				<integer>0</integer>
 				<key>Comment</key>
-				<string>Replace 1st RP06 PXSX with ARPT in DSDT</string>
+				<string>Replace first occurrence of RP06.PXSX with ARPT in DSDT</string>
 				<key>Count</key>
 				<integer>1</integer>
 				<key>Enabled</key>
 				<true/>
 				<key>Find</key>
-				<data>UFhTWA==</data>
+				<data>W4IAUFhTWA==</data>
 				<key>Limit</key>
 				<integer>0</integer>
 				<key>Mask</key>
-				<data></data>
+				<data>//8A/////w==</data>
 				<key>OemTableId</key>
 				<data>QSBNIEkAAAA=</data>
 				<key>Replace</key>
-				<data>QVJQVA==</data>
+				<data>AAAAQVJQVA==</data>
 				<key>ReplaceMask</key>
-				<data></data>
+				<data>AAAA/////w==</data>
 				<key>Skip</key>
-				<integer>0</integer>
+				<integer>5</integer>
 				<key>TableLength</key>
 				<integer>67704</integer>
 				<key>TableSignature</key>
@@ -313,13 +313,13 @@
 				<key>BaseSkip</key>
 				<integer>0</integer>
 				<key>Comment</key>
-				<string>Replace 2nd RP06 PXSX with ARPT in DSDT</string>
+				<string>Replace second occurrence of RP06.PXSX with ARPT in DSDT</string>
 				<key>Count</key>
 				<integer>1</integer>
 				<key>Enabled</key>
 				<true/>
 				<key>Find</key>
-				<data>hlBYU1gKAhQWX1BSVACgClBJQ02kQVIwOQ==</data>
+				<data>hlBYU1g=</data>
 				<key>Limit</key>
 				<integer>0</integer>
 				<key>Mask</key>
@@ -327,11 +327,11 @@
 				<key>OemTableId</key>
 				<data>QSBNIEkAAAA=</data>
 				<key>Replace</key>
-				<data>hkFSUFQKAhQWX1BSVACgClBJQ02kQVIwOQ==</data>
+				<data>AEFSUFQ=</data>
 				<key>ReplaceMask</key>
-				<data></data>
+				<data>AP////8=</data>
 				<key>Skip</key>
-				<integer>0</integer>
+				<integer>5</integer>
 				<key>TableLength</key>
 				<integer>67704</integer>
 				<key>TableSignature</key>
@@ -343,25 +343,25 @@
 				<key>BaseSkip</key>
 				<integer>0</integer>
 				<key>Comment</key>
-				<string>Replace 3rd RP06 PXSX with ARPT in DSDT</string>
+				<string>Replace third occurrence of RP06.PXSX with ARPT in DSDT</string>
 				<key>Count</key>
 				<integer>1</integer>
 				<key>Enabled</key>
 				<true/>
 				<key>Find</key>
-				<data>NlBYU1g=</data>
+				<data>EAAAAABfU0JfUENJMFJQAABQWFNY</data>
 				<key>Limit</key>
 				<integer>0</integer>
 				<key>Mask</key>
-				<data></data>
+				<data>/wAAAAD/////////////AAD/////</data>
 				<key>OemTableId</key>
 				<data>QSBNIEkAAAA=</data>
 				<key>Replace</key>
-				<data>NkFSUFQ=</data>
+				<data>AAAAAAAAAAAAAAAAAAAAAABBUlBU</data>
 				<key>ReplaceMask</key>
-				<data></data>
+				<data>AAAAAAAAAAAAAAAAAAAAAAD/////</data>
 				<key>Skip</key>
-				<integer>0</integer>
+				<integer>5</integer>
 				<key>TableLength</key>
 				<integer>67704</integer>
 				<key>TableSignature</key>
