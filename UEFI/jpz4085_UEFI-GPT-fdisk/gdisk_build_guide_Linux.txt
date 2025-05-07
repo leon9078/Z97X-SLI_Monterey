@@ -9,8 +9,9 @@ $ sudo sed -i 's/^[^#]*cdrom:/#&/' /etc/apt/sources.list
 $ sudo apt update
 $ sudo apt install git make gcc g++ uuid-dev -y
 $ cd ~/Documents/
-$ git clone --depth 1 https://git.code.sf.net/p/gptfdisk/code
-$ cd code/
+$ git clone --depth 1 https://git.code.sf.net/p/gptfdisk/code gptfdisk
+$ cd gptfdisk/
+$ sed -i 's/EFI system partition/EFI System Partition/' parttypes.cc
 $ git clone --depth 1 https://github.com/jpz4085/UEFI-GPT-fdisk
 $ cd UEFI-GPT-fdisk/
 $ git clone --depth 1 https://github.com/ncroxon/gnu-efi
@@ -19,8 +20,8 @@ $ chmod 755 PATCH.sh
 $ ./PATCH.sh
 $ make
 $ cd ~/Documents/
-$ cp code/UEFI-GPT-fdisk/gdisk.efi .
+$ cp gptfdisk/UEFI-GPT-fdisk/gdisk.efi .
 $ chmod 644 gdisk.efi
-$ rm -rf code
+$ rm -rf gptfdisk
 
 Done! We have our "gdisk.efi" file in Documents folder
