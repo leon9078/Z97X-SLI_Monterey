@@ -1158,7 +1158,9 @@
 				<key>ForceDisplayRotationInEFI</key>
 				<integer>0</integer>
 				<key>SystemAudioVolume</key>
-				<data>Rg==</data>
+				<data>gA==</data>
+				<key>SystemAudioVolumeDB</key>
+				<data>AA==</data>
 				<key>boot-args</key>
 				<string>-v keepsyms=1 debug=0x100</string>
 				<key>csr-active-config</key>
@@ -1184,6 +1186,8 @@
 			<array>
 				<string>EnableTRIM</string>
 				<string>ForceDisplayRotationInEFI</string>
+				<string>SystemAudioVolume</string>
+				<string>SystemAudioVolumeDB</string>
 				<string>boot-args</string>
 				<string>csr-active-config</string>
 				<string>prev-lang:kbd</string>
