@@ -23,7 +23,10 @@ DefinitionBlock ("", "SSDT", 2, "HACK", "PLUG", 0x00000000)
                 })
             }
 
-            Return (Zero)
+            Return (Buffer (One)
+            {
+                 0x00
+            })
         }
     }
 }

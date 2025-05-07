@@ -3,12 +3,12 @@ Intel ACPI Component Architecture
 ASL Optimizing Compiler version 20120711-32 [Jul 11 2012]
 Copyright (c) 2000 - 2012 Intel Corporation
 
-Compilation of "SSDT-PLUG.asl" - Sun Mar 30 07:21:09 2025
+Compilation of "SSDT-PLUG.asl" - Wed May 07 11:00:20 2025
 
        1....DefinitionBlock ("", "SSDT", 2, "HACK", "PLUG", 0x00000000)
 
-00000000....53 53 44 54 63 00 00 00     "SSDTc..."
-00000008....02 D1 48 41 43 4B 00 00     "..HACK.."
+00000000....53 53 44 54 67 00 00 00     "SSDTg..."
+00000008....02 AD 48 41 43 4B 00 00     "..HACK.."
 00000010....50 4C 55 47 00 00 00 00     "PLUG...."
 00000018....00 00 00 00 49 4E 54 4C     "....INTL"
 00000020....11 07 12 20 ............    "... "
@@ -18,32 +18,32 @@ Compilation of "SSDT-PLUG.asl" - Sun Mar 30 07:21:09 2025
        4....
        5....    Scope (\_PR.CPU0)
 
-00000024....10 3E 5C 2E 5F 50 52 5F     ".>\._PR_"
-0000002C....43 50 55 30 ............    "CPU0"
+00000024....10 42 04 5C 2E 5F 50 52     ".B.\._PR"
+0000002C....5F 43 50 55 30 .........    "_CPU0"
 
        6....    {
        7....        Method (_DSM, 4, NotSerialized)  
 
-00000030....14 32 5F 44 53 4D 04 ...    ".2_DSM."
+00000031....14 35 5F 44 53 4D 04 ...    ".5_DSM."
 
        8....        {
        9....            If (_OSI ("Darwin"))
 
-00000037....A0 29 ..................    ".)"
-00000039....5F 4F 53 49 0D 44 61 72     "_OSI.Dar"
-00000041....77 69 6E 00 ............    "win."
+00000038....A0 29 ..................    ".)"
+0000003A....5F 4F 53 49 0D 44 61 72     "_OSI.Dar"
+00000042....77 69 6E 00 ............    "win."
 
       10....            {
       11....                If (LEqual (Arg2, Zero))
 
-00000045....A0 09 ..................    ".."
-00000047....93 6A 00 ...............    ".j."
+00000046....A0 09 ..................    ".."
+00000048....93 6A 00 ...............    ".j."
 
       12....                {
       13....                    Return (Buffer (One)
 
-0000004A....A4 .....................    "."
-0000004B....11 03 01 03 ............    "...."
+0000004B....A4 .....................    "."
+0000004C....11 03 01 03 ............    "...."
 
       14....                    {
       15....                         0x03
@@ -52,10 +52,10 @@ Compilation of "SSDT-PLUG.asl" - Sun Mar 30 07:21:09 2025
       18....
       19....                Return (Package (0x02)
 
-0000004F....A4 .....................    "."
-00000050....12 10 02 0D 70 6C 75 67     "....plug"
-00000058....69 6E 2D 74 79 70 65 00     "in-type."
-00000060....01 .....................    "."
+00000050....A4 .....................    "."
+00000051....12 10 02 0D 70 6C 75 67     "....plug"
+00000059....69 6E 2D 74 79 70 65 00     "in-type."
+00000061....01 .....................    "."
 
       20....                {
       21....                    "plugin-type", 
@@ -63,13 +63,17 @@ Compilation of "SSDT-PLUG.asl" - Sun Mar 30 07:21:09 2025
       23....                })
       24....            }
       25....
-      26....            Return (Zero)
+      26....            Return (Buffer (One)
 
-00000061....A4 00 ..................    ".."
-      27....        }
-      28....    }
-      29....}
-      30....
+00000062....A4 .....................    "."
+00000063....11 03 01 00 ............    "...."
+      27....            {
+      28....                 0x00
+      29....            })
+      30....        }
+      31....    }
+      32....}
+      33....
 
 
 Summary of errors and warnings
@@ -77,9 +81,9 @@ Summary of errors and warnings
 
 ASL Optimizing Compiler version 20120711-32 [Jul 11 2012]
 
-ASL Input:     SSDT-PLUG.asl - 31 lines, 613 bytes, 8 keywords
-AML Output:    SSDT-PLUG.aml - 99 bytes, 2 named objects, 6 executable opcodes
-Listing File:  SSDT-PLUG.lst - 2465 bytes
+ASL Input:     SSDT-PLUG.asl - 34 lines, 671 bytes, 8 keywords
+AML Output:    SSDT-PLUG.aml - 103 bytes, 2 named objects, 6 executable opcodes
+Listing File:  SSDT-PLUG.lst - 2611 bytes
 
 Compilation complete. 0 Errors, 0 Warnings, 0 Remarks, 0 Optimizations
 
