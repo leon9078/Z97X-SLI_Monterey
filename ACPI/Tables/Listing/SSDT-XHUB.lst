@@ -3,7 +3,7 @@ Intel ACPI Component Architecture
 ASL Optimizing Compiler version 20120711-32 [Jul 11 2012]
 Copyright (c) 2000 - 2012 Intel Corporation
 
-Compilation of "SSDT-XHUB.asl" - Tue Apr 29 21:36:47 2025
+Compilation of "SSDT-XHUB.asl" - Sun May 25 20:46:08 2025
 
        1....DefinitionBlock ("", "SSDT", 2, "HACK", "XHUB", 0x00000000)
 
@@ -14,8 +14,8 @@ Compilation of "SSDT-XHUB.asl" - Tue Apr 29 21:36:47 2025
 00000020....11 07 12 20 ............    "... "
 
        2....{
-       3....    External (_SB_.PCI0.XHC_, DeviceObj)
-       4....    External (_SB_.PCI0.XHC_.RHUB, DeviceObj)
+       3....    External (\_SB_.PCI0.XHC_, DeviceObj)
+       4....    External (\_SB_.PCI0.XHC_.RHUB, DeviceObj)
        5....
        6....    Scope (\_SB.PCI0.XHC.RHUB)
 
@@ -117,7 +117,7 @@ Compilation of "SSDT-XHUB.asl" - Tue Apr 29 21:36:47 2025
 00000098....70 69 ..................    "pi"
 0000009A....88 50 43 4B 47 01 00 ...    ".PCKG.."
 
-      58....            Return (PCKG) 
+      58....            Return (PCKG)
 
 000000A1....A4 50 43 4B 47 .........    ".PCKG"
 
@@ -136,7 +136,7 @@ Optimize 6039 -                                          ^ Integer optimized to 
 
 
       64....            {
-      65....                Buffer (0x10){}
+      65....                Buffer (0x10) {}
       66....            })
 
 000000AE....08 50 43 4B 47 .........    ".PCKG"
@@ -150,7 +150,7 @@ Optimize 6039 -                                          ^ Integer optimized to 
 000000BD....88 50 43 4B 47 00 00 00     ".PCKG..."
 000000C5....0A 07 52 45 56 5F ......    "..REV_"
 
-      68....            Store (0x02, REV) 
+      68....            Store (0x02, REV)
 
 000000CB....70 0A 02 52 45 56 5F ...    "p..REV_"
 
@@ -161,7 +161,7 @@ Optimize 6039 -                                          ^ Integer optimized to 
 000000D5....88 50 43 4B 47 00 00 0A     ".PCKG..."
 000000DD....07 01 49 43 4F 4C ......    "..ICOL"
 
-      70....            Store (One, ICOL) 
+      70....            Store (One, ICOL)
 
 000000E3....70 01 49 43 4F 4C ......    "p.ICOL"
 
@@ -172,7 +172,7 @@ Optimize 6039 -                                          ^ Integer optimized to 
 000000EC....88 50 43 4B 47 00 00 0A     ".PCKG..."
 000000F4....40 01 56 49 53 49 ......    "@.VISI"
 
-      72....            Store (Arg0, VISI) 
+      72....            Store (Arg0, VISI)
 
 000000FA....70 68 56 49 53 49 ......    "phVISI"
 
@@ -183,7 +183,7 @@ Optimize 6039 -                                          ^ Integer optimized to 
 00000103....88 50 43 4B 47 00 00 0A     ".PCKG..."
 0000010B....43 0A 03 50 41 4E 4C ...    "C..PANL"
 
-      74....            Store (0x06, PANL) 
+      74....            Store (0x06, PANL)
 
 00000112....70 0A 06 50 41 4E 4C ...    "p..PANL"
 
@@ -194,7 +194,7 @@ Optimize 6039 -                                          ^ Integer optimized to 
 0000011C....88 50 43 4B 47 00 00 0A     ".PCKG..."
 00000124....4A 0A 04 53 48 41 50 ...    "J..SHAP"
 
-      76....            Store (0x07, SHAP) 
+      76....            Store (0x07, SHAP)
 
 0000012B....70 0A 07 53 48 41 50 ...    "p..SHAP"
 
@@ -205,11 +205,11 @@ Optimize 6039 -                                          ^ Integer optimized to 
 00000135....88 50 43 4B 47 00 00 0A     ".PCKG..."
 0000013D....57 0A 08 47 50 4F 53 ...    "W..GPOS"
 
-      78....            Store (Arg1, GPOS) 
+      78....            Store (Arg1, GPOS)
 
 00000144....70 69 47 50 4F 53 ......    "piGPOS"
 
-      79....            Return (PCKG) 
+      79....            Return (PCKG)
 
 0000014A....A4 50 43 4B 47 .........    ".PCKG"
 
@@ -1063,9 +1063,9 @@ Summary of errors and warnings
 
 ASL Optimizing Compiler version 20120711-32 [Jul 11 2012]
 
-ASL Input:     SSDT-XHUB.asl - 381 lines, 10288 bytes, 249 keywords
+ASL Input:     SSDT-XHUB.asl - 381 lines, 10283 bytes, 249 keywords
 AML Output:    SSDT-XHUB.aml - 1575 bytes, 99 named objects, 150 executable opcodes
-Listing File:  SSDT-XHUB.lst - 33701 bytes
+Listing File:  SSDT-XHUB.lst - 33696 bytes
 
 Compilation complete. 0 Errors, 0 Warnings, 0 Remarks, 1 Optimizations
 

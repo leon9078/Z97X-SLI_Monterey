@@ -1,7 +1,7 @@
 DefinitionBlock ("", "SSDT", 2, "HACK", "XHUB", 0x00000000)
 {
-    External (_SB_.PCI0.XHC_, DeviceObj)
-    External (_SB_.PCI0.XHC_.RHUB, DeviceObj)
+    External (\_SB_.PCI0.XHC_, DeviceObj)
+    External (\_SB_.PCI0.XHC_.RHUB, DeviceObj)
 
     Scope (\_SB.PCI0.XHC.RHUB)
     {
@@ -55,28 +55,28 @@ DefinitionBlock ("", "SSDT", 2, "HACK", "XHUB", 0x00000000)
             })
             Store (Arg0, Index (PCKG, Zero))
             Store (Arg1, Index (PCKG, One))
-            Return (PCKG) /* \GUPC.PCKG */
+            Return (PCKG)
         }
 
         Method (GPLD, 2, Serialized)
         {
             Name (PCKG, Package (0x01)
             {
-                Buffer (0x10){}
+                Buffer (0x10) {}
             })
             CreateField (DerefOf (Index (PCKG, Zero)), Zero, 0x07, REV)
-            Store (0x02, REV) /* \GPLD.REV_ */
+            Store (0x02, REV)
             CreateField (DerefOf (Index (PCKG, Zero)), 0x07, One, ICOL)
-            Store (One, ICOL) /* \GPLD.ICOL */
+            Store (One, ICOL)
             CreateField (DerefOf (Index (PCKG, Zero)), 0x40, One, VISI)
-            Store (Arg0, VISI) /* \GPLD.VISI */
+            Store (Arg0, VISI)
             CreateField (DerefOf (Index (PCKG, Zero)), 0x43, 0x03, PANL)
-            Store (0x06, PANL) /* \GPLD.PANL */
+            Store (0x06, PANL)
             CreateField (DerefOf (Index (PCKG, Zero)), 0x4A, 0x04, SHAP)
-            Store (0x07, SHAP) /* \GPLD.SHAP */
+            Store (0x07, SHAP)
             CreateField (DerefOf (Index (PCKG, Zero)), 0x57, 0x08, GPOS)
-            Store (Arg1, GPOS) /* \GPLD.GPOS */
-            Return (PCKG) /* \GPLD.PCKG */
+            Store (Arg1, GPOS)
+            Return (PCKG)
         }
     }
 
@@ -103,7 +103,7 @@ DefinitionBlock ("", "SSDT", 2, "HACK", "XHUB", 0x00000000)
                     Return (GUPC (DerefOf (Index (UHSD, Zero)), 0x03))
                 }
 
-                Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
+                Method (_PLD, 0, Serialized)  // _PLD: Physical Device Location
                 {
                     Return (GPLD (DerefOf (Index (UHSD, Zero)), One))
                 }
@@ -117,7 +117,7 @@ DefinitionBlock ("", "SSDT", 2, "HACK", "XHUB", 0x00000000)
                     Return (GUPC (DerefOf (Index (UHSD, One)), 0x03))
                 }
 
-                Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
+                Method (_PLD, 0, Serialized)  // _PLD: Physical Device Location
                 {
                     Return (GPLD (DerefOf (Index (UHSD, One)), 0x02))
                 }
@@ -131,7 +131,7 @@ DefinitionBlock ("", "SSDT", 2, "HACK", "XHUB", 0x00000000)
                     Return (GUPC (DerefOf (Index (UHSD, 0x02)), 0x03))
                 }
 
-                Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
+                Method (_PLD, 0, Serialized)  // _PLD: Physical Device Location
                 {
                     Return (GPLD (DerefOf (Index (UHSD, 0x02)), 0x03))
                 }
@@ -145,7 +145,7 @@ DefinitionBlock ("", "SSDT", 2, "HACK", "XHUB", 0x00000000)
                     Return (GUPC (DerefOf (Index (UHSD, 0x03)), 0x03))
                 }
 
-                Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
+                Method (_PLD, 0, Serialized)  // _PLD: Physical Device Location
                 {
                     Return (GPLD (DerefOf (Index (UHSD, 0x03)), 0x04))
                 }
@@ -159,7 +159,7 @@ DefinitionBlock ("", "SSDT", 2, "HACK", "XHUB", 0x00000000)
                     Return (GUPC (DerefOf (Index (UHSD, 0x04)), Zero))
                 }
 
-                Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
+                Method (_PLD, 0, Serialized)  // _PLD: Physical Device Location
                 {
                     Return (GPLD (DerefOf (Index (UHSD, 0x04)), 0x05))
                 }
@@ -173,7 +173,7 @@ DefinitionBlock ("", "SSDT", 2, "HACK", "XHUB", 0x00000000)
                     Return (GUPC (DerefOf (Index (UHSD, 0x05)), Zero))
                 }
 
-                Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
+                Method (_PLD, 0, Serialized)  // _PLD: Physical Device Location
                 {
                     Return (GPLD (DerefOf (Index (UHSD, 0x05)), 0x06))
                 }
@@ -187,7 +187,7 @@ DefinitionBlock ("", "SSDT", 2, "HACK", "XHUB", 0x00000000)
                     Return (GUPC (DerefOf (Index (UHSD, 0x06)), Zero))
                 }
 
-                Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
+                Method (_PLD, 0, Serialized)  // _PLD: Physical Device Location
                 {
                     Return (GPLD (DerefOf (Index (UHSD, 0x06)), 0x07))
                 }
@@ -201,7 +201,7 @@ DefinitionBlock ("", "SSDT", 2, "HACK", "XHUB", 0x00000000)
                     Return (GUPC (DerefOf (Index (UHSD, 0x07)), Zero))
                 }
 
-                Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
+                Method (_PLD, 0, Serialized)  // _PLD: Physical Device Location
                 {
                     Return (GPLD (DerefOf (Index (UHSD, 0x07)), 0x08))
                 }
@@ -215,7 +215,7 @@ DefinitionBlock ("", "SSDT", 2, "HACK", "XHUB", 0x00000000)
                     Return (GUPC (DerefOf (Index (UHSD, 0x08)), 0x03))
                 }
 
-                Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
+                Method (_PLD, 0, Serialized)  // _PLD: Physical Device Location
                 {
                     Return (GPLD (DerefOf (Index (UHSD, 0x08)), 0x09))
                 }
@@ -229,7 +229,7 @@ DefinitionBlock ("", "SSDT", 2, "HACK", "XHUB", 0x00000000)
                     Return (GUPC (DerefOf (Index (UHSD, 0x09)), 0x03))
                 }
 
-                Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
+                Method (_PLD, 0, Serialized)  // _PLD: Physical Device Location
                 {
                     Return (GPLD (DerefOf (Index (UHSD, 0x09)), 0x0A))
                 }
@@ -243,7 +243,7 @@ DefinitionBlock ("", "SSDT", 2, "HACK", "XHUB", 0x00000000)
                     Return (GUPC (DerefOf (Index (UHSD, 0x0A)), 0xFF))
                 }
 
-                Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
+                Method (_PLD, 0, Serialized)  // _PLD: Physical Device Location
                 {
                     Return (GPLD (DerefOf (Index (UHSD, 0x0A)), 0x0B))
                 }
@@ -257,7 +257,7 @@ DefinitionBlock ("", "SSDT", 2, "HACK", "XHUB", 0x00000000)
                     Return (GUPC (DerefOf (Index (UHSD, 0x0B)), Zero))
                 }
 
-                Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
+                Method (_PLD, 0, Serialized)  // _PLD: Physical Device Location
                 {
                     Return (GPLD (DerefOf (Index (UHSD, 0x0B)), 0x0C))
                 }
@@ -271,7 +271,7 @@ DefinitionBlock ("", "SSDT", 2, "HACK", "XHUB", 0x00000000)
                     Return (GUPC (DerefOf (Index (UHSD, 0x0C)), Zero))
                 }
 
-                Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
+                Method (_PLD, 0, Serialized)  // _PLD: Physical Device Location
                 {
                     Return (GPLD (DerefOf (Index (UHSD, 0x0C)), 0x0D))
                 }
@@ -285,7 +285,7 @@ DefinitionBlock ("", "SSDT", 2, "HACK", "XHUB", 0x00000000)
                     Return (GUPC (DerefOf (Index (UHSD, 0x0D)), Zero))
                 }
 
-                Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
+                Method (_PLD, 0, Serialized)  // _PLD: Physical Device Location
                 {
                     Return (GPLD (DerefOf (Index (UHSD, 0x0D)), 0x0E))
                 }
@@ -299,7 +299,7 @@ DefinitionBlock ("", "SSDT", 2, "HACK", "XHUB", 0x00000000)
                     Return (GUPC (DerefOf (Index (USSD, Zero)), 0x03))
                 }
 
-                Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
+                Method (_PLD, 0, Serialized)  // _PLD: Physical Device Location
                 {
                     Return (GPLD (DerefOf (Index (USSD, Zero)), One))
                 }
@@ -313,7 +313,7 @@ DefinitionBlock ("", "SSDT", 2, "HACK", "XHUB", 0x00000000)
                     Return (GUPC (DerefOf (Index (USSD, One)), 0x03))
                 }
 
-                Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
+                Method (_PLD, 0, Serialized)  // _PLD: Physical Device Location
                 {
                     Return (GPLD (DerefOf (Index (USSD, One)), 0x02))
                 }
@@ -327,7 +327,7 @@ DefinitionBlock ("", "SSDT", 2, "HACK", "XHUB", 0x00000000)
                     Return (GUPC (DerefOf (Index (USSD, 0x02)), 0x03))
                 }
 
-                Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
+                Method (_PLD, 0, Serialized)  // _PLD: Physical Device Location
                 {
                     Return (GPLD (DerefOf (Index (USSD, 0x02)), 0x03))
                 }
@@ -341,7 +341,7 @@ DefinitionBlock ("", "SSDT", 2, "HACK", "XHUB", 0x00000000)
                     Return (GUPC (DerefOf (Index (USSD, 0x03)), 0x03))
                 }
 
-                Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
+                Method (_PLD, 0, Serialized)  // _PLD: Physical Device Location
                 {
                     Return (GPLD (DerefOf (Index (USSD, 0x03)), 0x04))
                 }
@@ -355,7 +355,7 @@ DefinitionBlock ("", "SSDT", 2, "HACK", "XHUB", 0x00000000)
                     Return (GUPC (DerefOf (Index (USSD, 0x04)), 0x03))
                 }
 
-                Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
+                Method (_PLD, 0, Serialized)  // _PLD: Physical Device Location
                 {
                     Return (GPLD (DerefOf (Index (USSD, 0x04)), 0x05))
                 }
@@ -369,7 +369,7 @@ DefinitionBlock ("", "SSDT", 2, "HACK", "XHUB", 0x00000000)
                     Return (GUPC (DerefOf (Index (USSD, 0x05)), 0x03))
                 }
 
-                Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
+                Method (_PLD, 0, Serialized)  // _PLD: Physical Device Location
                 {
                     Return (GPLD (DerefOf (Index (USSD, 0x05)), 0x06))
                 }
