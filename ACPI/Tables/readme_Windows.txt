@@ -28,8 +28,7 @@ This will generate a disassembled file (*.dsl)
 
 
 
-In order to disassemble a binary ACPI table with a custom method implementation (ie. Method XSEL to XSEM etc.)
-we need to "Include ACPI table(s) for external symbol resolution". So we must include our "mod" DSDT.
+In order to disassemble a binary ACPI table with a custom method implementation we need to "Include ACPI table(s) for external symbol resolution". So we must include our "mod" DSDT.
 
 But we can't do it with OpenCore Misc > Debug > SysReport option. This will dump the original OEM ACPI tables without any OC customizations applied.
 
@@ -57,7 +56,7 @@ Boot Windows and copy the newly generated ACPI tables into the "C:\path\to\iasl-
 
 Then, back to Windows in CMD
 
-> iasl -d SSDT-XSEL.aml -e DSDT.aml
+> iasl -d SSDT-custom.aml -e DSDT.aml
 
 This will correctly generate a disassembled file (*.dsl)
 
