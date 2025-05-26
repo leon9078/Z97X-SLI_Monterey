@@ -123,9 +123,9 @@
 				<key>OemTableId</key>
 				<data>QSBNIEkAAAA=</data>
 				<key>Replace</key>
-				<data>RUgwMQ==</data>
+				<data>AAAwAA==</data>
 				<key>ReplaceMask</key>
-				<data></data>
+				<data>AAD/AA==</data>
 				<key>Skip</key>
 				<integer>0</integer>
 				<key>TableLength</key>
@@ -153,9 +153,9 @@
 				<key>OemTableId</key>
 				<data>QSBNIEkAAAA=</data>
 				<key>Replace</key>
-				<data>RUgwMg==</data>
+				<data>AAAwAA==</data>
 				<key>ReplaceMask</key>
-				<data></data>
+				<data>AAD/AA==</data>
 				<key>Skip</key>
 				<integer>0</integer>
 				<key>TableLength</key>
@@ -243,9 +243,9 @@
 				<key>OemTableId</key>
 				<data>QSBNIEkAAAA=</data>
 				<key>Replace</key>
-				<data>SU1FSQ==</data>
+				<data>SU1FAA==</data>
 				<key>ReplaceMask</key>
-				<data></data>
+				<data>////AA==</data>
 				<key>Skip</key>
 				<integer>0</integer>
 				<key>TableLength</key>
@@ -259,7 +259,7 @@
 				<key>BaseSkip</key>
 				<integer>0</integer>
 				<key>Comment</key>
-				<string>Replace first occurrence of RP06.PXSX with ARPT in DSDT</string>
+				<string>Replace RP06.PXSX with ARPT in DSDT, 1 of 3</string>
 				<key>Count</key>
 				<integer>1</integer>
 				<key>Enabled</key>
@@ -289,7 +289,7 @@
 				<key>BaseSkip</key>
 				<integer>0</integer>
 				<key>Comment</key>
-				<string>Replace second occurrence of RP06.PXSX with ARPT in DSDT</string>
+				<string>Replace RP06.PXSX with ARPT in DSDT, 2 of 3</string>
 				<key>Count</key>
 				<integer>1</integer>
 				<key>Enabled</key>
@@ -319,7 +319,7 @@
 				<key>BaseSkip</key>
 				<integer>0</integer>
 				<key>Comment</key>
-				<string>Replace third occurrence of RP06.PXSX with ARPT in DSDT</string>
+				<string>Replace RP06.PXSX with ARPT in DSDT, 3 of 3</string>
 				<key>Count</key>
 				<integer>1</integer>
 				<key>Enabled</key>
@@ -363,9 +363,9 @@
 				<key>OemTableId</key>
 				<data>QSBNIEkAAAA=</data>
 				<key>Replace</key>
-				<data>U0FUQQ==</data>
+				<data>AAAAQQ==</data>
 				<key>ReplaceMask</key>
-				<data></data>
+				<data>AAAA/w==</data>
 				<key>Skip</key>
 				<integer>0</integer>
 				<key>TableLength</key>
@@ -393,9 +393,9 @@
 				<key>OemTableId</key>
 				<data></data>
 				<key>Replace</key>
-				<data>U0FUQQ==</data>
+				<data>AAAAQQ==</data>
 				<key>ReplaceMask</key>
-				<data></data>
+				<data>AAAA/w==</data>
 				<key>Skip</key>
 				<integer>0</integer>
 				<key>TableLength</key>
