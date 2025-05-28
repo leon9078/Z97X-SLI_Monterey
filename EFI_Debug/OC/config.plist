@@ -403,36 +403,6 @@
 				<key>TableSignature</key>
 				<data>U1NEVA==</data>
 			</dict>
-			<dict>
-				<key>Base</key>
-				<string></string>
-				<key>BaseSkip</key>
-				<integer>0</integer>
-				<key>Comment</key>
-				<string>Remove non-Windows OSes from PCI initialization in DSDT</string>
-				<key>Count</key>
-				<integer>1</integer>
-				<key>Enabled</key>
-				<true/>
-				<key>Find</key>
-				<data>YKAAX09TSQ1XaW5kb3dzIDIwMDEAcAvRB09TVFmgAF9PU0kNV2luZG93cyAyMDAxLjEAcAvRB09TVFmgAF9PU0kNRnJlZUJTRABwC9EHT1NUWaAAX09TSQ1IUC1VWABwC9EHT1NUWaAAX09TSQ1PcGVuVk1TAHAL0QdPU1RZoABfT1NJDVdpbmRvd3MgMjAwMSBTUDEAcAvRB09TVFmgAF9PU0kNV2luZG93cyAyMDAxIFNQMgBwC9EHT1NUWaAAX09TSQ1XaW5kb3dzIDIwMDEgU1AzAHAL0QdPU1RZoABfT1NJDVdpbmRvd3MgMjAwNgBwC9YHT1NUWaAAX09TSQ1XaW5kb3dzIDIwMDYgU1AxAHAL1gdPU1RZoABfT1NJDVdpbmRvd3MgMjAwOQBwC9kHT1NZU3AL2QdPU1RZoABfT1NJDVdpbmRvd3MgMjAxMgBwC9wHT1NZU3AL3AdPU1RZoABfT1NJDVdpbmRvd3MgMjAxMwBwC90HT1NZU3AL3QdPU1RZ</data>
-				<key>Limit</key>
-				<integer>0</integer>
-				<key>Mask</key>
-				<data>//8A////////////////////////////////////AP//////////////////////////////////////AP////////////////////////////8A//////////////////////////8A/////////////////////////////wD/////////////////////////////////////////AP////////////////////////////////////////8A/////////////////////////////////////////wD///////////////////////////////////8A/////////////////////////////////////////wD//////////////////////////////////////////////wD//////////////////////////////////////////////wD/////////////////////////////////////////////</data>
-				<key>OemTableId</key>
-				<data>QSBNIEkAAAA=</data>
-				<key>Replace</key>
-				<data>AKBGB5GRkZFfT1NJDVdpbmRvd3MgMjAwMQBfT1NJDVdpbmRvd3MgMjAwMS4xAF9PU0kNV2luZG93cyAyMDAxIFNQMQBfT1NJDVdpbmRvd3MgMjAwMSBTUDIAX09TSQ1XaW5kb3dzIDIwMDEgU1AzAHAL0QdPU1RZoDKRX09TSQ1XaW5kb3dzIDIwMDYAX09TSQ1XaW5kb3dzIDIwMDYgU1AxAHAL1gdPU1RZoCNfT1NJDVdpbmRvd3MgMjAwOQBwC9kHT1NZU3AL2QdPU1RZoCNfT1NJDVdpbmRvd3MgMjAxMgBwC9wHT1NZU3AL3AdPU1RZoCNfT1NJDVdpbmRvd3MgMjAxMwBwC90HT1NZU3AL3QdPU1RZo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Oj</data>
-				<key>ReplaceMask</key>
-				<data></data>
-				<key>Skip</key>
-				<integer>0</integer>
-				<key>TableLength</key>
-				<integer>67704</integer>
-				<key>TableSignature</key>
-				<data>RFNEVA==</data>
-			</dict>
 		</array>
 		<key>Quirks</key>
 		<dict>
