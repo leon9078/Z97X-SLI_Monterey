@@ -1,6 +1,6 @@
 Entire BIOS mod guide
 
-Complete list of edits:
+Complete list of modifications:
 1) Update the default 88:88:88:88:87:88 MAC address to my specific one (74:D4:35:E6:42:2C)
 2) Update Intel ME from 9.1.25.1005 to 9.1.40.1000
 3) Update the module after "MERecoveryDxe" to include updated first 512KiB of SPI into it
@@ -12,7 +12,7 @@ Complete list of edits:
 6) Delete 2 Microcode GUID ffs (fake, and last of the duplicates one)
 7) Delete 2 "Padding file" sections, by adjusting Attributes
 8) Replace AMI's "FileSystem" driver with "Fat" (EnhancedFatDxe from FatPkg audk [fork of EDK II project focused on security])
-9) Add "HfsPlus" driver
+9) Change CORE_DXE to add "OpenCore bootloader" and "gentoo" for automatic detection of specific bootloader paths
 
 Prerequisites:
 - Clean install of Windows 10 version 1607 or higher
@@ -27,9 +27,9 @@ We need this files/softwares:
 4) 7-Zip latest for Windows [x64] (https://www.7-zip.org/)
 5) Notepad++ latest Installer [x64] (https://github.com/notepad-plus-plus/notepad-plus-plus/releases/latest)
 6) Hextor latest (https://github.com/digitalw0lf/hextor/releases/latest)
-7) HfsPlus latest from acidanthera/OcBinaryData (https://github.com/acidanthera/OcBinaryData)
-8) Original latest BIOS from OEM website (F10b, Fix memory compatibility) (https://www.gigabyte.com/Motherboard/GA-Z97X-SLI-rev-10/support)
-9) UEFITool NE latest for Windows [x64] (https://github.com/LongSoft/UEFITool/releases/latest)
+7) Original latest BIOS from OEM website (F10b, Fix memory compatibility) (https://www.gigabyte.com/Motherboard/GA-Z97X-SLI-rev-10/support)
+8) UEFITool NE latest for Windows [x64] (https://github.com/LongSoft/UEFITool/releases/latest)
+9) UEFITool 0.28.0 for Windows (https://github.com/LongSoft/UEFITool/releases/tag/0.28.0)
 10) IFRExtractor RS latest for Windows [x86] (https://github.com/LongSoft/IFRExtractor-RS/releases/latest)
 11) My OpenCore fork (Darwin XCODE5) (which add Fat.efi) (https://github.com/leon9078/OpenCorePkg/releases/latest)
 12) My OpenCore fork (Windows VS2019) (which add GenSec.exe and LzmaCompress.exe) (https://github.com/leon9078/OpenCorePkg/releases/latest)
@@ -40,16 +40,16 @@ Click on "Start" icon > select "Windows System" folder > select "Command Prompt"
 Right click on "Command Prompt" icon > select "Pin to taskbar"
 Click on "Command Prompt" icon, then run:
 > cd Documents
-> curl -LO https://github.com/mullvad/mullvad-browser/releases/download/14.5/mullvad-browser-windows-x86_64-14.5.exe
+> curl -LO https://github.com/mullvad/mullvad-browser/releases/download/14.5.5/mullvad-browser-windows-x86_64-14.5.5.exe
 > curl -LO https://aka.ms/vs/17/release/vc_redist.x86.exe
 > curl -LO https://aka.ms/vs/17/release/vc_redist.x64.exe
-> curl -LO https://www.python.org/ftp/python/3.13.3/python-3.13.3-amd64.exe
-> curl -LO https://www.7-zip.org/a/7z2409-x64.exe
-> curl -LO https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.7.9/npp.8.7.9.Installer.x64.exe
+> curl -LO https://www.python.org/ftp/python/3.13.5/python-3.13.5-amd64.exe
+> curl -LO https://www.7-zip.org/a/7z2501-x64.exe
+> curl -LO https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.8.3/npp.8.8.3.Installer.x64.exe
 > curl -LO https://github.com/digitalw0lf/hextor/releases/download/v0.14/HextorSetup.exe
-> curl -LO https://github.com/acidanthera/OcBinaryData/raw/refs/heads/master/Drivers/HfsPlus.efi
 > curl -LO https://download.gigabyte.com/FileList/BIOS/mb_bios_ga-z97x-sli_f10b.zip
-> curl -LO https://github.com/LongSoft/UEFITool/releases/download/A71/UEFITool_NE_A71_win64.zip
+> curl -LO https://github.com/LongSoft/UEFITool/releases/download/A72/UEFITool_NE_A72_win64.zip
+> curl -LO https://github.com/LongSoft/UEFITool/releases/download/0.28.0/UEFITool_0.28.0_win32.zip
 > curl -LO https://github.com/LongSoft/IFRExtractor-RS/releases/download/v1.6.0/ifrextractor_1.6.0_win32.zip
 > curl -LO https://github.com/leon9078/OpenCorePkg/releases/download/1.0.5/OpenCore-1.0.5-Darwin-XCODE5-RELEASE.zip
 > curl -LO https://github.com/leon9078/OpenCorePkg/releases/download/1.0.5/OpenCore-1.0.5-Windows-VS2019-RELEASE.zip
@@ -57,7 +57,7 @@ Click on "Command Prompt" icon, then run:
 Click on "Start" icon > select "Documents"
 Click twice on "Date modified"
 
-Open "mullvad-browser-windows-x86_64-14.5.exe"
+Open "mullvad-browser-windows-x86_64-14.5.5.exe"
 "Installation type" > Select "Advanced"
 Next >
 Uncheck "Add desktop icon"
@@ -143,28 +143,14 @@ Back to CMD
 > MainForm.bat
 > Updater.bat
 > del Editor.bat MainForm.bat Updater.bat
+> vc_redist.x86.exe /install /passive /norestart
+> vc_redist.x64.exe /install /passive /norestart
 
 
 
 Back to File Explorer, press F5 to refresh the new downloaded files
 
-Right click on "vc_redist.x86.exe" > "Run as administrator" > "Yes"
-Check "I agree to the license terms and conditions"
-Install
-Close
-
-
-
-Right click on "vc_redist.x64.exe" > "Run as administrator" > "Yes"
-Check "I agree to the license terms and conditions"
-Install
-Close
-
-
-
-
-
-Right click on "python-3.13.3-amd64.exe" > "Run as administrator" > "Yes"
+Right click on "python-3.13.5-amd64.exe" > "Run as administrator" > "Yes"
 Check "Use admin privileges when installing py.exe"
 Check "Add python.exe to PATH"
 
@@ -178,13 +164,13 @@ Close
 
 
 
-Right click on "7z2409-x64.exe" > "Run as administrator" > "Yes"
+Right click on "7z2501-x64.exe" > "Run as administrator" > "Yes"
 Install
 Close
 
 
 
-Right click on "npp.8.7.9.Installer.x64.exe" > "Run as administrator" > "Yes"
+Right click on "npp.8.8.3.Installer.x64.exe" > "Run as administrator" > "Yes"
 (English is fine, otherwise choose your language)
 OK
 Next >
@@ -192,7 +178,7 @@ I Agree
 Next >
 Next >
 Install
-Uncheck "Run Notepad++ v8.7.9"
+Uncheck "Run Notepad++ v8.8.3"
 Finish
 
 
@@ -224,12 +210,12 @@ I'm going to change some default settings in Notepad++:
 
 Settings > Preferences...
 
-General
+Tab Bar
     "Enable pin tab feature" NO
 
 Editing 1
-    "Enable scrolling beyond last line" NO
     "Enable Copy/Cut Line without selection" NO
+    "Enable scrolling beyond last line" NO
 
 Margins/Border/Edge
     "Line Number" > Display > "Constant width"
@@ -252,7 +238,7 @@ Cloud & Link
 
 MISC.
     "Document Switcher (Ctrl+TAB)" > "Enable" NO
-    "Enable Notepad++ auto-updater" NO
+    "Auto-updater:" > "Disable"
 
 Close
 Plugins > Plugins Admin... > Scroll down a bit and check "ComparePlus" > Install > Yes > Yes
@@ -266,9 +252,9 @@ Quit Hextor
 
 
 
-Select with Shift modifier:
+Select with Ctrl modifier:
 "mb_bios_ga-z97x-sli_f10b.zip"
-"UEFITool_NE_A71_win64.zip"
+"UEFITool_NE_A72_win64.zip"
 "ifrextractor_1.6.0_win32.zip"
 "MMTool_Aptio_5.02.0024_Mod.7z"
 "ME System Tools v9.1 r7.rar"
@@ -276,6 +262,7 @@ Select with Shift modifier:
 
 and with all this files selected (6) > 7-Zip > Extract Here
 
+Right click on "UEFITool_0.28.0_win32.zip" > 7-Zip > Extract to "UEFITool_0.28.0_win32\"
 Right click on "OpenCore-1.0.5-Darwin-XCODE5-RELEASE.zip" > 7-Zip > Extract to "OpenCore-1.0.5-Darwin-XCODE5-RELEASE\"
 Right click on "OpenCore-1.0.5-Windows-VS2019-RELEASE.zip" > 7-Zip > Extract to "OpenCore-1.0.5-Windows-VS2019-RELEASE\"
 Right click on "UBU_v1_80_b1.rar" > 7-Zip > Extract to "UBU_v1_80_b1\"
@@ -291,11 +278,11 @@ The idea of creating a custom BIOS file started because I was fed up with my spe
 In a bootable USB DOS environment, this command will flash the entire BIOS image including the GbE region with the wrong (default) MAC address:
 > fpt -f Z97XSLI.10b
 
-To avoid replacing my specific MAC address, I need to specify an additional parameter, "-savemac" or "-bios"
+To avoid replacing my specific MAC address, I need to specify an additional parameter, "-savemac"
 
-1) fpt -savemac -f Z97XSLI.10b    #This will prevent the MAC address from being overwritten
-or
-2) fpt -bios -f Z97XSLI.10b       #This will flash the BIOS region only
+> fpt -savemac -f Z97XSLI.10b
+
+This will prevent the MAC address from being overwritten
 
 
 
@@ -303,8 +290,7 @@ Back to CMD
 > del autoexec.bat Efiflash.exe
 
 
-Open Hextor
-File > Open > "Z97XSLI.10b" > Open
+Back to File Explorer, drag "Z97XSLI.10b" into Hextor icon while holding Shift
 Search > Go To address... > 0x1000 > OK
 Type this HEX sequence: "74 D4 35 E6 42 2C"
 File > Save as... > "74D435E6422C.fd" > Save
@@ -325,8 +311,7 @@ Back to CMD
 > move "Intel ME Firmware v9.1.40.1000 (1.5MB)\9.1.40.1000_1.5MB_PRD_EXTR.bin" .
 > rmdir "Intel ME Firmware v9.1.40.1000 (1.5MB)"
 
-Open Hextor
-File > Open > "9.1.40.1000_1.5MB_PRD_EXTR.bin" > Open
+Back to File Explorer, drag "9.1.40.1000_1.5MB_PRD_EXTR.bin" into Hextor icon while holding Shift
 Edit > Select all
 Edit > Copy
 File > Open > "74D435E6422C.fd" > Open
@@ -402,8 +387,8 @@ Back to CMD
 
 
 
-Open Hextor
-File > Open > "BIOS Region.bin" > Open
+Back to File Explorer > Documents folder
+Drag "BIOS Region.bin" into Hextor icon while holding Shift
 Edit > Select Range... > Range end: 0x200000 > Select
 Hit the Insert key, then Del key, then Insert key again
 File > Save
@@ -419,8 +404,6 @@ File > Open... > "config.xml" > Open
 Build > Build Image
 WARNING "Are you sure you want to choose the Boot Guard Profile: "Boot Guard Profile 0 - No_FVME" for this build?" > "Yes"
 File > Exit
-
-Our new BIOS image will be inside Build\ folder named "outimage.bin"
 
 Close WIN32 window in File Explorer
 
@@ -446,8 +429,7 @@ Here are some references (post 21 through 25): https://winraid.level1techs.com/t
 Double click on the only one result, it will select "Raw section".
 Right click on "Raw section" > Extract body... > [default name is fine] > Save
 
-Open Hextor
-File > Open > "Z97XSLI.10b" > Open
+Back to File Explorer, drag "Z97XSLI.10b" into Hextor icon while holding Shift
 Edit > Select Range... > Range end: 0x80000 > Select
 File > Save selection as... > "Original_first_512KiB_SPI.bin" > Save
 File > Exit
@@ -471,7 +453,7 @@ But first let's check some important stuff
 
 Back to UEFITool
 Click above on "Compressed section" and check "Compression algorithm", it says "None". We can extract the module "As is".
-There are usually different types of compression algorithms for section files (https://github.com/LongSoft/UEFITool/blob/A71/common/basetypes.h#L130-L140)
+There are usually different types of compression algorithms for section files (https://github.com/LongSoft/UEFITool/blob/A72/common/basetypes.h#L130-L140)
 If we have a module with a "Compression algorithm" different than "None", we need to uncompress with a specific tool.
 
 Click on "821D110C-D0A3-4CF7-AEF3-E28088491704" and take note of the following info:
@@ -483,8 +465,8 @@ Click on "821D110C-D0A3-4CF7-AEF3-E28088491704" and take note of the following i
 
 We have to find the section type and ffs type, so we can use that info later.
 
-File Types: https://github.com/LongSoft/UEFITool/blob/A71/common/ffs.cpp#L282-L297
-Section Types: https://github.com/LongSoft/UEFITool/blob/A71/common/ffs.cpp#L305-L321
+File Types: https://github.com/LongSoft/UEFITool/blob/A72/common/ffs.cpp#L282-L297
+Section Types: https://github.com/LongSoft/UEFITool/blob/A72/common/ffs.cpp#L305-L321
 
 In UEFITool check the "Subtype" value of the "File" type, it says "Freeform"
 Double check on the link above the result: EFI_FV_FILETYPE_FREEFORM
@@ -494,7 +476,7 @@ And so on, till the end of the module.
 
 
 
-In (https://github.com/LongSoft/UEFITool/blob/A71/common/ffs.h#L328-L335)
+In (https://github.com/LongSoft/UEFITool/blob/A72/common/ffs.h#L328-L335)
 "FFS_ATTRIB_CHECKSUM" is bit 6h (0x40)
 
 In (https://uefi.org/specs/PI/1.9/V3_Code_Definitions.html#efi-ffs-file-header)
@@ -505,8 +487,7 @@ Quit UEFITool
 
 
 
-Open Hextor
-File > Open > "outimage.bin" > Open
+Back to File Explorer, drag "outimage.bin" into Hextor icon while holding Shift
 Edit > Select Range... > Range end: 0x80000 > Select
 File > Save selection as... > "Updated_512KiB.bin" > Save
 File > Exit
@@ -648,8 +629,7 @@ Our dictionary size: 800000h
 00 80 00 00 # dictionary size is 4 byte size, add a leading zero
 00 00 80 00 # convert the result to little endian (swap the bytes from right to left)
 
-Open Hextor
-File > Open > "Setup.ffs" > Open
+Back to File Explorer, drag "Setup.ffs" into Hextor icon while holding Shift
 Search > Find/Replace... > "?? 00 00 80 00" > HEX > Extended syntax > List > Search pattern found 1 time(s) > OK => Find next >> => << Find prev
 Close Find/Replace window
 
@@ -666,8 +646,7 @@ Back to CMD
 Back to UEFITool
 Click on "MiniSetupResourceSection", right click "Hex view...", select the first 16 HEX bytes from offset 00000000, Ctrl+C, close the window
 
-Open Hextor
-File > Open > "Setup_Uncompressed.bin" > Open
+Back to File Explorer, drag "Setup_Uncompressed.bin" into Hextor icon while holding Shift
 Search > Find/Replace... > Ctrl+V > HEX > Find next >> > << Find prev
 Close Find/Replace window
 
@@ -686,7 +665,7 @@ Now we need to search for something descriptive inside those *.txt files (like "
 
 Open Notepad++
 Search > Find in Files...
-Find what: ADBG
+Find what: "ADBG"
 Replace with: [empty]
 Filters: *.txt
 Directory: > ... > Select Documents folder > Select Folder
@@ -734,8 +713,7 @@ Back to CMD
 > del Setup_Uncompressed_ACPI_Debug.bin
 > GenSec -o Setup_ACPI_Debug.com -s EFI_SECTION_COMPRESSION -c PI_NONE Setup_ACPI_Debug.lzma
 
-Open Hextor
-File > Open > "Setup_ACPI_Debug.com" > Open
+Back to File Explorer, drag "Setup_ACPI_Debug.com" into Hextor icon while holding Shift
 Search > Go To address... > 0x8
 Type "02"
 File > Save
@@ -747,8 +725,7 @@ Back to UEFITool
 Click on "DXE dependency section", right click "Hex view...", select the first 16 HEX bytes from offset 00000000, Ctrl+C, close the window
 
 
-Open Hextor again
-File > Open > "Setup.ffs" > Open
+Back to File Explorer, drag again "Setup.ffs" into Hextor icon while holding Shift
 Search > Find/Replace > Ctrl-V > HEX > Find next >> > << Find prev
 Close Find/Replace window
 
@@ -805,8 +782,7 @@ Back to CMD
 
 
 
-Open Hextor
-File > Open > "AMITSE.ffs" > Open
+Back to File Explorer, drag "AMITSE.ffs" into Hextor icon while holding Shift
 
 Now we need to find where are the 2 HEX bytes to change. Remember, we want to change "ACPI Debug" from "Disabled" to "Enabled" in both Failsafe and Optimal value
 
@@ -939,8 +915,7 @@ So, 0x200077 + 0x11 = 0x200088
 
 
 
-Open Hextor
-File > Open > "mod_bios.bin" > Open
+Back to File Explorer, drag "mod_bios.bin" into Hextor icon while holding Shift
 Search > Go To address... > 0x200088 > OK
 
 Now we need the "ACPI Debug" VarOffset value
@@ -985,8 +960,7 @@ Back in UEFITool, before working on making the actual edit, click on "Defaults",
 Attributes: 40h
 Data checksum: 51h, valid
 
-Open Hextor
-File > Open > "Defaults.ffs" > Open
+Back to File Explorer, drag "Defaults.ffs" into Hextor icon while holding Shift
 
 The module has the "Data checksum" bit (0x40) set, so we need to make the edit to the Data checksum later, after we edit the default value
 
@@ -1074,7 +1048,7 @@ Now, we want to remove the "Padding file" sections from the BIOS.
 
 Back to File Explorer
 Open UEFITool.exe
-File > Open image file... > "mod_bios_tmp" > Open
+File > Open image file... > "mod_bios_tmp.fd" > Open
 
 In the bottom section, under "Parser", there are 2 results.
 Double click on each of them and take notes of the following informations on the right side:
@@ -1092,8 +1066,7 @@ Back to CMD
 
 
 
-Open Hextor
-File > Open > "BiosAc.ffs" > Open
+Back to File Explorer, drag "BiosAc.ffs" into Hextor icon while holding Shift
 Search > Go To address... > 0x13 > OK
 Type "00"
 
@@ -1112,8 +1085,7 @@ Back to CMD
 
 
 
-Open Hextor
-File > Open > "TxtPeiAp.ffs" > Open
+Back to File Explorer, drag "TxtPeiAp.ffs" into Hextor icon while holding Shift
 Search > Go To address... > 0x13 > OK
 Type "00"
 
@@ -1151,48 +1123,276 @@ Done with the creation of the Fat ffs module!
 
 
 
-[Adding HfsPlus driver]
-
-As per OpenCore Configuration document:
-"Proprietary HFS file system driver with bless support commonly found in Apple firmware."
-
-Since I'm going to install a hackintosh I need to include the binary HfsPlus from acidanthera/OcBinaryData repository in the EFI folder. As vit9696 explains here (https://github.com/acidanthera/bugtracker/issues/659#issue-548918983)
-
-"Currently we recommend using Apple HfsPlus.efi driver to enable HFS+ file system support for the following tasks:
-
-- Loading DMG recovery images in all operating systems up to 10.15 inclusive.
-- Loading macOS on HFS+ up to 10.13 inclusive (I believe there is no legit way to install macOS on HFS+ otherwise).
-- Loading macOS installers up to 10.14 or even 10.15 inclusive (they still use HFS+)."
+Now we want to add "OpenCore bootloader" and "gentoo" to the list of recognized EFI default bootloaders in our firmware.
+We known that our firmware has "UEFI OS" boot entry during startup for any bootloader installed in the EFI (fallback) removable path (EFI\BOOT\BOOTx64.efi).
+We also have "Windows Boot Manager" boot entry when we are booting a Windows operating system just like any other PC.
 
 
+Let's try to search for "UEFI OS" string in our BIOS
 
-So this driver is still needed, despite Apple is using APFS since macOS 10.14+
+Back to File Explorer
+Open UEFITool.exe
+File > Open image file... > "mod_bios_tmp.fd" > Open
+Action > Search... > Text > "UEFI OS", check "Unicode", check "Case sensitive" > OK
 
-I was fed up to include this driver in every EFI partition (whether it's a USB or a hard drive partition), so I decided to add this driver directly in the firmware!
-This also allows me to bypass UEFI > ConnectDrivers in OpenCore config!
+There will be 1 result inside CORE_DXE/.../PE32 image section.
+Double click on it, it will select "PE32 image section"
+Click on "Compressed section" above, check on the right "Compression algorithm", it says "None". We don't have to uncompress it!
+Click on "CORE_DXE" above, check this important info on the right:
+
+Attributes: 40h
+Data checksum: F0h, valid
+
+The module has the "Data checksum" bit (0x40) set, so we need to edit the "Data checksum" value later, after we make the edit.
+Unfortunately, since the edit will be huge this time, we need to use UEFITool 0.28.0 which will calculate the new 8-Bit Checksum for us.
+
+Quit UEFITool
 
 
-> GenSec -o HfsPlus.pe32 -s EFI_SECTION_PE32 HfsPlus.efi
-> GenSec -o HfsPlus.ui -s EFI_SECTION_USER_INTERFACE -n "HfsPlus"
-> GenSec -o HfsPlus.com -s EFI_SECTION_COMPRESSION -c PI_NONE HfsPlus.pe32 HfsPlus.ui
+Back to CMD:
+> start /b /min /wait MMTool mod_bios_tmp.fd /ec 5AE3F37E-4EAE-41AE-8240-35465B5E81EB CORE_DXE.ffs
 
-Lastly, create the .ffs module using this specific GUID: "AE4C11C8-1D6C-F24E-A183-E1CA36D1A8A9"
-This GUID is used by Apple in the latest Intel Mac firmwares
-This is the direct link to find this GUID: https://github.com/LongSoft/UEFITool/blob/A71/common/guids.csv#L8013C1-L8013C37
-Otherwise it's included in the EFIPayloads of the official installer
 
-This GUID is also embedded in HfsPlus.efi file!
 
-Open Hextor
-File > Open > "HfsPlus.efi" > Open
-Search > Find/Replace... > Find: "AE4C11C8-1D6C-F24E-A183-E1CA36D1A8A9" > Text > List > Search pattern found 1 time(s) > OK
+
+Back to File Explorer, drag "CORE_DXE.ffs" into Hextor icon while holding Shift
+
+For this whole part, the text is encoded in Unicode (UCS-2) string, so every character is 2 bytes length
+
+Search > Find/Replace... > Find: "UEFI OS" > Text: "1200 (Unicode)" > List > Search pattern found 1 time(s) > OK > Find next >>
+Close Find/Replace window.
+
+Now, put the cursor to the Text pane, and select "UEFI OS" up to right before the beginning of "Windows Boot Manager" which is a bit down there.
+Do not care about those dots, between the ASCII letters. This are part of the Unicode encoding, they are "\x00" bytes, and we will get rid of them shortly.
+We do this in order to have a better reading of the text itself.
+
+You have selected a total of 376 bytes.
+
+Edit > Copy as > Array (delimited text)
+Elements: unicode
+Notation: ansi char
+Layout: Without separators
+Values per line: All in one line
+
+Copy
+
+
+Open Notepad++
+Edit > Paste
+
+We want to replace those unreadable characters (\x00) to spaces.
+
+Search > Replace...
+Find what: "[^\x00-\x7F]+"
+Replace with: "\x20"
+Search Mode: Regular expression
+
+Replace All
+
+[Replace All: 10 occurrences were replaced in entire file]
+
+Now we want to automatically add new line at the end of ".efi"
+
+Find what: "(\.efi)"
+Replace with: "\1\r\n"
+Uncheck "Match case"
+Search Mode: Regular expression
+
+Replace All
+
+
+
+
+Find what: "^\x20"
+Replace with: [empty]
+Search Mode: Regular expression
+
+Replace All
+
+Close Replace window
+
+
+
+This is the result:
+
+
+UEFI OS \EFI\BOOT\BOOTX64.EFI
+opensuse \EFI\opensuse\grubx64.efi
+RedHat Boot Manager \EFI\Redhat\elilo.efi
+ubuntu \EFI\Ubuntu\grubx64.efi
+Suse Boot Manager \EFI\Suse\elilo.efi
+
+Now, we can clearly see a pattern:
+- on the left there is the boot entry string (ie. "UEFI OS")
+- on the right there is the EFI bootloader path (ie. \EFI\BOOT\BOOTX64.EFI)
+
+Furthermore, if we go back to Hextor, we can see that each side (the boot entry string on the left, and the bootloader path on the right) has multiple NULL characters before the next entry appear
+
+Search > Find/Replace... > Find: "UEFI OS" > Text: "1200 (Unicode)" > << Find prev     > Find next >>     > Find next >>
+By doing so we go immediately after the selection.
+
+
+There are 2 NULL bytes before beginning the "UEFI OS" bootloader path string "\EFI\BOOT\BOOTX64.EFI"
+
+
+I noticed that each side MUST have the following requirements:
+- the string length must be a multiple of 4
+- at least 1 UCS-2 NULL character after the readable string
+- they have a fixed length including NULL character(s)
+
+So "UEFI OS" consist of 7 characters, we must have 1 NUL character.
+This string can contain from 4 to 7 characters, plus NUL character(s) respectively.
+
+"\EFI\BOOT\BOOTX64.EFI" consist of 21 characters, we must have 3 NUL chacters in order to achieve a number divisible by 4
+
+
+Select the 2 NULL bytes (1 UCS-2 byte) before beginning bootloader path.
+
+Edit > Select Range... > Range end: +2
+
+We can see the following NULL bytes sequences in yellow
+
+For a clearer overall view of the process we want to put quotes on both side plus add a parenteses indicating string length + number of following NUL character(s)
+
+"UEFI OS"               {7+1}  (8) ->  "\EFI\BOOT\BOOTX64.EFI"      {21+3} (24)
+"opensuse"              {8+4} (12) ->  "\EFI\opensuse\grubx64.efi"  {25+3} (28)
+"RedHat Boot Manager"  {19+1} (20) ->  "\EFI\Redhat\elilo.efi"      {21+3} (24)
+"ubuntu"                {6+2}  (8) ->  "\EFI\Ubuntu\grubx64.efi"    {23+1} (24)
+"Suse Boot Manager"    {17+3} (20) ->  "\EFI\Suse\elilo.efi"        {19+1} (20)
+
+
+
+We want to modify "RedHat Boot Manager" and "ubuntu" entries.
+
+From this:
+
+"RedHat Boot Manager"  {19+1} (20) ->  "\EFI\Redhat\elilo.efi"      {21+3} (24)
+"ubuntu"                {6+2}  (8) ->  "\EFI\Ubuntu\grubx64.efi"    {23+1} (24)
+
+to this:
+
+"OpenCore bootloader"  {19+1} (20) ->  "\EFI\OC\OpenCore.efi"       {20+4} (24)
+"gentoo"                {6+2}  (8) ->  "\EFI\gentoo\grubx64.efi"    {23+1} (24)
+
+
+Now, sum the number of characters to Find/Replace: 20 + 24 + 8 + 24 = 76
+We need to replace 76 UCS-2 bytes (152 bytes)
+
+Now we have to create our Hextor find sequence:
+
+The initial find sequence begins with "RedHat Boot Manager". Next we need to add "\x00" to the end.
+This will also be useful later because we want to add a fixed number of "\x00" at the end of each string as we noted above.
+Our find sequence is now: "RedHat Boot Manager{u16:0x00}"
+Now we have to add the remaining number of UCS-2 bytes to sequence until we reach number 76
+"RedHat Boot Manager" is 19 characters.
+"\x00" is 1 character.
+Remaining bytes will be: 76 - (19 + 1) = 56
+
+Our new sequence will be: "RedHat Boot Manager{u16:0x00}{u16::56}"
+
+
+
+Now let's move to the Replace sequence
+
+We have "OpenCore bootloader" with one extra NUL character.
+This time, in the replace sequence we can not add "{u16:0x00}" as it will be recognized as an string to replace.
+
+One way is using this notation: "\x00", but later when we have to deal with multiple NUL characters we would type: "\x00\x00\x00\x00"
+
+Another more efficient way is to use a feature in Hextor called "Indexed subexpressions".
+Basically, find sequence becomes: "RedHat Boot Manager({u16:0x00}){u16::56}"
+while replace sequence now becomes: "OpenCore bootloader$1"
+
+"$1" in this case means: "{u16:0x00}"
+
+Now that we understand this pattern, it's easy to continue till the end of the Replace sequence:
+
+OpenCore bootloader      -> 19
+$1                       ->  1 (\x00)
+\EFI\OC\OpenCore.efi     -> 20
+$1$1$1$1                 ->  4 (\x00 * 4)
+gentoo                   ->  6
+$1$1                     ->  2 (\x00 * 2)
+\EFI\gentoo\grubx64.efi  -> 23
+$1                       ->  1 (\x00)
+
+TOTAL                    -> 76
+
+Now one last caveat, we need to escape backlash (\) character(s), otherwise those gets removed by Hextor.
+
+Final sequence now is: "OpenCore bootloader$1\\EFI\\OC\\OpenCore.efi$1$1$1$1gentoo$1$1\\EFI\\gentoo\\grubx64.efi$1"
+
+Back to Hextor
+Search > Find/Replace...
+Find: "RedHat Boot Manager({u16:0x00}){u16::56}"
+Text: "1200 (Unicode)"
+check "Extended syntax"
+Find next >>
+
+Expand "Replace" section
+Replace with: "OpenCore bootloader$1\\EFI\\OC\\OpenCore.efi$1$1$1$1gentoo$1$1\\EFI\\gentoo\\grubx64.efi$1"
+uncheck both "Hex" and "ask each replace"
+Replace all > [Search pattern replaced 1 time(s)] > OK
+
 Close Find/Replace window
+
+File > Save as... > "CORE_DXE_mod.ffs" > Save
 File > Exit
 
-> GenFfs -o HfsPlus.ffs -t EFI_FV_FILETYPE_DRIVER -g "AE4C11C8-1D6C-F24E-A183-E1CA36D1A8A9" -s -i HfsPlus.com
-> del HfsPlus.pe32 HfsPlus.ui HfsPlus.com
 
-Done with the creation of the HfsPlus ffs module!
+Quit Notepad++  > Save > No
+
+
+
+Okay, okay, with made this big edit. But now there is one thing that we have to fix inside this FFS, the "Data checksum".
+In this case, calculating the 8-bit checksum manually takes an extreme amount of time, so we use UEFITool 0.28.0 which helps us to recalculate the new data checksum.
+
+Back to CMD
+> del CORE_DXE.ffs
+> copy mod_bios_tmp.fd UEFITool_0.28.0_win32\
+> copy CORE_DXE_mod.ffs UEFITool_0.28.0_win32\
+> start cmd /k cd UEFITool_0.28.0_win32\
+> UEFITool.exe mod_bios_tmp.fd
+
+
+File > Search... > GUID: "5AE3F37E-4EAE-41AE-8240-35465B5E81EB", check "Header only" > OK
+
+Double click on the entry, it will select the "CORE_DXE" ffs module. Right click on it, select "Replace as is..." > "CORE_DXE_mod.ffs" > Open
+
+File > Save image file... > "tmp.fd" > Save
+
+Open reconstructed file > No
+
+A warning will appear saying: "parseFile: invalid data checksum F0h, should be 1Fh". It is recreating the checksum for us!!!
+
+Source of this message here: https://github.com/LongSoft/UEFITool/blob/0.28.0/ffsengine.cpp#L1346C17-L1346C68
+
+Take note of the new checksum value: "1Fh"
+
+
+File > Quit
+
+> exit
+> rmdir /s /q UEFITool_0.28.0_win32
+
+
+Back to File Explorer, drag "CORE_DXE_mod.ffs" into Hextor icon while holding Shift
+
+Search > Go To address... > 0x11 > OK
+Type: "1F"
+File > Save
+File > Exit
+
+Done with the creation of "CORE_DXE_mod.ffs", we will use this file later in the process!!!
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1204,14 +1404,13 @@ Back to CMD
 > start /b /min /wait MMTool mod_bios_tmp.fd /r 899407D7-99FE-43D8-9A21-79EC328CAC21 Setup_ACPI_Debug.ffs
 > start /b /min /wait MMTool mod_bios_tmp.fd /r 93022F8C-1F09-47EF-BBB2-5814FF609DF5 Fat.ffs
 > start /b /min /wait MMTool mod_bios_tmp.fd /r 9221315B-30BB-46B5-813E-1B1BF4712BD3 Defaults_ACPI_Debug.ffs
+> start /b /min /wait MMTool mod_bios_tmp.fd /r 5AE3F37E-4EAE-41AE-8240-35465B5E81EB CORE_DXE_mod.ffs
 > start /b /min /wait MMTool mod_bios_tmp.fd /r 821D110C-D0A3-4CF7-AEF3-E28088491704 Updated_512KiB.ffs
 > start /b /min /wait MMTool mod_bios_tmp.fd /r B1DA0ADF-4F77-4070-A88E-BFFE1C60529A AMITSE_ACPI_Debug.ffs
-> start /b /min /wait MMTool mod_bios_tmp.fd /i AE4C11C8-1D6C-F24E-A183-E1CA36D1A8A9 HfsPlus.ffs 02:01-00
 > start /b /min /wait MMTool mod_bios_tmp.fd /r 2D27C618-7DCD-41F5-BB10-21166BE7E143 BiosAc_fix.ffs
 > start /b /min /wait MMTool mod_bios_tmp.fd /r D1E59F50-E8C3-4545-BF61-11F002233C97 TxtPeiAp_fix.ffs
 > move mod_bios_tmp.fd Z97XSLI.fd
-> del HfsPlus.ffs Fat.ffs TxtPeiAp_fix.ffs BiosAc_fix.ffs Defaults_ACPI_Debug.ffs AMITSE_ACPI_Debug.ffs Setup_ACPI_Debug.ffs Updated_512KiB.ffs
-> exit
+> del CORE_DXE_mod.ffs Fat.ffs TxtPeiAp_fix.ffs BiosAc_fix.ffs Defaults_ACPI_Debug.ffs AMITSE_ACPI_Debug.ffs Setup_ACPI_Debug.ffs Updated_512KiB.ffs
 
 We have finished editing the BIOS! The last step is to create the report of it
 
@@ -1222,6 +1421,11 @@ File > Unload GUID database
 File > Open image file... > "Z97XSLI.fd" > Open
 File > Generate report... > [default name is fine] > Save
 File > Quit
+
+Back to CMD
+> reg delete HKCU\SOFTWARE\CodeRush /f
+> reg delete HKCU\SOFTWARE\QtProject /f
+> exit
 
 Open MMTool.exe for the last time
 Load Image > "Z97XSLI.fd" > Open

@@ -1,0 +1,198 @@
+Prerequirements:
+- macOS environment
+- empty 16+ GB USB flash drive for macOS Monterey
+- empty 2+ GB USB flash drive for Arch
+
+In a macOS environment:
+- Download official Python package from python.org and install the ".pkg". Quit and reopen Terminal.
+- Download macOS Monterey full installer using "installinstallmacos.py" (https://github.com/munki/macadmin-scripts)
+% cd ~/Documents/
+% git clone --depth 1 https://github.com/munki/macadmin-scripts
+% cd macadmin-scripts
+% sudo python3 installinstallmacos.py
+[type the number of the macOS version you want to install]
+% sudo chown -R $(whoami) *
+% sudo hdiutil attach -mountpoint mnt Install_macOS_12.7.4-21H1123.dmg
+% cp -R mnt/Install\ macOS\ Monterey.app /Applications/
+% sudo sync
+% hdiutil detach mnt
+
+Insert an empty 16+ GB USB flash drive
+% diskutil list
+% diskutil partitionDisk /dev/diskX GPT HFS+J "Monterey_Installer" 0
+% sudo /Applications/Install\ macOS\ Monterey.app/Contents/Resources/createinstallmedia --volume /Volumes/Monterey_Installer --nointeraction
+% diskutil eject /dev/diskX
+% hdiutil detach /dev/diskY
+(Y in this case is X+1)
+
+Download Arch from official Arch website
+Insert an empty 2+ GB USB flash drive
+% diskutil list
+% diskutil partitionDisk /dev/diskX MBR FAT32 "ARCH_202508" 0
+% bsdtar -x --exclude=boot/syslinux/ -f archlinux-2025.08.01-x86_64.iso -C /Volumes/ARCH_202508
+% sudo sync
+% diskutil eject /dev/diskX
+
+Before boot the Arch USB installer, make sure you have Ethernet cable disconnected!
+
+Boot the Arch installer with this options (type "e" at initial boot screen):
+module_blacklist=b43,b43legacy,bcm43xx,bcma,brcm80211,brcmfmac,brcmsmac,ssb quiet loglevel=0
+
+# setfont ter-i16b
+# systemctl stop systemd-timesyncd
+# systemctl disable systemd-timesyncd
+# systemctl stop reflector
+# systemctl disable reflector
+
+Connect Ethernet cable now
+
+# pacman-key --init
+# pacman-key --populate archlinux
+# pacman -Sy
+# pacman -S --noconfirm git
+# git clone --depth 1 https://github.com/leon9078/Z97X-SLI_Monterey
+
+Connect the macOS Monterey USB installer
+# lsblk
+# mount /dev/sdX1 /mnt
+# cp -R Z97X-SLI_Monterey/EFI_USB /mnt/EFI
+# sync
+# umount /mnt
+# eject /dev/sdX
+# systemctl poweroff
+
+Unplug power cable.
+Unplug every peripheral, including any SATA/M.2 disk drive.
+Unplug CMOS battery.
+
+Now connect the power cable. Power on and immediately power off the PC.
+Flash my mod BIOS using flashrom and a CH341A_SPI to USB in a Linux environment (booted with "iomem=relaxed").
+
+# printf '\xFF%.0s' {1..8388608} > FF_8MiB.bin
+
+Start with the backup BIOS (B_BIOS):
+
+# flashrom --chip "MX25L6473E" --programmer ch341a_spi --erase
+# flashrom --chip "MX25L6473E" --programmer ch341a_spi --read B_BIOS_read_after_erase.bin
+# flashrom --chip "MX25L6473E" --programmer ch341a_spi --noverify --write Z97XSLI.fd
+# flashrom --chip "MX25L6473E" --programmer ch341a_spi --read B_BIOS_read_after_reprogram.bin
+
+Now, move on to the main BIOS (M_BIOS):
+
+# flashrom --chip "MX25L6473E" --programmer ch341a_spi --erase
+# flashrom --chip "MX25L6473E" --programmer ch341a_spi --read M_BIOS_read_after_erase.bin
+# flashrom --chip "MX25L6473E" --programmer ch341a_spi --noverify --write Z97XSLI.fd
+# flashrom --chip "MX25L6473E" --programmer ch341a_spi --read M_BIOS_read_after_reprogram.bin
+
+Unplug power cable again.
+Short CLR_CMOS pins.
+Reinsert CMOS battery.
+Connect USB keyboard and mouse.
+Connect monitor output.
+Plug power cable again.
+Power on the PC.
+A message will show up saying "BIOS has been reset - Please decide how to continue"
+Select "Load optimized defaults then reboot"
+After reboot, a new WARNING will appear saying "No bootable device is detected"
+
+Insert macOS Monterey USB installer, press the reset button, at OpenCore Boot Menu press Spacebar, select "UefiVarTool". This tool will set the BIOS settings recommended for hackintosh, then it automatically reboot.
+After reboot, quickly unplug USB flash drive, wait for "No bootable device is detected" message. Plug again the USB flash drive and press the reset button.
+At OpenCore Boot Menu press Spacebar, select "UEFI Shell".
+Go to this website on another device: https://time.is/UTC
+
+Shell> date <month>/<day>/<year>
+Shell> time <hours>:<minutes>:<seconds>
+Shell> reset -s
+
+Unplug macOS Monterey USB installer, attach empty SATA Samsung SSD
+
+Boot the PC, "No bootable device is detected", insert Arch USB installer.
+
+Make sure Ethernet is disconnected!
+
+Reset button, F9, USB, "e", "module_blacklist=b43,b43legacy,bcm43xx,bcma,brcm80211,brcmfmac,brcmsmac,ssb nomodeset i915.modeset=0 nouveau.modeset=0 quiet loglevel=0"
+
+# setfont ter-i16b
+# systemctl stop systemd-timesyncd
+# systemctl disable systemd-timesyncd
+# systemctl stop reflector
+# systemctl disable reflector
+# lsblk
+# parted -s /dev/sdX -- mklabel gpt mkpart \'EFI\ System\ Partition\' fat32 1MiB 201MiB set 1 esp on mkpart \'\' hfs+ 201MiB -262185s
+# sync
+# systemctl poweroff
+
+Unplug Arch USB installer, insert macOS Monterey USB installer.
+Boot, F9, USB, "Install macOS Monterey (external)" will be automatically selected and booted in 5 seconds.
+Type Cmd+Shift+T to quickly enter Terminal
+
+# diskutil list disk0
+# newfs_msdos -F 32 -v "EFI" /dev/rdisk0s1
+# diskutil mount readOnly disk0s1
+# mount | grep disk0 (check for "read-only")
+# diskutil umount disk0s1
+# newfs_hfs -J -v "Macintosh HD" /dev/rdisk0s2
+# diskutil mount disk0s2
+
+Cmd-Q to quit Terminal
+
+Install macOS Monterey to Macintosh HD.
+
+There will be multiple reboots in the middle.
+Reboot -> "macOS Installer" -> Reboot -> "macOS Installer" -> Reboot -> "Macintosh HD"
+When you see "Macintosh HD" inside OpenCore Boot Menu, press Tab once to select "Shut Down"
+
+Unplug macOS USB installer, plug again Arch installer.
+
+Make sure Ethernet is disconnected!
+
+Boot, F9, USB, "e", "module_blacklist=b43,b43legacy,bcm43xx,bcma,brcm80211,brcmfmac,brcmsmac,ssb nomodeset i915.modeset=0 nouveau.modeset=0 quiet loglevel=0"
+
+# setfont ter-i16b
+# systemctl stop systemd-timesyncd
+# systemctl disable systemd-timesyncd
+# systemctl stop reflector
+# systemctl disable reflector
+
+Connect Ethernet cable now
+
+# pacman-key --init
+# pacman-key --populate archlinux
+# pacman -Sy
+# pacman -S --noconfirm git
+# git clone --depth 1 https://github.com/leon9078/Z97X-SLI_Monterey
+# lsblk
+# mount /dev/sdX1 /mnt
+# mkdir -p /mnt/EFI
+# cp -R Z97X-SLI_Monterey/EFI_Target/* /mnt/EFI/
+# sync
+# umount /mnt
+# systemctl poweroff
+
+Unplug Arch USB, power on the PC, finish macOS install. Done!
+
+
+
+
+
+Post-install
+- Open Terminal
+% cp /etc/zshrc ~/.zshrc
+% chmod 600 ~/.zshrc
+% sed -i '' 's/\(^PS1=\).*/\1"%~ %# "/' ~/.zshrc
+% printf '\n# Make sure line content is cleared from cursor position till the beginning of line when Ctrl+U is typed\nbindkey "^U" backward-kill-line\n' >> ~/.zshrc
+
+Go to Terminal > Settings... > Profiles and select the profile you're using.
+
+Go to the 'Window' tab:
+- under 'Working directory or document', check 'Path'
+- under 'Active process name', uncheck 'Arguments'
+- check 'Profile name'
+
+Go to the 'Tab' tab and under 'Active process name', uncheck 'Arguments'.
+
+Go to the 'Shell' tab and under the 'Startup' heading, check 'Run command:' and enter into the box: login -fpql my_username /bin/zsh -l
+Make sure 'Run inside shell' is unchecked.
+If you have the 'Ask before closing: Only if there are processes other than the login shell and:' option selected, add 'login' and 'zsh' to the list of processes it will not prompt for.
+
+% rm -rf ~/.zsh_sessions ; rm -f ~/.zsh_history ; kill -9 $$
