@@ -51,8 +51,8 @@ Click on "Command Prompt" icon, then run:
 > curl -LO https://github.com/LongSoft/UEFITool/releases/download/A72/UEFITool_NE_A72_win64.zip
 > curl -LO https://github.com/LongSoft/UEFITool/releases/download/0.28.0/UEFITool_0.28.0_win32.zip
 > curl -LO https://github.com/LongSoft/IFRExtractor-RS/releases/download/v1.6.0/ifrextractor_1.6.0_win32.zip
-> curl -LO https://github.com/leon9078/OpenCorePkg/releases/download/1.0.5/OpenCore-1.0.5-Darwin-XCODE5-RELEASE.zip
-> curl -LO https://github.com/leon9078/OpenCorePkg/releases/download/1.0.5/OpenCore-1.0.5-Windows-VS2019-RELEASE.zip
+> curl -LO https://github.com/leon9078/OpenCorePkg/releases/download/1.0.6/OpenCore-1.0.6-Darwin-XCODE5-RELEASE.zip
+> curl -LO https://github.com/leon9078/OpenCorePkg/releases/download/1.0.6/OpenCore-1.0.6-Windows-VS2019-RELEASE.zip
 
 Click on "Start" icon > select "Documents"
 Click twice on "Date modified"
@@ -263,8 +263,8 @@ Select with Ctrl modifier:
 and with all this files selected (6) > 7-Zip > Extract Here
 
 Right click on "UEFITool_0.28.0_win32.zip" > 7-Zip > Extract to "UEFITool_0.28.0_win32\"
-Right click on "OpenCore-1.0.5-Darwin-XCODE5-RELEASE.zip" > 7-Zip > Extract to "OpenCore-1.0.5-Darwin-XCODE5-RELEASE\"
-Right click on "OpenCore-1.0.5-Windows-VS2019-RELEASE.zip" > 7-Zip > Extract to "OpenCore-1.0.5-Windows-VS2019-RELEASE\"
+Right click on "OpenCore-1.0.6-Darwin-XCODE5-RELEASE.zip" > 7-Zip > Extract to "OpenCore-1.0.6-Darwin-XCODE5-RELEASE\"
+Right click on "OpenCore-1.0.6-Windows-VS2019-RELEASE.zip" > 7-Zip > Extract to "OpenCore-1.0.6-Windows-VS2019-RELEASE\"
 Right click on "UBU_v1_80_b1.rar" > 7-Zip > Extract to "UBU_v1_80_b1\"
 Right click on "Intel_VBIOS_and_BSF_r3.7z" > 7-Zip > Extract to "Intel_VBIOS_and_BSF_r3\"
 
@@ -493,10 +493,10 @@ File > Save selection as... > "Updated_512KiB.bin" > Save
 File > Exit
 
 Now back to CMD
-> move OpenCore-1.0.5-Windows-VS2019-RELEASE\Utilities\BaseTools\GenSec.exe .
-> move OpenCore-1.0.5-Windows-VS2019-RELEASE\Utilities\BaseTools\GenFfs.exe .
-> move OpenCore-1.0.5-Windows-VS2019-RELEASE\Utilities\BaseTools\LzmaCompress.exe .
-> rmdir /s /q OpenCore-1.0.5-Windows-VS2019-RELEASE
+> move OpenCore-1.0.6-Windows-VS2019-RELEASE\Utilities\BaseTools\GenSec.exe .
+> move OpenCore-1.0.6-Windows-VS2019-RELEASE\Utilities\BaseTools\GenFfs.exe .
+> move OpenCore-1.0.6-Windows-VS2019-RELEASE\Utilities\BaseTools\LzmaCompress.exe .
+> rmdir /s /q OpenCore-1.0.6-Windows-VS2019-RELEASE
 > GenSec -o Updated_512KiB.raw -s EFI_SECTION_RAW Updated_512KiB.bin
 > GenSec -o Updated_512KiB.com -s EFI_SECTION_COMPRESSION -c PI_NONE Updated_512KiB.raw
 > GenFfs -o Updated_512KiB.ffs -t EFI_FV_FILETYPE_FREEFORM -g "821D110C-D0A3-4CF7-AEF3-E28088491704" -i Updated_512KiB.com
@@ -1105,8 +1105,8 @@ File > Exit
 
 Back to CMD
 > del BiosAc.ffs TxtPeiAp.ffs
-> move OpenCore-1.0.5-Darwin-XCODE5-RELEASE\X64\EFI\OC\Drivers\Fat.efi .
-> rmdir /s /q OpenCore-1.0.5-Darwin-XCODE5-RELEASE
+> move OpenCore-1.0.6-Darwin-XCODE5-RELEASE\X64\EFI\OC\Drivers\Fat.efi .
+> rmdir /s /q OpenCore-1.0.6-Darwin-XCODE5-RELEASE
 > GenSec -o Fat.pe32 -s EFI_SECTION_PE32 Fat.efi
 > GenSec -o Fat.ui -s EFI_SECTION_USER_INTERFACE -n "Fat"
 > GenSec -o Fat.com -s EFI_SECTION_COMPRESSION -c PI_NONE Fat.pe32 Fat.ui

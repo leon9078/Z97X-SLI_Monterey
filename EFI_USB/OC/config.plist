@@ -478,15 +478,8 @@
 	<dict>
 		<key>Add</key>
 		<dict>
-			<key>PciRoot(0x0)/Pci(0x2,0x0)</key>
-			<dict>
-				<key>disable-hdmi-patches</key>
-				<data>AAAAAA==</data>
-			</dict>
 			<key>PciRoot(0x0)/Pci(0x1b,0x0)</key>
 			<dict>
-				<key>No-hda-gfx</key>
-				<data>AAAAAA==</data>
 				<key>layout-id</key>
 				<data>YwAAAA==</data>
 			</dict>

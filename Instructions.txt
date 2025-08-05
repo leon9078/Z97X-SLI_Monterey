@@ -29,7 +29,7 @@ Download Arch from official Arch website
 Insert an empty 2+ GB USB flash drive
 % diskutil list
 % diskutil partitionDisk /dev/diskX MBR FAT32 "ARCH_202508" 0
-% bsdtar -x --exclude=boot/syslinux/ -f archlinux-2025.08.01-x86_64.iso -C /Volumes/ARCH_202508
+% bsdtar -x -v -o --exclude boot/syslinux/ -f archlinux-2025.08.01-x86_64.iso -C /Volumes/ARCH_202508
 % sudo sync
 % diskutil eject /dev/diskX
 
