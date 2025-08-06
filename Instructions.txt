@@ -6,8 +6,8 @@ Prerequirements:
 In a macOS environment:
 - Download official Python package from python.org and install the ".pkg". Quit and reopen Terminal.
 - Download macOS Monterey full installer using "installinstallmacos.py" (https://github.com/munki/macadmin-scripts)
-% cd ~/Documents/
-% git clone --depth 1 https://github.com/munki/macadmin-scripts
+% cd ~/Music/
+% git clone --depth 1 https://github.com/munki/macadmin-scripts.git
 % cd macadmin-scripts
 % sudo python3 installinstallmacos.py
 [type the number of the macOS version you want to install]
@@ -16,6 +16,9 @@ In a macOS environment:
 % cp -R mnt/Install\ macOS\ Monterey.app /Applications/
 % sudo sync
 % hdiutil detach mnt
+% mv Install_macOS_12.7.4-21H1123.dmg ../
+% cd ..
+% rm -rf macadmin-scripts
 
 Insert an empty 16+ GB USB flash drive
 % diskutil list
@@ -25,24 +28,36 @@ Insert an empty 16+ GB USB flash drive
 % hdiutil detach /dev/diskY
 (Y in this case is X+1)
 
-Download Arch from official Arch website
+Download Arch installer iso from official Arch website
 Insert an empty 2+ GB USB flash drive
 % diskutil list
 % diskutil partitionDisk /dev/diskX MBR FAT32 "ARCH_202508" 0
-% bsdtar -x -v -o --exclude boot/syslinux/ -f archlinux-2025.08.01-x86_64.iso -C /Volumes/ARCH_202508
+% bsdtar -x -v -o --exclude shellx64.efi --exclude boot/syslinux/ -f archlinux-2025.08.01-x86_64.iso -C /Volumes/ARCH_202508
+% sed -i '' 's/15/5/' /Volumes/ARCH_202508/boot/grub/loopback.cfg
+% sed -i '' 's/15/5/' /Volumes/ARCH_202508/loader/loader.conf
+% mv /Volumes/ARCH_202508/EFI/BOOT/{,SYSTEMD-}BOOTx64.EFI
+% curl -LJ -o /Volumes/ARCH_202508/EFI/BOOT/BOOTx64.EFI "https://github.com/leon9078/UEFI-Shell/releases/download/25H1/shellx64.efi"
+% mkdir /Volumes/ARCH_202508/EFI/TOOLS
+% curl -LJ -o /Volumes/ARCH_202508/EFI/TOOLS/uvt.efi "https://github.com/leon9078/UefiVarTool/releases/download/1.0.0/uvt.efi"
+% curl -LJ -o /Volumes/ARCH_202508/EFI/BOOT/BIOS_settings.nsh "https://github.com/leon9078/Z97X-SLI_Monterey/raw/master/BIOS/BIOS_settings.nsh"
+% printf '@echo -off\r\nSYSTEMD-BOOTx64.EFI\r\n' > /Volumes/ARCH_202508/EFI/BOOT/startup.nsh
+% perl -i -0777pe "s/(.{1})/\$1\x00/gs" /Volumes/ARCH_202508/EFI/BOOT/startup.nsh
+% sed -i '' '1s/^/\xFF\xFE/' /Volumes/ARCH_202508/EFI/BOOT/startup.nsh
 % sudo sync
 % diskutil eject /dev/diskX
 
 Before boot the Arch USB installer, make sure you have Ethernet cable disconnected!
 
-Boot the Arch installer with this options (type "e" at initial boot screen):
+Boot the Arch USB installer.
+First, it will launch UEFI Shell, in 5 seconds it will automatically launch system-boot which, then, loads Arch Linux install menu.
+If we press any key, except ESC, we skip the delay and boot immediately to systemd-boot.
+
+Now, type "e" at initial boot screen:
 module_blacklist=b43,b43legacy,bcm43xx,bcma,brcm80211,brcmfmac,brcmsmac,ssb quiet loglevel=0
 
+# systemctl stop reflector systemd-{networkd-wait-online,timesyncd}
+# systemctl disable reflector systemd-{networkd-wait-online,timesyncd}
 # setfont ter-i16b
-# systemctl stop systemd-timesyncd
-# systemctl disable systemd-timesyncd
-# systemctl stop reflector
-# systemctl disable reflector
 
 Connect Ethernet cable now
 
@@ -50,9 +65,10 @@ Connect Ethernet cable now
 # pacman-key --populate archlinux
 # pacman -Sy
 # pacman -S --noconfirm git
-# git clone --depth 1 https://github.com/leon9078/Z97X-SLI_Monterey
+# git clone --depth 1 https://github.com/leon9078/Z97X-SLI_Monterey.git
 
 Connect the macOS Monterey USB installer
+
 # lsblk
 # mount /dev/sdX1 /mnt
 # cp -R Z97X-SLI_Monterey/EFI_USB /mnt/EFI
@@ -95,28 +111,32 @@ A message will show up saying "BIOS has been reset - Please decide how to contin
 Select "Load optimized defaults then reboot"
 After reboot, a new WARNING will appear saying "No bootable device is detected"
 
-Insert macOS Monterey USB installer, press the reset button, at OpenCore Boot Menu press Spacebar, select "UefiVarTool". This tool will set the BIOS settings recommended for hackintosh, then it automatically reboot.
-After reboot, quickly unplug USB flash drive, wait for "No bootable device is detected" message. Plug again the USB flash drive and press the reset button.
-At OpenCore Boot Menu press Spacebar, select "UEFI Shell".
+Insert Arch USB installer, press the reset button, at UEFI Shell press ESC key (within 5 seconds) to skip "startup.nsh" (which will otherwise load Arch systemd-boot).
+At UEFI Shell prompt, we can simply type "bios_settings". UEFI Shell is case-insensitive, so we can type "bios_settings" instead of "BIOS_settings".
+Also we can omit typing the script extension ".nsh"
+
+Shell> bios_settings
+
+After reboot, quickly unplug USB flash drive, wait for "No bootable device is detected" message. Plug again the Arch USB flash drive and press the reset button.
+Again, at UEFI Shell press ESC key (within 5 seconds).
+
 Go to this website on another device: https://time.is/UTC
 
 Shell> date <month>/<day>/<year>
 Shell> time <hours>:<minutes>:<seconds>
 Shell> reset -s
 
-Unplug macOS Monterey USB installer, attach empty SATA Samsung SSD
+Unplug Arch USB installer, attach empty SATA Samsung SSD
 
 Boot the PC, "No bootable device is detected", insert Arch USB installer.
 
 Make sure Ethernet is disconnected!
 
-Reset button, F9, USB, "e", "module_blacklist=b43,b43legacy,bcm43xx,bcma,brcm80211,brcmfmac,brcmsmac,ssb nomodeset i915.modeset=0 nouveau.modeset=0 quiet loglevel=0"
+Reset button, F9, USB, UEFI Shell, Arch systemd-boot, "e", "module_blacklist=b43,b43legacy,bcm43xx,bcma,brcm80211,brcmfmac,brcmsmac,ssb quiet loglevel=0"
 
+# systemctl stop reflector systemd-{networkd-wait-online,timesyncd}
+# systemctl disable reflector systemd-{networkd-wait-online,timesyncd}
 # setfont ter-i16b
-# systemctl stop systemd-timesyncd
-# systemctl disable systemd-timesyncd
-# systemctl stop reflector
-# systemctl disable reflector
 # lsblk
 # parted -s /dev/sdX -- mklabel gpt mkpart \'EFI\ System\ Partition\' fat32 1MiB 201MiB set 1 esp on mkpart \'\' hfs+ 201MiB -262185s
 # sync
@@ -146,13 +166,11 @@ Unplug macOS USB installer, plug again Arch installer.
 
 Make sure Ethernet is disconnected!
 
-Boot, F9, USB, "e", "module_blacklist=b43,b43legacy,bcm43xx,bcma,brcm80211,brcmfmac,brcmsmac,ssb nomodeset i915.modeset=0 nouveau.modeset=0 quiet loglevel=0"
+Boot, F9, USB, UEFI Shell, Arch systemd-boot, "e", "module_blacklist=b43,b43legacy,bcm43xx,bcma,brcm80211,brcmfmac,brcmsmac,ssb quiet loglevel=0"
 
+# systemctl stop reflector systemd-{networkd-wait-online,timesyncd}
+# systemctl disable reflector systemd-{networkd-wait-online,timesyncd}
 # setfont ter-i16b
-# systemctl stop systemd-timesyncd
-# systemctl disable systemd-timesyncd
-# systemctl stop reflector
-# systemctl disable reflector
 
 Connect Ethernet cable now
 
@@ -160,11 +178,11 @@ Connect Ethernet cable now
 # pacman-key --populate archlinux
 # pacman -Sy
 # pacman -S --noconfirm git
-# git clone --depth 1 https://github.com/leon9078/Z97X-SLI_Monterey
+# git clone --depth 1 https://github.com/leon9078/Z97X-SLI_Monterey.git
 # lsblk
 # mount /dev/sdX1 /mnt
 # mkdir -p /mnt/EFI
-# cp -R Z97X-SLI_Monterey/EFI_Target/* /mnt/EFI/
+# cp -R Z97X-SLI_Monterey/EFI_Target/OC /mnt/EFI/
 # sync
 # umount /mnt
 # systemctl poweroff
