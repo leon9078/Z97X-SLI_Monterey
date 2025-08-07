@@ -38,8 +38,7 @@ Insert an empty 2+ GB USB flash drive
 % sed -i '' 's/15/5/' /Volumes/ARCH_202508/loader/loader.conf
 % mv /Volumes/ARCH_202508/EFI/BOOT/{,SYSTEMD-}BOOTx64.EFI
 % curl -LJ -o /Volumes/ARCH_202508/EFI/BOOT/BOOTx64.EFI https://github.com/leon9078/UEFI-Shell/releases/download/25H1/shellx64.efi
-% mkdir /Volumes/ARCH_202508/EFI/TOOLS
-% curl -LJ -o /Volumes/ARCH_202508/EFI/TOOLS/uvt.efi https://github.com/leon9078/UefiVarTool/releases/download/1.0.0/uvt.efi
+% curl -LJ -o /Volumes/ARCH_202508/EFI/TOOLS/uvt.efi --create-dirs https://github.com/leon9078/UefiVarTool/releases/download/1.0.0/uvt.efi
 % curl -LJ -o /Volumes/ARCH_202508/EFI/BOOT/BIOS_settings.nsh https://github.com/leon9078/Z97X-SLI_Monterey/raw/master/BIOS/BIOS_settings.nsh
 % printf '@echo -off\r\nSYSTEMD-BOOTx64.EFI\r\n' > /Volumes/ARCH_202508/EFI/BOOT/startup.nsh
 % perl -i -0777pe 's/(.{1})/$1\x00/gs' /Volumes/ARCH_202508/EFI/BOOT/startup.nsh
