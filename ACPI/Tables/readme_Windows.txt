@@ -2,7 +2,7 @@ This are the SSDTs needed to work with my hackintosh!
 
 I'm using the same iasl compiler version of the ACPI tables that are embedded in my BIOS: 20120711
 In order to compile/decompile, we must be on Windows.
-Download iasl compiler from here: https://github.com/acpica/acpica/raw/refs/tags/R07_11_12/libraries/iasl.exe
+Download iasl compiler from here: https://github.com/acpica/acpica/raw/R07_11_12/libraries/iasl.exe
 
 Right click on "iasl-win-20120711.zip" > 7-Zip > Extract to "iasl-win-20120711\"
 
@@ -32,7 +32,7 @@ In order to disassemble a binary ACPI table with a custom method implementation 
 
 But we can't do it with OpenCore Misc > Debug > SysReport option. This will dump the original OEM ACPI tables without any OC customizations applied.
 
-To dump the OEM ACPI tables with OC customization applied, we have to copy EFI_debug into a FAT32 USB drive. Rename the folder to "EFI".
+To dump the OEM ACPI tables with OC customization applied, we have to copy "EFI_USB" into a FAT32 USB drive. Rename the folder to "EFI".
 
 (Re)Boot, press F12 to show Boot menu, choose USB drive.
 At OpenCore boot menu, quickly press spacebar key to show Auxiliary entries
@@ -56,7 +56,7 @@ Boot Windows and copy the newly generated ACPI tables into the "C:\path\to\iasl-
 
 Then, back to Windows in CMD
 
-> iasl -d SSDT-custom.aml -e DSDT.aml
+> iasl -d SSDT0000.aml -e DSDT0000.aml SSDT0001.aml SSDT0002.aml SSDT0003.aml SSDT0004.aml SSDT0005.aml
 
 This will correctly generate a disassembled file (*.dsl)
 

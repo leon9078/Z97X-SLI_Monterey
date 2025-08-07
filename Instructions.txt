@@ -6,6 +6,7 @@ Prerequirements:
 In a macOS environment:
 - Download official Python package from python.org and install the ".pkg". Quit and reopen Terminal.
 - Download macOS Monterey full installer using "installinstallmacos.py" (https://github.com/munki/macadmin-scripts)
+
 % cd ~/Music/
 % git clone --depth 1 https://github.com/munki/macadmin-scripts.git
 % cd macadmin-scripts
@@ -22,7 +23,7 @@ In a macOS environment:
 
 Insert an empty 16+ GB USB flash drive
 % diskutil list
-% diskutil partitionDisk /dev/diskX GPT HFS+J "Monterey_Installer" 0
+% diskutil partitionDisk /dev/diskX GPT HFS+J 'Monterey_Installer' 0
 % sudo /Applications/Install\ macOS\ Monterey.app/Contents/Resources/createinstallmedia --volume /Volumes/Monterey_Installer --nointeraction
 % diskutil eject /dev/diskX
 % hdiutil detach /dev/diskY
@@ -31,17 +32,17 @@ Insert an empty 16+ GB USB flash drive
 Download Arch installer iso from official Arch website
 Insert an empty 2+ GB USB flash drive
 % diskutil list
-% diskutil partitionDisk /dev/diskX MBR FAT32 "ARCH_202508" 0
+% diskutil partitionDisk /dev/diskX MBR FAT32 'ARCH_202508' 0
 % bsdtar -x -v -o --exclude shellx64.efi --exclude boot/syslinux/ -f archlinux-2025.08.01-x86_64.iso -C /Volumes/ARCH_202508
 % sed -i '' 's/15/5/' /Volumes/ARCH_202508/boot/grub/loopback.cfg
 % sed -i '' 's/15/5/' /Volumes/ARCH_202508/loader/loader.conf
 % mv /Volumes/ARCH_202508/EFI/BOOT/{,SYSTEMD-}BOOTx64.EFI
-% curl -LJ -o /Volumes/ARCH_202508/EFI/BOOT/BOOTx64.EFI "https://github.com/leon9078/UEFI-Shell/releases/download/25H1/shellx64.efi"
+% curl -LJ -o /Volumes/ARCH_202508/EFI/BOOT/BOOTx64.EFI https://github.com/leon9078/UEFI-Shell/releases/download/25H1/shellx64.efi
 % mkdir /Volumes/ARCH_202508/EFI/TOOLS
-% curl -LJ -o /Volumes/ARCH_202508/EFI/TOOLS/uvt.efi "https://github.com/leon9078/UefiVarTool/releases/download/1.0.0/uvt.efi"
-% curl -LJ -o /Volumes/ARCH_202508/EFI/BOOT/BIOS_settings.nsh "https://github.com/leon9078/Z97X-SLI_Monterey/raw/master/BIOS/BIOS_settings.nsh"
+% curl -LJ -o /Volumes/ARCH_202508/EFI/TOOLS/uvt.efi https://github.com/leon9078/UefiVarTool/releases/download/1.0.0/uvt.efi
+% curl -LJ -o /Volumes/ARCH_202508/EFI/BOOT/BIOS_settings.nsh https://github.com/leon9078/Z97X-SLI_Monterey/raw/master/BIOS/BIOS_settings.nsh
 % printf '@echo -off\r\nSYSTEMD-BOOTx64.EFI\r\n' > /Volumes/ARCH_202508/EFI/BOOT/startup.nsh
-% perl -i -0777pe "s/(.{1})/\$1\x00/gs" /Volumes/ARCH_202508/EFI/BOOT/startup.nsh
+% perl -i -0777pe 's/(.{1})/$1\x00/gs' /Volumes/ARCH_202508/EFI/BOOT/startup.nsh
 % sed -i '' '1s/^/\xFF\xFE/' /Volumes/ARCH_202508/EFI/BOOT/startup.nsh
 % sudo sync
 % diskutil eject /dev/diskX
@@ -78,7 +79,7 @@ Connect the macOS Monterey USB installer
 # systemctl poweroff
 
 Unplug power cable.
-Unplug every peripheral, including any SATA/M.2 disk drive.
+Unplug every peripheral, including any SATA/M.2 drive.
 Unplug CMOS battery.
 
 Now connect the power cable. Power on and immediately power off the PC.
@@ -88,17 +89,17 @@ Flash my mod BIOS using flashrom and a CH341A_SPI to USB in a Linux environment 
 
 Start with the backup BIOS (B_BIOS):
 
-# flashrom --chip "MX25L6473E" --programmer ch341a_spi --erase
-# flashrom --chip "MX25L6473E" --programmer ch341a_spi --read B_BIOS_read_after_erase.bin
-# flashrom --chip "MX25L6473E" --programmer ch341a_spi --noverify --write Z97XSLI.fd
-# flashrom --chip "MX25L6473E" --programmer ch341a_spi --read B_BIOS_read_after_reprogram.bin
+# flashrom --chip 'MX25L6473E' --programmer ch341a_spi --erase
+# flashrom --chip 'MX25L6473E' --programmer ch341a_spi --read B_BIOS_read_after_erase.bin
+# flashrom --chip 'MX25L6473E' --programmer ch341a_spi --noverify --write Z97XSLI.fd
+# flashrom --chip 'MX25L6473E' --programmer ch341a_spi --read B_BIOS_read_after_reprogram.bin
 
 Now, move on to the main BIOS (M_BIOS):
 
-# flashrom --chip "MX25L6473E" --programmer ch341a_spi --erase
-# flashrom --chip "MX25L6473E" --programmer ch341a_spi --read M_BIOS_read_after_erase.bin
-# flashrom --chip "MX25L6473E" --programmer ch341a_spi --noverify --write Z97XSLI.fd
-# flashrom --chip "MX25L6473E" --programmer ch341a_spi --read M_BIOS_read_after_reprogram.bin
+# flashrom --chip 'MX25L6473E' --programmer ch341a_spi --erase
+# flashrom --chip 'MX25L6473E' --programmer ch341a_spi --read M_BIOS_read_after_erase.bin
+# flashrom --chip 'MX25L6473E' --programmer ch341a_spi --noverify --write Z97XSLI.fd
+# flashrom --chip 'MX25L6473E' --programmer ch341a_spi --read M_BIOS_read_after_reprogram.bin
 
 Unplug power cable again.
 Short CLR_CMOS pins.
@@ -146,13 +147,13 @@ Unplug Arch USB installer, insert macOS Monterey USB installer.
 Boot, F9, USB, "Install macOS Monterey (external)" will be automatically selected and booted in 5 seconds.
 Type Cmd+Shift+T to quickly enter Terminal
 
-# diskutil list disk0
-# newfs_msdos -F 32 -v "EFI" /dev/rdisk0s1
-# diskutil mount readOnly disk0s1
-# mount | grep disk0 (check for "read-only")
-# diskutil umount disk0s1
-# newfs_hfs -J -v "Macintosh HD" /dev/rdisk0s2
-# diskutil mount disk0s2
+# diskutil list /dev/disk0
+# newfs_msdos -F 32 -v 'EFI' /dev/rdisk0s1
+# diskutil mount readOnly /dev/disk0s1
+# mount | grep '/dev/disk0s1' (check for "read-only")
+# diskutil umount /dev/disk0s1
+# newfs_hfs -J -v 'Macintosh HD' /dev/rdisk0s2
+# diskutil mount /dev/disk0s2
 
 Cmd-Q to quit Terminal
 
