@@ -34,8 +34,7 @@ Insert an empty 2+ GB USB flash drive
 % diskutil list
 % diskutil partitionDisk /dev/diskX MBR FAT32 'ARCH_202508' 0
 % bsdtar -x -v -o --exclude shellx64.efi --exclude boot/syslinux/ -f archlinux-2025.08.01-x86_64.iso -C /Volumes/ARCH_202508
-% perl -i -pe 's/15/5/' /Volumes/ARCH_202508/boot/grub/loopback.cfg
-% perl -i -pe 's/15/5/' /Volumes/ARCH_202508/loader/loader.conf
+% perl -i -pe 's/(^timeout )15/$15/;s/(^beep o)n/$1ff/' /Volumes/ARCH_202508/loader/loader.conf
 % mv /Volumes/ARCH_202508/EFI/BOOT/{,ARCH-}BOOTx64.EFI
 % curl -LJ -o /Volumes/ARCH_202508/EFI/BOOT/BOOTx64.EFI https://github.com/leon9078/UEFI-Shell/releases/download/25H1/shellx64.efi
 % curl -LJ -o /Volumes/ARCH_202508/EFI/TOOLS/uvt.efi --create-dirs https://github.com/leon9078/UefiVarTool/releases/download/1.0.0/uvt.efi

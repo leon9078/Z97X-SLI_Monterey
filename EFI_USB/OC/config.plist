@@ -478,10 +478,22 @@
 	<dict>
 		<key>Add</key>
 		<dict>
+			<key>PciRoot(0x0)/Pci(0x2,0x0)</key>
+			<dict>
+				<key>force-online</key>
+				<data>AQAAAA==</data>
+			</dict>
 			<key>PciRoot(0x0)/Pci(0x1b,0x0)</key>
 			<dict>
 				<key>layout-id</key>
 				<data>YwAAAA==</data>
+			</dict>
+			<key>PciRoot(0x0)/Pci(0x1c,0x5)/Pci(0x0,0x0)</key>
+			<dict>
+				<key>brcmfx-country</key>
+				<string>#a</string>
+				<key>brcmfx-driver</key>
+				<integer>2</integer>
 			</dict>
 			<key>PciRoot(0x0)/Pci(0x1f,0x0)</key>
 			<dict>
@@ -504,13 +516,6 @@
 				<data>g4wAAA==</data>
 				<key>name</key>
 				<string>pci8086,8c83</string>
-			</dict>
-			<key>PciRoot(0x0)/Pci(0x1c,0x5)/Pci(0x0,0x0)</key>
-			<dict>
-				<key>brcmfx-country</key>
-				<string>#a</string>
-				<key>brcmfx-driver</key>
-				<integer>2</integer>
 			</dict>
 		</dict>
 		<key>Delete</key>
