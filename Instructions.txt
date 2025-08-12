@@ -34,15 +34,13 @@ Insert an empty 2+ GB USB flash drive
 % diskutil list
 % diskutil partitionDisk /dev/diskX MBR FAT32 'ARCH_202508' 0
 % bsdtar -x -v -o --exclude shellx64.efi --exclude boot/syslinux/ -f archlinux-2025.08.01-x86_64.iso -C /Volumes/ARCH_202508
-% sed -i '' 's/15/5/' /Volumes/ARCH_202508/boot/grub/loopback.cfg
-% sed -i '' 's/15/5/' /Volumes/ARCH_202508/loader/loader.conf
-% mv /Volumes/ARCH_202508/EFI/BOOT/{,SYSTEMD-}BOOTx64.EFI
+% perl -i -pe 's/15/5/' /Volumes/ARCH_202508/boot/grub/loopback.cfg
+% perl -i -pe 's/15/5/' /Volumes/ARCH_202508/loader/loader.conf
+% mv /Volumes/ARCH_202508/EFI/BOOT/{,ARCH-}BOOTx64.EFI
 % curl -LJ -o /Volumes/ARCH_202508/EFI/BOOT/BOOTx64.EFI https://github.com/leon9078/UEFI-Shell/releases/download/25H1/shellx64.efi
 % curl -LJ -o /Volumes/ARCH_202508/EFI/TOOLS/uvt.efi --create-dirs https://github.com/leon9078/UefiVarTool/releases/download/1.0.0/uvt.efi
 % curl -LJ -o /Volumes/ARCH_202508/EFI/BOOT/BIOS_settings.nsh https://github.com/leon9078/Z97X-SLI_Monterey/raw/master/BIOS/BIOS_settings.nsh
-% printf '@echo -off\r\nSYSTEMD-BOOTx64.EFI\r\n' > /Volumes/ARCH_202508/EFI/BOOT/startup.nsh
-% perl -i -0777pe 's/(.{1})/$1\x00/gs' /Volumes/ARCH_202508/EFI/BOOT/startup.nsh
-% sed -i '' '1s/^/\xFF\xFE/' /Volumes/ARCH_202508/EFI/BOOT/startup.nsh
+% printf '@echo -off\r\nARCH-BOOTx64.EFI\r\n' | perl -0777pe 's/(.{1})/$1\x00/gs;s/^/\xFF\xFE/' > /Volumes/ARCH_202508/EFI/BOOT/startup.nsh
 % sudo sync
 % diskutil eject /dev/diskX
 
@@ -197,7 +195,7 @@ Post-install
 - Open Terminal
 % cp /etc/zshrc ~/.zshrc
 % chmod 600 ~/.zshrc
-% sed -i '' 's/\(^PS1=\).*/\1"%~ %# "/' ~/.zshrc
+% perl -i -pe 's/(^PS1=).*/$1"%~ %# "/' ~/.zshrc
 % printf '\n# Make sure line content is cleared from cursor position till the beginning of line when Ctrl+U is typed\nbindkey "^U" backward-kill-line\n' >> ~/.zshrc
 
 Go to Terminal > Settings... > Profiles and select the profile you're using.
