@@ -952,13 +952,10 @@ Click on "Defaults" and check on the right:
 - Attributes: 40h
 - Data checksum: 51h, valid
 
+Attribute bit set (0x40) AND Data checksum value different than AA. So we know we have to calculate file checksum for this module, this info is useful later
+
 Inside CMD
 > start /b /min /wait MMTool mod_bios_NVRAM_ACPI_Debug.fd /ec 9221315B-30BB-46B5-813E-1B1BF4712BD3 Defaults.ffs
-
-Back in UEFITool, before working on making the actual edit, click on "Defaults", check again this important info on the right:
-
-Attributes: 40h
-Data checksum: 51h, valid
 
 Back to File Explorer, drag "Defaults.ffs" into Hextor icon while holding Shift
 
