@@ -43,9 +43,9 @@ Click on "Command Prompt" icon, then run:
 > curl -LO https://github.com/mullvad/mullvad-browser/releases/download/14.5.5/mullvad-browser-windows-x86_64-14.5.5.exe
 > curl -LO https://aka.ms/vs/17/release/vc_redist.x86.exe
 > curl -LO https://aka.ms/vs/17/release/vc_redist.x64.exe
-> curl -LO https://www.python.org/ftp/python/3.13.5/python-3.13.5-amd64.exe
+> curl -LO https://www.python.org/ftp/python/3.13.6/python-3.13.6-amd64.exe
 > curl -LO https://www.7-zip.org/a/7z2501-x64.exe
-> curl -LO https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.8.3/npp.8.8.3.Installer.x64.exe
+> curl -LO https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.8.4/npp.8.8.4.Installer.x64.exe
 > curl -LO https://github.com/digitalw0lf/hextor/releases/download/v0.14/HextorSetup.exe
 > curl -LO https://download.gigabyte.com/FileList/BIOS/mb_bios_ga-z97x-sli_f10b.zip
 > curl -LO https://github.com/LongSoft/UEFITool/releases/download/A72/UEFITool_NE_A72_win64.zip
@@ -150,7 +150,7 @@ Back to CMD
 
 Back to File Explorer, press F5 to refresh the new downloaded files
 
-Right click on "python-3.13.5-amd64.exe" > "Run as administrator" > "Yes"
+Right click on "python-3.13.6-amd64.exe" > "Run as administrator" > "Yes"
 Check "Use admin privileges when installing py.exe"
 Check "Add python.exe to PATH"
 
@@ -170,7 +170,7 @@ Close
 
 
 
-Right click on "npp.8.8.3.Installer.x64.exe" > "Run as administrator" > "Yes"
+Right click on "npp.8.8.4.Installer.x64.exe" > "Run as administrator" > "Yes"
 (English is fine, otherwise choose your language)
 OK
 Next >
@@ -178,7 +178,7 @@ I Agree
 Next >
 Next >
 Install
-Uncheck "Run Notepad++ v8.8.3"
+Uncheck "Run Notepad++ v8.8.4"
 Finish
 
 
