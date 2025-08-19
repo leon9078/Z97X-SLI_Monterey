@@ -13,7 +13,7 @@ In a macOS environment:
 % sudo python3 installinstallmacos.py
 [type the number of the macOS version you want to install]
 % sudo chown -R $(whoami) *
-% sudo hdiutil attach -mountpoint mnt Install_macOS_12.7.4-21H1123.dmg
+% hdiutil attach -mountpoint mnt Install_macOS_12.7.4-21H1123.dmg
 % cp -R mnt/Install\ macOS\ Monterey.app /Applications/
 % sudo sync
 % hdiutil detach mnt
@@ -129,7 +129,7 @@ Boot the PC, "No bootable device is detected", insert Arch USB installer.
 
 Make sure Ethernet is disconnected!
 
-Reset button, F9, USB, UEFI Shell, Arch systemd-boot, "e", "module_blacklist=b43,b43legacy,bcm43xx,bcma,brcm80211,brcmfmac,brcmsmac,ssb quiet loglevel=0"
+Reset button, F12, USB, UEFI Shell, Arch systemd-boot, "e", "module_blacklist=b43,b43legacy,bcm43xx,bcma,brcm80211,brcmfmac,brcmsmac,ssb quiet loglevel=0"
 
 # systemctl stop reflector systemd-{networkd-wait-online,timesyncd}
 # systemctl disable reflector systemd-{networkd-wait-online,timesyncd}
@@ -140,7 +140,7 @@ Reset button, F9, USB, UEFI Shell, Arch systemd-boot, "e", "module_blacklist=b43
 # systemctl poweroff
 
 Unplug Arch USB installer, insert macOS Monterey USB installer.
-Boot, F9, USB, "Install macOS Monterey (external)" will be automatically selected and booted in 5 seconds.
+Boot, F12, USB, "Install macOS Monterey (external)" will be automatically selected and booted in 5 seconds.
 Type Cmd+Shift+T to quickly enter Terminal
 
 # diskutil list /dev/disk0
@@ -163,7 +163,7 @@ Unplug macOS USB installer, plug again Arch installer.
 
 Make sure Ethernet is disconnected!
 
-Boot, F9, USB, UEFI Shell, Arch systemd-boot, "e", "module_blacklist=b43,b43legacy,bcm43xx,bcma,brcm80211,brcmfmac,brcmsmac,ssb quiet loglevel=0"
+Boot, F12, USB, UEFI Shell, Arch systemd-boot, "e", "module_blacklist=b43,b43legacy,bcm43xx,bcma,brcm80211,brcmfmac,brcmsmac,ssb quiet loglevel=0"
 
 # systemctl stop reflector systemd-{networkd-wait-online,timesyncd}
 # systemctl disable reflector systemd-{networkd-wait-online,timesyncd}
