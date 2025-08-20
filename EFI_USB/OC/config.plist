@@ -550,7 +550,7 @@
 				<key>ExecutablePath</key>
 				<string>Contents/MacOS/Lilu</string>
 				<key>MaxKernel</key>
-				<string>24.9.9</string>
+				<string>25.9.9</string>
 				<key>MinKernel</key>
 				<string>8.0.0</string>
 				<key>PlistPath</key>
@@ -568,7 +568,7 @@
 				<key>ExecutablePath</key>
 				<string>Contents/MacOS/VirtualSMC</string>
 				<key>MaxKernel</key>
-				<string>24.9.9</string>
+				<string>25.9.9</string>
 				<key>MinKernel</key>
 				<string>8.0.0</string>
 				<key>PlistPath</key>
@@ -586,7 +586,7 @@
 				<key>ExecutablePath</key>
 				<string>Contents/MacOS/WhateverGreen</string>
 				<key>MaxKernel</key>
-				<string>24.9.9</string>
+				<string>25.9.9</string>
 				<key>MinKernel</key>
 				<string>10.0.0</string>
 				<key>PlistPath</key>
@@ -604,7 +604,7 @@
 				<key>ExecutablePath</key>
 				<string>Contents/MacOS/AppleALC</string>
 				<key>MaxKernel</key>
-				<string>24.9.9</string>
+				<string>25.9.9</string>
 				<key>MinKernel</key>
 				<string>8.0.0</string>
 				<key>PlistPath</key>
@@ -622,7 +622,7 @@
 				<key>ExecutablePath</key>
 				<string>Contents/MacOS/AirportBrcmFixup</string>
 				<key>MaxKernel</key>
-				<string>24.9.9</string>
+				<string>25.9.9</string>
 				<key>MinKernel</key>
 				<string>12.0.0</string>
 				<key>PlistPath</key>
@@ -658,7 +658,7 @@
 				<key>ExecutablePath</key>
 				<string></string>
 				<key>MaxKernel</key>
-				<string>24.9.9</string>
+				<string>25.9.9</string>
 				<key>MinKernel</key>
 				<string>17.0.0</string>
 				<key>PlistPath</key>
@@ -676,7 +676,7 @@
 				<key>ExecutablePath</key>
 				<string>Contents/MacOS/RestrictEvents</string>
 				<key>MaxKernel</key>
-				<string>24.9.9</string>
+				<string>25.9.9</string>
 				<key>MinKernel</key>
 				<string>12.0.0</string>
 				<key>PlistPath</key>
