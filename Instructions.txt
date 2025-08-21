@@ -195,7 +195,7 @@ Post-install
 % cp /etc/zshrc ~/.zshrc
 % chmod 600 ~/.zshrc
 % perl -i -pe 's/(^PS1=).*/$1"%~ %# "/' ~/.zshrc
-% printf '\n# Make sure line content is cleared from cursor position till the beginning of line when Ctrl+U is typed\nbindkey "^U" backward-kill-line\n' >> ~/.zshrc
+% printf '\n# Make sure line content is cleared from cursor position till the beginning of line when Ctrl-U is typed\nbindkey "^U" backward-kill-line\n' >> ~/.zshrc
 
 Go to Terminal > Settings... > Profiles and select the profile you're using.
 
