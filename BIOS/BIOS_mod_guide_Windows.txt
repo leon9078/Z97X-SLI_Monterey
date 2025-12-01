@@ -12,7 +12,7 @@ Complete list of modifications:
 6) Delete 2 Microcode GUID ffs (fake, and last of the duplicates one)
 7) Delete 2 "Padding file" sections, by adjusting Attributes
 8) Replace AMI's "FileSystem" driver with "Fat" (EnhancedFatDxe from FatPkg audk [fork of EDK II project focused on security])
-9) Change CORE_DXE to add "OpenCore bootloader" and "Gentoo" for automatic detection of specific bootloader paths. Plus, make all UEFI bootloader paths uppercase
+9) Change CORE_DXE to add "OpenCore" and "Gentoo" for automatic detection of specific bootloader paths. Plus, make all UEFI bootloader paths uppercase
 
 Prerequisites:
 - Clean install of Windows 10 version 1607 or higher
@@ -51,8 +51,8 @@ Click on "Command Prompt" icon, then run:
 > curl -LO https://github.com/LongSoft/UEFITool/releases/download/A72/UEFITool_NE_A72_win64.zip
 > curl -LO https://github.com/LongSoft/UEFITool/releases/download/0.28.0/UEFITool_0.28.0_win32.zip
 > curl -LO https://github.com/LongSoft/IFRExtractor-RS/releases/download/v1.6.0/ifrextractor_1.6.0_win32.zip
-> curl -LO https://github.com/leon9078/OpenCorePkg/releases/download/1.0.6/OpenCore-1.0.6-Darwin-XCODE5-RELEASE.zip
-> curl -LO https://github.com/leon9078/OpenCorePkg/releases/download/1.0.6/OpenCore-1.0.6-Windows-VS2019-RELEASE.zip
+> curl -LO https://github.com/leon9078/OpenCorePkg/releases/download/1.0.7/OpenCore-1.0.7-Darwin-XCODE5-RELEASE.zip
+> curl -LO https://github.com/leon9078/OpenCorePkg/releases/download/1.0.7/OpenCore-1.0.7-Windows-VS2019-RELEASE.zip
 
 Click on "Start" icon > select "Documents"
 Click twice on "Date modified"
@@ -263,8 +263,8 @@ Select with Ctrl modifier:
 and with all this files selected (6) > 7-Zip > Extract Here
 
 Right click on "UEFITool_0.28.0_win32.zip" > 7-Zip > Extract to "UEFITool_0.28.0_win32\"
-Right click on "OpenCore-1.0.6-Darwin-XCODE5-RELEASE.zip" > 7-Zip > Extract to "OpenCore-1.0.6-Darwin-XCODE5-RELEASE\"
-Right click on "OpenCore-1.0.6-Windows-VS2019-RELEASE.zip" > 7-Zip > Extract to "OpenCore-1.0.6-Windows-VS2019-RELEASE\"
+Right click on "OpenCore-1.0.7-Darwin-XCODE5-RELEASE.zip" > 7-Zip > Extract to "OpenCore-1.0.7-Darwin-XCODE5-RELEASE\"
+Right click on "OpenCore-1.0.7-Windows-VS2019-RELEASE.zip" > 7-Zip > Extract to "OpenCore-1.0.7-Windows-VS2019-RELEASE\"
 Right click on "UBU_v1_80_b1.rar" > 7-Zip > Extract to "UBU_v1_80_b1\"
 Right click on "Intel_VBIOS_and_BSF_r3.7z" > 7-Zip > Extract to "Intel_VBIOS_and_BSF_r3\"
 
@@ -400,7 +400,6 @@ Back to CMD
 
 Back to File Explorer > WIN32 folder
 Open again "fitc.exe"
-File > Open... > "config.xml" > Open
 Build > Build Image
 WARNING "Are you sure you want to choose the Boot Guard Profile: "Boot Guard Profile 0 - No_FVME" for this build?" > "Yes"
 File > Exit
@@ -493,10 +492,10 @@ File > Save selection as... > "Updated_512KiB.bin" > Save
 File > Exit
 
 Now back to CMD
-> move OpenCore-1.0.6-Windows-VS2019-RELEASE\Utilities\BaseTools\GenSec.exe .
-> move OpenCore-1.0.6-Windows-VS2019-RELEASE\Utilities\BaseTools\GenFfs.exe .
-> move OpenCore-1.0.6-Windows-VS2019-RELEASE\Utilities\BaseTools\LzmaCompress.exe .
-> rmdir /s /q OpenCore-1.0.6-Windows-VS2019-RELEASE
+> move OpenCore-1.0.7-Windows-VS2019-RELEASE\Utilities\BaseTools\GenSec.exe .
+> move OpenCore-1.0.7-Windows-VS2019-RELEASE\Utilities\BaseTools\GenFfs.exe .
+> move OpenCore-1.0.7-Windows-VS2019-RELEASE\Utilities\BaseTools\LzmaCompress.exe .
+> rmdir /s /q OpenCore-1.0.7-Windows-VS2019-RELEASE
 > GenSec -o Updated_512KiB.raw -s EFI_SECTION_RAW Updated_512KiB.bin
 > GenSec -o Updated_512KiB.com -s EFI_SECTION_COMPRESSION -c PI_NONE Updated_512KiB.raw
 > GenFfs -o Updated_512KiB.ffs -t EFI_FV_FILETYPE_FREEFORM -g "821D110C-D0A3-4CF7-AEF3-E28088491704" -i Updated_512KiB.com
@@ -1102,8 +1101,8 @@ File > Exit
 
 Back to CMD
 > del BiosAc.ffs TxtPeiAp.ffs
-> move OpenCore-1.0.6-Darwin-XCODE5-RELEASE\X64\EFI\OC\Drivers\Fat.efi .
-> rmdir /s /q OpenCore-1.0.6-Darwin-XCODE5-RELEASE
+> move OpenCore-1.0.7-Darwin-XCODE5-RELEASE\X64\EFI\OC\Drivers\Fat.efi .
+> rmdir /s /q OpenCore-1.0.7-Darwin-XCODE5-RELEASE
 > GenSec -o Fat.pe32 -s EFI_SECTION_PE32 Fat.efi
 > GenSec -o Fat.ui -s EFI_SECTION_USER_INTERFACE -n "Fat"
 > GenSec -o Fat.com -s EFI_SECTION_COMPRESSION -c PI_NONE Fat.pe32 Fat.ui
@@ -1120,7 +1119,12 @@ Done with the creation of the Fat ffs module!
 
 
 
-Now we want to change some default UEFI boot entries in order to add "OpenCore bootloader" and "Gentoo" to the list of recognized UEFI default boot entries in our firmware.
+Now we want to change some default UEFI boot entries in order to add "OpenCore" and "Gentoo" to the list of recognized UEFI default boot entries in our firmware.
+
+For OpenCore, I took the string from here: https://github.com/acidanthera/OpenCorePkg/blob/507907a2dbebea24cf22f5dfaf0509d4097545fe/Library/OcMainLib/OpenCoreMisc.c#L690C11-L690C19
+Basically it's the same as if OpenCore was launched with "LauncherOption" set to "Short"
+
+For Gentoo, I took the string from here: https://github.com/gentoo/gentoo/blob/8f3e1123e053127bab087ab0b8bbfc16a0c38748/sys-boot/grub/files/grub.default-4#L11C19-L11C25
 
 This entries are auto-generated at runtime by the underlying firmware as Boot####, where # is an HEX value containing numbers (0-9) and uppercase HEX letters (A-F).
 This auto-generation works much like the user have created a UEFI entry from the UEFI shell with this command:
@@ -1178,7 +1182,7 @@ You have selected a total of 496 bytes.
 
 Edit > Copy as > Array (delimited text)
 Elements: unicode
-Notation: ansi char
+Notation: wide char
 Layout: Without separators
 Values per line: All in one line
 
@@ -1186,7 +1190,7 @@ Copy
 
 
 Open Notepad++
-View > Word wrap
+View > Word wrap (check)
 Edit > Paste
 
 We want to replace those unreadable characters (\x00) to spaces.
@@ -1221,7 +1225,7 @@ Replace All
 
 Close Replace window
 
-View > Word wrap
+View > Word wrap (uncheck)
 
 
 
@@ -1276,11 +1280,46 @@ For a clearer overall view of the process we want to put quotes on both side plu
 
 
 
-We want to modify "RedHat Boot Manager" and "ubuntu" entries and change them to "OpenCore bootloader" and "Gentoo" respectively.
+The firmware will generate at runtime (if bootloader paths are found in the HDDs) those entries in the following direction from bottom to top, so:
+1) Windows Boot Manager
+2) Suse Boot Manager
+3) ubuntu
+4) RedHat Boot Manager
+5) opensuse
+6) UEFI OS
+  - If Windows is installed it will create "\EFI\Boot\bootx64.efi" alongside "\EFI\Microsoft\Boot\bootmgfw.efi" in the same partition. So only in this case, "UEFI OS" entry is NOT created if "Windows Boot Manager" exist
+
+
+So in an unlikely configuration of a disk (or more disks) where all those bootloader paths are present, this is what the firmware create at runtime:
+- Boot0001 Windows Boot Manager    \EFI\Microsoft\Boot\bootmgfw.efi
+- Boot0002 Suse Boot Manager       \EFI\Suse\elilo.efi
+- Boot0003 ubuntu                  \EFI\Ubuntu\grubx64.efi
+- Boot0004 RedHat Boot Manager     \EFI\Redhat\elilo.efi
+- Boot0005 opensuse                \EFI\opensuse\grubx64.efi
+
+If Windows exist AND there's another disk attached to the PC with the UEFI fallback path:
+- Boot0001 Windows Boot Manager    \EFI\Microsoft\Boot\bootmgfw.efi
+- Boot0002 Suse Boot Manager       \EFI\Suse\elilo.efi
+- Boot0003 ubuntu                  \EFI\Ubuntu\grubx64.efi
+- Boot0004 RedHat Boot Manager     \EFI\Redhat\elilo.efi
+- Boot0005 opensuse                \EFI\opensuse\grubx64.efi
+- Boot0006 UEFI OS                 \EFI\BOOT\BOOTX64.EFI ---> Pointing to the other HDD
+
+If Windows does NOT exist:
+- Boot0001 Suse Boot Manager       \EFI\Suse\elilo.efi
+- Boot0002 ubuntu                  \EFI\Ubuntu\grubx64.efi
+- Boot0003 RedHat Boot Manager     \EFI\Redhat\elilo.efi
+- Boot0004 opensuse                \EFI\opensuse\grubx64.efi
+- Boot0005 UEFI OS                 \EFI\BOOT\BOOTX64.EFI ---> More entry of this for each HDD
+
+
+
+We want to modify "RedHat Boot Manager" and "ubuntu" entries and change them to "OpenCore" and "Gentoo" respectively.
 Why I choose those 2 Linux distros? Because they fit with the Description and EFI path size respectively, making sure there are enough NUL character(s) to fit the multiple of 4 length.
+"OpenCore" entry is smaller by 11 characters, but it's not an issue. We will replace that with NUL characters.
 
 "RedHat Boot Manager"  {19+1} (20)  ->  "\EFI\Redhat\elilo.efi"  {21+3} (24)
-"OpenCore bootloader"  {19+1} (20)  ->  "\EFI\OC\OPENCORE.EFI"   {20+4} (24)
+"OpenCore"             {8+12} (20)  ->  "\EFI\OC\OPENCORE.EFI"   {20+4} (24)
 
 "ubuntu"  {6+2} (8)  ->  "\EFI\Ubuntu\grubx64.efi"  {23+1} (24)
 "Gentoo"  {6+2} (8)  ->  "\EFI\GENTOO\BZIMAGE.EFI"  {23+1} (24)
@@ -1288,7 +1327,7 @@ Why I choose those 2 Linux distros? Because they fit with the Description and EF
 
 
 Plus, we want to modify casing of Description of some entries, and make all DevPaths to uppercase.
-Only openSUSE need the modification from "opensuse" to "openSUSE".
+Only openSUSE need the modification from "opensuse" to "OpenSUSE".
 
 UEFI OS already has DevPath all uppercase (\EFI\BOOT\BOOTX64.EFI), so we can skip it.
 
@@ -1302,11 +1341,11 @@ From this:
 
 to this:
 
-"openSUSE"               {8+4} (12) ->  "\EFI\OPENSUSE\GRUBX64.EFI"         {25+3} (28)
-"OpenCore bootloader"   {19+1} (20) ->  "\EFI\OC\OPENCORE.EFI"              {20+4} (24)
-"Gentoo"                 {6+2}  (8) ->  "\EFI\GENTOO\BZIMAGE.EFI"           {23+1} (24)
-"Suse Boot Manager"     {17+3} (20) ->  "\EFI\SUSE\ELILO.EFI"               {19+1} (20)
-"Windows Boot Manager"  {20+4} (24) ->  "\EFI\MICROSOFT\BOOT\BOOTMGFW.EFI"  {32+4} (36)
+"OpenSUSE"               {8+4}  (12) ->  "\EFI\OPENSUSE\GRUBX64.EFI"         {25+3} (28)
+"OpenCore"               {8+12} (20) ->  "\EFI\OC\OPENCORE.EFI"              {20+4} (24)
+"Gentoo"                 {6+2}   (8) ->  "\EFI\GENTOO\BZIMAGE.EFI"           {23+1} (24)
+"Suse Boot Manager"     {17+3}  (20) ->  "\EFI\SUSE\ELILO.EFI"               {19+1} (20)
+"Windows Boot Manager"  {20+4}  (24) ->  "\EFI\MICROSOFT\BOOT\BOOTMGFW.EFI"  {32+4} (36)
 
 Here I'm defining "bzImage.efi" instead of the traditional "grubx64.efi". This is because I want to use EFI stub instead of the traditional GRUB 2 bootloader when using Gentoo!
 
@@ -1329,8 +1368,8 @@ Our new sequence will be: "opensuse{u16:0x00:4}{u16::204}"
 
 Now let's move to the Replace sequence
 
-We are changing the case of the openSUSE Description from "opensuse" to "openSUSE". Then DevPath uppercase.
-Next, we have "OpenCore bootloader" with one extra NUL character. Then DevPath uppercase.
+We are changing the case of the openSUSE Description from "opensuse" to "OpenSUSE". Then DevPath uppercase.
+Next, we have "OpenCore" with x12 extra NUL characters. Then DevPath uppercase.
 This time, in the replace sequence we can not add "{u16:0x00}" as it will be recognized as a string to replace.
 
 One way is using this notation: "\x00", but later when we have to deal with multiple NUL characters we would type: "\x00\x00\x00\x00"
@@ -1342,18 +1381,18 @@ But if we do this way, our value inside round brackets would be \x00\x00\x00\x00
 So we want to change this by only selecting 1 NUL character inside the round bracket and then add 3 more bytes to the curly brackets.
 So the FINAL find sequence will be: "opensuse({u16:0x00}){u16::207}"
 
-while replace sequence now becomes: "openSUSE$1$1$1$1"
+while replace sequence now becomes: "OpenSUSE$1$1$1$1"
 
 "$1" in this case means: "{u16:0x00}"
 
 Now that we understand this pattern, it's easy to continue till the end of the Replace sequence:
 
-openSUSE                          ->  8
+OpenSUSE                          ->  8
 $1$1$1$1                          ->  4 (\x00 * 4)
 \EFI\OPENSUSE\GRUBX64.EFI         -> 25
 $1$1$1                            ->  3 (\x00 * 3)
-OpenCore bootloader               -> 19
-$1                                ->  1 (\x00)
+OpenCore                          ->  8
+$1$1$1$1$1$1$1$1$1$1$1$1          -> 12 (\x00 * 12)
 \EFI\OC\OPENCORE.EFI              -> 20
 $1$1$1$1                          ->  4 (\x00 * 4)
 Gentoo                            ->  6
@@ -1374,7 +1413,7 @@ TOTAL                      -> 216
 
 Now one last caveat, we need to escape backlash (\) character(s), otherwise those gets removed by Hextor.
 
-FINAL replace sequence now is: "openSUSE$1$1$1$1\\EFI\\OPENSUSE\\GRUBX64.EFI$1$1$1OpenCore bootloader$1\\EFI\\OC\\OPENCORE.EFI$1$1$1$1Gentoo$1$1\\EFI\\GENTOO\\BZIMAGE.EFI$1Suse Boot Manager$1$1$1\\EFI\\SUSE\\ELILO.EFI$1Windows Boot Manager$1$1$1$1\\EFI\\MICROSOFT\\BOOT\\BOOTMGFW.EFI$1$1$1$1"
+FINAL replace sequence now is: "OpenSUSE$1$1$1$1\\EFI\\OPENSUSE\\GRUBX64.EFI$1$1$1OpenCore$1$1$1$1$1$1$1$1$1$1$1$1\\EFI\\OC\\OPENCORE.EFI$1$1$1$1Gentoo$1$1\\EFI\\GENTOO\\BZIMAGE.EFI$1Suse Boot Manager$1$1$1\\EFI\\SUSE\\ELILO.EFI$1Windows Boot Manager$1$1$1$1\\EFI\\MICROSOFT\\BOOT\\BOOTMGFW.EFI$1$1$1$1"
 
 Back to Hextor
 Search > Find/Replace...
@@ -1384,7 +1423,7 @@ check "Extended syntax"
 Find next >>
 
 Expand "Replace" section
-Replace with: "openSUSE$1$1$1$1\\EFI\\OPENSUSE\\GRUBX64.EFI$1$1$1OpenCore bootloader$1\\EFI\\OC\\OPENCORE.EFI$1$1$1$1Gentoo$1$1\\EFI\\GENTOO\\BZIMAGE.EFI$1Suse Boot Manager$1$1$1\\EFI\\SUSE\\ELILO.EFI$1Windows Boot Manager$1$1$1$1\\EFI\\MICROSOFT\\BOOT\\BOOTMGFW.EFI$1$1$1$1"
+Replace with: "OpenSUSE$1$1$1$1\\EFI\\OPENSUSE\\GRUBX64.EFI$1$1$1OpenCore$1$1$1$1$1$1$1$1$1$1$1$1\\EFI\\OC\\OPENCORE.EFI$1$1$1$1Gentoo$1$1\\EFI\\GENTOO\\BZIMAGE.EFI$1Suse Boot Manager$1$1$1\\EFI\\SUSE\\ELILO.EFI$1Windows Boot Manager$1$1$1$1\\EFI\\MICROSOFT\\BOOT\\BOOTMGFW.EFI$1$1$1$1"
 uncheck both "Hex" and "Ask each replace"
 Replace all > [Search pattern replaced 1 time(s)] > OK
 
@@ -1417,11 +1456,11 @@ File > Save image file... > "tmp.fd" > Save
 
 Open reconstructed file > No
 
-A warning will appear saying: "parseFile: invalid data checksum F0h, should be B2h". It is recreating the checksum for us!!!
+A warning will appear saying: "parseFile: invalid data checksum F0h, should be 1Dh". It is recreating the checksum for us!!!
 
 Source of this message here: https://github.com/LongSoft/UEFITool/blob/0.28.0/ffsengine.cpp#L1346C17-L1346C68
 
-Take note of the new checksum value: "B2h"
+Take note of the new checksum value: "1Dh"
 
 
 File > Quit
@@ -1433,7 +1472,7 @@ File > Quit
 Back to File Explorer, drag "CORE_DXE_mod.ffs" into Hextor icon while holding Shift
 
 Search > Go To address... > 0x11 > OK
-Type: "B2"
+Type: "1D"
 File > Save
 File > Exit
 
