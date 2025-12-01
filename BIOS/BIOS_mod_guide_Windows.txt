@@ -1518,6 +1518,7 @@ File > Quit
 Back to CMD
 > reg delete HKCU\SOFTWARE\CodeRush /f
 > reg delete HKCU\SOFTWARE\QtProject /f
+> reg delete HKCU\SOFTWARE\Intel\FlashImageTool /f
 > exit
 
 Open MMTool.exe for the last time
