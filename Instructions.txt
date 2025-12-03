@@ -100,7 +100,7 @@ y
 
 % sudo newfs_msdos -v ARCH_202512 /dev/rdiskXs1
 % sudo diskutil mount nobrowse /dev/diskXs1
-% bsdtar -x -v --exclude EFI/BOOT/BOOTIA32.EFI --exclude boot/syslinux/ -f archlinux-2025.12.01-x86_64.iso -C /Volumes/ARCH_202512
+% bsdtar -x -v --exclude EFI/BOOT/BOOTIA32.EFI --exclude boot/syslinux/ --exclude shellia32.efi -f archlinux-2025.12.01-x86_64.iso -C /Volumes/ARCH_202512
 % perl -i -pe 's/(timeout).*/$1 5/;s/(beep).*/$1 off/' /Volumes/ARCH_202512/loader/loader.conf
 % mv /Volumes/ARCH_202512/EFI/BOOT/{,ARCH-}BOOTx64.EFI
 % mv /Volumes/ARCH_202512/shellx64.efi /Volumes/ARCH_202512/EFI/BOOT/BOOTx64.EFI
