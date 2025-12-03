@@ -6,6 +6,7 @@ Prerequirements:
 In a macOS environment:
 - Download official Python package from python.org and install the ".pkg". Quit and reopen Terminal.
 - Download macOS Monterey full installer using "installinstallmacos.py" (https://github.com/munki/macadmin-scripts)
+- Download GPT fdisk (gdisk) tool
 
 % cd ~/Music/
 % git clone --depth 1 https://github.com/munki/macadmin-scripts.git
@@ -21,32 +22,101 @@ In a macOS environment:
 % cd ..
 % rm -rf macadmin-scripts
 
+Download GPT fdisk (gdisk) tool
+
+% curl -L -o gdisk-1.0.10.pkg https://sourceforge.net/projects/gptfdisk/files/gptfdisk/1.0.10/gdisk-binaries/gdisk-1.0.10.pkg/download
+% pkgutil --expand-full gdisk-1.0.10.pkg gdisk-1.0.10/
+% mv gdisk-1.0.10/Payload/usr/local/bin/gdisk .
+% rm -r gdisk-1.0.10*
+
 Insert an empty 16+ GB USB flash drive
+
 % diskutil list
-% diskutil partitionDisk /dev/diskX GPT HFS+J 'Monterey_Installer' 0
+% sudo ./gdisk /dev/rdiskX
+n
+[Enter, accept default Partition number]
+[Enter, accept default First sector]
++600M
+ef00
+c
+EFI System Partition
+n
+[Enter, accept default Partition number]
+[Enter, accept default First sector]
+[Enter, accept default Last sector]
+[Enter, accept default AF00 Hex code]
+c
+2
+[empty name (PARTLABEL)]
+x
+h
+v
+
+[The output MUST say "No problems found." and "available in 2 segments, the largest of which is 2014 [...] in size."]
+[2014 sectors MUST BE the MINIMUM largest segment, so it COULD BE a larger number]
+
+w
+y
+
+% sudo newfs_msdos -v EFI /dev/rdiskXs1
+% sudo diskutil mount readOnly /dev/diskXs1
+% diskutil umount /dev/diskXs1
+% sudo newfs_hfs -J -v Monterey_Installer /dev/rdiskXs2
+% diskutil mount nobrowse /dev/diskXs2
 % sudo /Applications/Install\ macOS\ Monterey.app/Contents/Resources/createinstallmedia --volume /Volumes/Monterey_Installer --nointeraction
+% sudo sync
+% hdiutil detach /Volumes/Shared\ Support
+% sudo rm -rf /Volumes/Install\ macOS\ Monterey/.{Spotlight-V100,fseventsd}
+% diskutil umount /dev/diskXs2
 % diskutil eject /dev/diskX
-% hdiutil detach /dev/diskY
-(Y in this case is X+1)
+
+Unplug Monterey USB drive
 
 Download Arch installer iso from official Arch website
+% curl -O https://it.mirrors.cicku.me/archlinux/iso/2025.12.01/{archlinux-2025.12.01-x86_64.iso,sha256sums.txt}
+% shasum -a 256 archlinux-2025.12.01-x86_64.iso | grep --color=yes "<paste SHA-256 of archlinux-2025.12.01.iso>"
+
 Insert an empty 2+ GB USB flash drive
+
 % diskutil list
-% diskutil partitionDisk /dev/diskX MBR FAT32 'ARCH_202508' 0
-% bsdtar -x -v -o --exclude shellx64.efi --exclude boot/syslinux/ -f archlinux-2025.08.01-x86_64.iso -C /Volumes/ARCH_202508
-% perl -i -pe 's/(^timeout )15/${1}5/;s/(^beep o)n/$1ff/' /Volumes/ARCH_202508/loader/loader.conf
-% mv /Volumes/ARCH_202508/EFI/BOOT/{,ARCH-}BOOTx64.EFI
-% curl -LJ -o /Volumes/ARCH_202508/EFI/BOOT/BOOTx64.EFI https://github.com/leon9078/UEFI-Shell/releases/download/25H1/shellx64.efi
-% curl -LJ -o /Volumes/ARCH_202508/EFI/BOOT/BIOS_settings.nsh https://github.com/leon9078/Z97X-SLI_Monterey/raw/master/BIOS/BIOS_settings.nsh
-% curl -LJ -o /Volumes/ARCH_202508/EFI/TOOLS/uvt.efi --create-dirs https://github.com/leon9078/UefiVarTool/releases/download/1.0.0/uvt.efi
-% printf '@echo -off\r\nARCH-BOOTx64.EFI\r\n' | perl -0777pe 's/(.{1})/$1\x00/gs;s/^/\xFF\xFE/' > /Volumes/ARCH_202508/EFI/BOOT/startup.nsh
+
+Get the size of the Arch .iso and add 100 MiB in order to create a partition where the file system will have enough free space
+
+% echo +$(( $(wc -c < archlinux-2025.12.01-x86_64.iso) / 2 ** 20 + 100 ))M
+
+% sudo ./gdisk /dev/rdiskX
+n
+[Enter, accept default Partition number]
+[Enter, accept default First sector]
+[output of echo command]
+ef00
+v
+
+[The output MUST say "No problems found." and "available in 2 segments, the largest of which is 2014 [...] in size."]
+[2014 sectors MUST BE the MINIMUM largest segment, so it COULD BE a larger number]
+
+w
+y
+
+% sudo newfs_msdos -v ARCH_202512 /dev/rdiskXs1
+% sudo diskutil mount nobrowse /dev/diskXs1
+% bsdtar -x -v --exclude EFI/BOOT/BOOTIA32.EFI --exclude boot/syslinux/ -f archlinux-2025.12.01-x86_64.iso -C /Volumes/ARCH_202512
+% perl -i -pe 's/(timeout).*/$1 5/;s/(beep).*/$1 off/' /Volumes/ARCH_202512/loader/loader.conf
+% mv /Volumes/ARCH_202512/EFI/BOOT/{,ARCH-}BOOTx64.EFI
+% mv /Volumes/ARCH_202512/shellx64.efi /Volumes/ARCH_202512/EFI/BOOT/BOOTx64.EFI
+% curl -LJ -o /Volumes/ARCH_202512/EFI/BOOT/BIOS_settings.nsh https://github.com/leon9078/Z97X-SLI_Monterey/raw/master/BIOS/BIOS_settings.nsh
+% curl -LJ -o /Volumes/ARCH_202512/EFI/TOOLS/uvt.efi --create-dirs https://github.com/leon9078/UefiVarTool/releases/download/1.0.0/uvt.efi
+% printf '@echo -off\r\nARCH-BOOTx64.EFI\r\n' | perl -0777pe 's/(.)/$1\x00/gs;s/^/\xFF\xFE/' > /Volumes/ARCH_202512/EFI/BOOT/startup.nsh
 % sudo sync
+% diskutil umount /dev/diskXs1
 % diskutil eject /dev/diskX
+
+Unplug Arch USB drive
 
 Before boot the Arch USB installer, make sure you have Ethernet cable disconnected!
 
 Boot the Arch USB installer.
-First, it will launch UEFI Shell, in 5 seconds it will automatically launch system-boot which, then, loads Arch Linux install menu.
+First, it will launch UEFI Shell, in 5 seconds it will automatically launch systemd-boot which, then, loads Arch Linux install menu.
 If we press any key, except ESC, we skip the delay and boot immediately to systemd-boot.
 
 Now, type "e" at initial boot screen:
@@ -64,16 +134,20 @@ Connect Ethernet cable now
 # pacman -S --noconfirm git
 # git clone --depth 1 https://github.com/leon9078/Z97X-SLI_Monterey.git
 
-Connect the macOS Monterey USB installer
+Plug macOS Monterey USB installer
 
-# lsblk
-# mount /dev/sdX1 /mnt
+# lsblk -po +FSTYPE,LABEL,PARTLABEL,PARTTYPENAME
+# mount -o nosuid,nodev,noexec,noatime,umask=0077,tz=UTC /dev/sdX1 /mnt
 # cp -R Z97X-SLI_Monterey/EFI_USB /mnt/EFI
 # sync
 # umount /mnt
 # eject /dev/sdX
+
+Unplug macOS Monterey USB installer
+
 # systemctl poweroff
 
+Unplug Arch USB installer.
 Unplug power cable.
 Unplug every peripheral, including any SATA/M.2 drive.
 Unplug CMOS battery.
@@ -81,21 +155,25 @@ Unplug CMOS battery.
 Now connect the power cable. Power on and immediately power off the PC.
 Flash my mod BIOS using flashrom and a CH341A_SPI to USB in a Linux environment (booted with "iomem=relaxed").
 
-# printf '\xFF%.0s' {1..8388608} > FF_8MiB.bin
+# printf '\xFF%.0s' {1..$(( 8 * 2 ** 20 ))} > FF_8MiB.bin
 
 Start with the backup BIOS (B_BIOS):
 
 # flashrom --chip 'MX25L6473E' --programmer ch341a_spi --erase
 # flashrom --chip 'MX25L6473E' --programmer ch341a_spi --read B_BIOS_read_after_erase.bin
+# echo && sha256sum FF_8MiB.bin B_BIOS_read_after_erase.bin && echo
 # flashrom --chip 'MX25L6473E' --programmer ch341a_spi --noverify --write Z97XSLI.fd
 # flashrom --chip 'MX25L6473E' --programmer ch341a_spi --read B_BIOS_read_after_reprogram.bin
+# echo && sha256sum Z97XSLI.fd B_BIOS_read_after_reprogram.bin && echo
 
 Now, move on to the main BIOS (M_BIOS):
 
 # flashrom --chip 'MX25L6473E' --programmer ch341a_spi --erase
 # flashrom --chip 'MX25L6473E' --programmer ch341a_spi --read M_BIOS_read_after_erase.bin
+# echo && sha256sum FF_8MiB.bin M_BIOS_read_after_erase.bin && echo
 # flashrom --chip 'MX25L6473E' --programmer ch341a_spi --noverify --write Z97XSLI.fd
 # flashrom --chip 'MX25L6473E' --programmer ch341a_spi --read M_BIOS_read_after_reprogram.bin
+# echo && sha256sum Z97XSLI.fd M_BIOS_read_after_reprogram.bin && echo
 
 Unplug power cable again.
 Short CLR_CMOS pins.
@@ -125,7 +203,7 @@ Shell> reset -s
 
 Unplug Arch USB installer, attach empty SATA Samsung SSD
 
-Boot the PC, "No bootable device is detected", insert Arch USB installer.
+Boot the PC, "No bootable device is detected.", insert Arch USB installer.
 
 Make sure Ethernet is disconnected!
 
@@ -134,22 +212,55 @@ Reset button, F12, USB, UEFI Shell, Arch systemd-boot, "e", "module_blacklist=b4
 # systemctl stop reflector systemd-{networkd-wait-online,timesyncd}
 # systemctl disable reflector systemd-{networkd-wait-online,timesyncd}
 # setfont ter-i16b
-# lsblk
-# parted -s /dev/sdX -- mklabel gpt mkpart \'EFI\ System\ Partition\' fat32 1MiB 201MiB set 1 esp on mkpart \'\' hfs+ 201MiB -262185s
-# sync
+# lsblk -po +FSTYPE,LABEL,PARTLABEL,PARTTYPENAME
+# gdisk /dev/sdX
+n
+[Enter, accept default Partition number]
+[Enter, accept default First sector]
++600M
+ef00
+c
+EFI System Partition
+n
+[Enter, accept default Partition number]
+[Enter, accept default First sector]
+[Enter, accept default Last sector]
+af00
+c
+2
+[empty name (PARTLABEL)]
+p
+n
+[Enter, accept default Partition number]
+[value of End sector of partition number 2 + 1 sector]
+[Enter, accept default Last sector]
+0700
+c
+3
+[empty name (PARTLABEL)]
+x
+h
+v
+
+[The output MUST say "No problems found." and "available in 2 segments, the largest of which is 2014 [...] in size."]
+[2014 sectors MUST BE the MINIMUM largest segment, so it COULD BE a larger number]
+
+w
+y
+
+# partprobe /dev/sdX
 # systemctl poweroff
 
 Unplug Arch USB installer, insert macOS Monterey USB installer.
 Boot, F12, USB, "Install macOS Monterey (external)" will be automatically selected and booted in 5 seconds.
 Type Cmd+Shift+T to quickly enter Terminal
 
-# diskutil list /dev/disk0
-# newfs_msdos -F 32 -v 'EFI' /dev/rdisk0s1
-# diskutil mount readOnly /dev/disk0s1
-# mount | grep '/dev/disk0s1' (check for "read-only")
-# diskutil umount /dev/disk0s1
-# newfs_hfs -J -v 'Macintosh HD' /dev/rdisk0s2
-# diskutil mount /dev/disk0s2
+# diskutil list
+# newfs_msdos -v 'EFI' /dev/rdiskXs1
+# diskutil mount readOnly /dev/diskXs1
+# diskutil umount /dev/diskXs1
+# newfs_hfs -J -v 'Macintosh HD' /dev/rdiskXs2
+# diskutil mount /dev/diskXs2
 
 Cmd-Q to quit Terminal
 
@@ -157,7 +268,7 @@ Install macOS Monterey to Macintosh HD.
 
 There will be multiple reboots in the middle.
 Reboot -> "macOS Installer" -> Reboot -> "macOS Installer" -> Reboot -> "Macintosh HD"
-When you see "Macintosh HD" inside OpenCore Boot Menu, press Tab once to select "Shut Down"
+When you see "Macintosh HD" inside OpenCore Boot Menu, press Tab once to select "Shutdown"
 
 Unplug macOS USB installer, plug again Arch installer.
 
@@ -176,12 +287,21 @@ Connect Ethernet cable now
 # pacman -Sy
 # pacman -S --noconfirm git
 # git clone --depth 1 https://github.com/leon9078/Z97X-SLI_Monterey.git
-# lsblk
-# mount /dev/sdX1 /mnt
+# lsblk -po +FSTYPE,LABEL,PARTLABEL,PARTTYPENAME
+# mount -o nosuid,nodev,noexec,noatime,umask=0077,tz=UTC /dev/sdX1 /mnt
 # mkdir -p /mnt/EFI
 # cp -R Z97X-SLI_Monterey/EFI_Target/OC /mnt/EFI/
 # sync
 # umount /mnt
+# gdisk /dev/sdX
+d
+3
+w
+y
+
+# partprobe /dev/sdX
+# efibootmgr -O
+# for i in $(seq 9 -1 0); do efibootmgr -Bb $i 2> /dev/null; done
 # systemctl poweroff
 
 Unplug Arch USB, power on the PC, finish macOS install. Done!
