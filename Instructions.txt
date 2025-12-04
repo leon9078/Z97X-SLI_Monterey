@@ -249,6 +249,7 @@ w
 y
 
 # partprobe /dev/sdX
+# printf '' | mkfs.fat -m - -n EFI -vv /dev/sdf1
 # systemctl poweroff
 
 Unplug Arch USB installer, insert macOS Monterey USB installer.
@@ -256,9 +257,6 @@ Boot, F12, USB, "Install macOS Monterey (external)" will be automatically select
 Type Cmd+Shift+T to quickly enter Terminal
 
 # diskutil list
-# newfs_msdos -v 'EFI' /dev/rdiskXs1
-# diskutil mount readOnly /dev/diskXs1
-# diskutil umount /dev/diskXs1
 # newfs_hfs -J -v 'Macintosh HD' /dev/rdiskXs2
 # diskutil mount /dev/diskXs2
 
