@@ -1,24 +1,28 @@
 Prerequirements:
 - macOS environment
 - empty 16+ GB USB flash drive for macOS Monterey
-- empty 2+ GB USB flash drive for Arch
+- empty 2+ GB USB flash drive for Arch Linux
 
 In a macOS environment:
-- Download official Python package from python.org and install the ".pkg". Quit and reopen Terminal.
 - Download macOS Monterey full installer using "installinstallmacos.py" (https://github.com/munki/macadmin-scripts)
 - Download GPT fdisk (gdisk) tool
+- Download latest Arch Linux ISO
 
-% cd ~/Music/
+Make sure internet connection is available
+
+% cd ~/Music
+% xcode-select --install
 % git clone --depth 1 https://github.com/munki/macadmin-scripts.git
 % cd macadmin-scripts
+% pip3 install xattr
 % sudo python3 installinstallmacos.py
 [type the number of the macOS version you want to install]
 % sudo chown -R $(whoami) *
-% hdiutil attach -mountpoint mnt Install_macOS_12.7.4-21H1123.dmg
+% cp Install_macOS_12.7.4-21H1123.dmg ..
+% hdiutil attach -mountpoint mnt -nobrowse -noverify Install_macOS_12.7.4-21H1123.dmg
 % cp -R mnt/Install\ macOS\ Monterey.app /Applications/
 % sudo sync
 % hdiutil detach mnt
-% mv Install_macOS_12.7.4-21H1123.dmg ../
 % cd ..
 % rm -rf macadmin-scripts
 
@@ -31,7 +35,7 @@ Download GPT fdisk (gdisk) tool
 
 Insert an empty 16+ GB USB flash drive
 
-% diskutil list
+% printf '\33c\e[3J' && diskutil list
 % sudo ./gdisk /dev/rdiskX
 n
 [Enter, accept default Partition number]
@@ -39,7 +43,7 @@ n
 +600M
 ef00
 c
-EFI System Partition
+[empty name (PARTLABEL)]
 n
 [Enter, accept default Partition number]
 [Enter, accept default First sector]
@@ -59,30 +63,52 @@ w
 y
 
 % sudo newfs_msdos -v EFI /dev/rdiskXs1
-% sudo diskutil mount readOnly /dev/diskXs1
-% diskutil umount /dev/diskXs1
-% sudo newfs_hfs -J -v Monterey_Installer /dev/rdiskXs2
-% diskutil mount nobrowse /dev/diskXs2
-% sudo /Applications/Install\ macOS\ Monterey.app/Contents/Resources/createinstallmedia --volume /Volumes/Monterey_Installer --nointeraction
+% curl -LJO https://github.com/leon9078/Z97X-SLI_Monterey/archive/refs/heads/master.zip
+% unzip -q Z97X-SLI_Monterey-master.zip
+% sudo diskutil mount nobrowse /dev/diskXs1
+% cp -R Z97X-SLI_Monterey-master/EFI_USB /Volumes/EFI/EFI
 % sudo sync
-% hdiutil detach /Volumes/Shared\ Support
-% sudo rm -rf /Volumes/Install\ macOS\ Monterey/.{Spotlight-V100,fseventsd}
-% diskutil umount /dev/diskXs2
+% diskutil umount /dev/diskXs1
 % diskutil eject /dev/diskX
 
-Unplug Monterey USB drive
+Unplug USB flash drive
 
-Download Arch installer iso from official Arch website
-% curl -O https://it.mirrors.cicku.me/archlinux/iso/2025.12.01/{archlinux-2025.12.01-x86_64.iso,sha256sums.txt}
-% shasum -a 256 archlinux-2025.12.01-x86_64.iso | grep --color=yes "<paste SHA-256 of archlinux-2025.12.01.iso>"
+Reboot macOS into Recovery mode
+
+Click on Apple logo > Riavvia
+Press and hold Win+R (equivalent Cmd+R Apple shortcut combo)
+It will take a while, then it will load into Recovery mode!
+
+Type Cmd+Shift+T to quickly enter Terminal
+
+Plug again the previous 16+ USB flash drive
+
+# diskutil list
+# newfs_hfs -J -v Monterey_Installer /dev/rdiskXs2
+# diskutil mount nobrowse /dev/diskXs2
+# /Volumes/Macintosh\ HD/Applications/Install\ macOS\ Monterey.app/Contents/Resources/createinstallmedia --volume /Volumes/Monterey_Installer --nointeraction
+# sync
+# hdiutil detach /Volumes/Shared\ Support
+# diskutil umount /dev/diskXs2
+# diskutil eject /dev/diskX
+
+Unplug macOS Monterey USB drive
+
+Click on Apple logo > Riavvia
+
+Login, then download Arch Linux installer ISO from their official website
+
+% cd ~/Music
+% curl -O https://it.mirrors.cicku.me/archlinux/iso/2026.01.01/{archlinux-2026.01.01-x86_64.iso,sha256sums.txt}
+% shasum -a 256 archlinux-2026.01.01-x86_64.iso | grep --color=yes "<paste SHA-256 of archlinux-2026.01.01.iso>"
 
 Insert an empty 2+ GB USB flash drive
 
-% diskutil list
+% printf '\33c\e[3J' && diskutil list
 
 Get the size of the Arch .iso and add 100 MiB in order to create a partition where the file system will have enough free space
 
-% echo +$(( $(wc -c < archlinux-2025.12.01-x86_64.iso) / 2 ** 20 + 100 ))M
+% echo +$(( $(wc -c < archlinux-2026.01.01-x86_64.iso) / 2 ** 20 + 100 ))M
 
 % sudo ./gdisk /dev/rdiskX
 n
@@ -90,6 +116,8 @@ n
 [Enter, accept default First sector]
 [output of echo command]
 ef00
+c
+[empty name (PARTLABEL)]
 v
 
 [The output MUST say "No problems found." and "available in 2 segments, the largest of which is 2014 [...] in size."]
@@ -98,56 +126,23 @@ v
 w
 y
 
-% sudo newfs_msdos -v ARCH_202512 /dev/rdiskXs1
+% dd if=archlinux-2026.01.01-x86_64.iso bs=1 skip=$(( 0x8028 )) count=32 status=none | perl -pe 's/[ ]+$/\n/'
+% sudo newfs_msdos -v ARCH_202601 /dev/rdiskXs1
 % sudo diskutil mount nobrowse /dev/diskXs1
-% bsdtar -x -v --exclude EFI/BOOT/BOOTIA32.EFI --exclude boot/syslinux/ --exclude shellia32.efi -f archlinux-2025.12.01-x86_64.iso -C /Volumes/ARCH_202512
-% perl -i -pe 's/(timeout).*/$1 5/;s/(beep).*/$1 off/' /Volumes/ARCH_202512/loader/loader.conf
-% mv /Volumes/ARCH_202512/EFI/BOOT/{,ARCH-}BOOTx64.EFI
-% mv /Volumes/ARCH_202512/shellx64.efi /Volumes/ARCH_202512/EFI/BOOT/BOOTx64.EFI
-% curl -LJ -o /Volumes/ARCH_202512/EFI/BOOT/BIOS_settings.nsh https://github.com/leon9078/Z97X-SLI_Monterey/raw/master/BIOS/BIOS_settings.nsh
-% curl -LJ -o /Volumes/ARCH_202512/EFI/TOOLS/uvt.efi --create-dirs https://github.com/leon9078/UefiVarTool/releases/download/1.0.0/uvt.efi
-% printf '@echo -off\r\nARCH-BOOTx64.EFI\r\n' | perl -0777pe 's/(.)/$1\x00/gs;s/^/\xFF\xFE/' > /Volumes/ARCH_202512/EFI/BOOT/startup.nsh
+% bsdtar -x -v --exclude EFI/BOOT/BOOTIA32.EFI --exclude boot/syslinux/ --exclude shellia32.efi -f archlinux-2026.01.01-x86_64.iso -C /Volumes/ARCH_202601
+% perl -i -pe 's/(timeout).*/$1 5/;s/(beep).*/$1 off/' /Volumes/ARCH_202601/loader/loader.conf
+% mv /Volumes/ARCH_202601/EFI/BOOT/{,ARCH-}BOOTx64.EFI
+% cp /Volumes/ARCH_202601/{shellx64.efi,EFI/BOOT/BOOTx64.EFI}
+% cp Z97X-SLI_Monterey-master/BIOS/BIOS_settings.nsh /Volumes/ARCH_202601/EFI/BOOT/
+% mkdir /Volumes/ARCH_202601/EFI/TOOLS/
+% cp Z97X-SLI_Monterey-master/EFI_USB/TOOLS/uvt.efi /Volumes/ARCH_202601/EFI/TOOLS/
+% printf '@echo -off\r\nARCH-BOOTx64.EFI\r\n' | perl -0777pe 's/(.)/$1\x00/gs;s/^/\xFF\xFE/' > /Volumes/ARCH_202601/EFI/BOOT/startup.nsh
 % sudo sync
 % diskutil umount /dev/diskXs1
 % diskutil eject /dev/diskX
+% rm -r Z97X-SLI_Monterey-master
 
 Unplug Arch USB drive
-
-Before boot the Arch USB installer, make sure you have Ethernet cable disconnected!
-
-Boot the Arch USB installer.
-First, it will launch UEFI Shell, in 5 seconds it will automatically launch systemd-boot which, then, loads Arch Linux install menu.
-If we press any key, except ESC, we skip the delay and boot immediately to systemd-boot.
-
-Now, type "e" at initial boot screen:
-module_blacklist=b43,b43legacy,bcm43xx,bcma,brcm80211,brcmfmac,brcmsmac,ssb quiet loglevel=0
-
-# systemctl stop reflector systemd-{networkd-wait-online,timesyncd}
-# systemctl disable reflector systemd-{networkd-wait-online,timesyncd}
-# setfont ter-i16b
-
-Connect Ethernet cable now
-
-# pacman-key --init
-# pacman-key --populate archlinux
-# pacman -Sy
-# pacman -S --noconfirm git
-# git clone --depth 1 https://github.com/leon9078/Z97X-SLI_Monterey.git
-
-Plug macOS Monterey USB installer
-
-# lsblk -po +FSTYPE,LABEL,PARTLABEL,PARTTYPENAME
-# mount -o nosuid,nodev,noexec,noatime,umask=0077,tz=UTC /dev/sdX1 /mnt
-# cp -R Z97X-SLI_Monterey/EFI_USB /mnt/EFI
-# sync
-# umount /mnt
-# eject /dev/sdX
-
-Unplug macOS Monterey USB installer
-
-# systemctl poweroff
-
-Unplug Arch USB installer.
 Unplug power cable.
 Unplug every peripheral, including any SATA/M.2 drive.
 Unplug CMOS battery.
@@ -186,8 +181,9 @@ A message will show up saying "BIOS has been reset - Please decide how to contin
 Select "Load optimized defaults then reboot"
 After reboot, a new WARNING will appear saying "No bootable device is detected"
 
-Insert Arch USB installer, press the reset button, at UEFI Shell press ESC key (within 5 seconds) to skip "startup.nsh" (which will otherwise load Arch systemd-boot).
-At UEFI Shell prompt, we can simply type "bios_settings". UEFI Shell is case-insensitive, so we can type "bios_settings" instead of "BIOS_settings".
+Plug Arch USB drive to the target PC
+Press the reset button, F12, Arch USB, at UEFI Shell press ESC key (within 5 seconds) to skip "startup.nsh" (which will otherwise load Arch systemd-boot)
+At UEFI Shell prompt, we can simply type "bios_settings". UEFI Shell is case-insensitive, so we can type "bios_settings" instead of "BIOS_settings"
 Also we can omit typing the script extension ".nsh"
 
 Shell> bios_settings
@@ -205,13 +201,12 @@ Unplug Arch USB installer, attach empty SATA Samsung SSD
 
 Boot the PC, "No bootable device is detected.", insert Arch USB installer.
 
-Make sure Ethernet is disconnected!
+Make sure Ethernet cable is disconnected!
 
 Reset button, F12, USB, UEFI Shell, Arch systemd-boot, "e", "module_blacklist=b43,b43legacy,bcm43xx,bcma,brcm80211,brcmfmac,brcmsmac,ssb quiet loglevel=0"
 
 # systemctl stop reflector systemd-{networkd-wait-online,timesyncd}
 # systemctl disable reflector systemd-{networkd-wait-online,timesyncd}
-# setfont ter-i16b
 # lsblk -po +FSTYPE,LABEL,PARTLABEL,PARTTYPENAME
 # gdisk /dev/sdX
 n
@@ -220,7 +215,7 @@ n
 +600M
 ef00
 c
-EFI System Partition
+[empty name (PARTLABEL)]
 n
 [Enter, accept default Partition number]
 [Enter, accept default First sector]
@@ -232,12 +227,75 @@ c
 p
 n
 [Enter, accept default Partition number]
-[value of End sector of partition number 2 + 1 sector]
+[value of End sector of partition number 2 + 1 (sector)]
 [Enter, accept default Last sector]
 0700
 c
 3
 [empty name (PARTLABEL)]
+v
+
+[The output MUST say "Caution: Partition 3 doesn't end on a 2048-sector boundary. This may result in problems with some disk encryption tools."
+
+Don't worry, we will delete this partition after the end of macOS installation!
+
+Also, we MUST have this text "No problems found." and "available in 1 segments, the largest of which is 2014 [...] in size."]
+
+w
+y
+
+# systemctl poweroff
+
+Unplug Arch USB installer.
+Boot the PC, "No bootable device is detected", insert macOS Monterey USB installer.
+
+Ctrl-Alt-Del, F12, USB, "Install macOS Monterey (external)" will be automatically selected and booted in 5 seconds.
+
+Type Cmd+Shift+T to quickly enter Terminal
+
+# diskutil list
+# newfs_hfs -J -v 'Macintosh HD' /dev/rdiskXs2
+# diskutil mount nobrowse diskXs2
+
+Cmd+Q to quit Terminal
+
+Install macOS Monterey to Macintosh HD.
+
+There will be multiple reboots in the middle.
+Reboot -> "macOS Installer" -> Reboot -> "macOS Installer" -> Reboot -> "Macintosh HD"
+When you see "Macintosh HD" inside OpenCore Boot Menu, select again "Install macOS Monterey (external)"
+
+Type Cmd+Shift+T to quickly enter Terminal
+
+# diskutil list
+# newfs_msdos -v EFI /dev/rdiskXs1
+
+Plug Ethernet cable now!
+
+# curl -LJO https://github.com/leon9078/Z97X-SLI_Monterey/archive/refs/heads/master.zip
+
+Unplug Ethernet cable now!
+
+# unzip -q Z97X-SLI_Monterey-master.zip
+# diskutil mount nobrowse /dev/diskXs1
+# cp -R Z97X-SLI_Monterey-master/EFI_Target /Volumes/EFI/EFI
+# sync
+# diskutil umount /dev/diskXs1
+# rm -r Z97X-SLI_Monterey-master*
+
+Cmd+Q to quit Terminal
+
+Click on Apple logo > Spegni
+
+Unplug macOS USB installer.
+Boot the PC, "No bootable device is detected", insert Arch installer one more time.
+
+Ctrl-Alt-Del, F12, USB, UEFI Shell, Arch systemd-boot, "e", "module_blacklist=b43,b43legacy,bcm43xx,bcma,brcm80211,brcmfmac,brcmsmac,ssb quiet loglevel=0"
+
+# lsblk -po +FSTYPE,LABEL,PARTLABEL,PARTTYPENAME
+# gdisk /dev/sdX
+d
+3
 x
 h
 v
@@ -248,84 +306,159 @@ v
 w
 y
 
-# partprobe /dev/sdX
-# printf '' | mkfs.fat -m - -n EFI -vv /dev/sdf1
 # systemctl poweroff
 
-Unplug Arch USB installer, insert macOS Monterey USB installer.
-Boot, F12, USB, "Install macOS Monterey (external)" will be automatically selected and booted in 5 seconds.
+Unplug Arch USB drive.
+
+Make sure Ethernet is disconnected during macOS first setup!
+
+Power on the PC, finish macOS install. Done!
+
+
+
+
+
+Post-install!
+
+In macOS open Terminal once
+
+% touch .{vim,zsh}rc
+
+Cmd+Q to quit Terminal
+
+Reboot macOS into Recovery mode
+
+Click on Apple logo > Riavvia
+After initial American Megatrends Inc screen, press and hold Win+R (equivalent Cmd+R Apple shortcut combo)
+It will take a while, then it will load into Recovery mode!
+
 Type Cmd+Shift+T to quickly enter Terminal
 
-# diskutil list
-# newfs_hfs -J -v 'Macintosh HD' /dev/rdiskXs2
-# diskutil mount /dev/diskXs2
+# mount | grep " /Volumes/"
+# tee < /Volumes/Macintosh\ HD/etc/zshrc > /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/.zshrc
+# perl -i -pe 's/(^PS1=).*/$1"%~ %# "/' /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/.zshrc
+# chmod 600 /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/.zshrc
+# echo "set ruler" > /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/.vimrc
+# chmod 600 /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/.vimrc
 
-Cmd-Q to quit Terminal
 
-Install macOS Monterey to Macintosh HD.
 
-There will be multiple reboots in the middle.
-Reboot -> "macOS Installer" -> Reboot -> "macOS Installer" -> Reboot -> "Macintosh HD"
-When you see "Macintosh HD" inside OpenCore Boot Menu, press Tab once to select "Shutdown"
+Now manually set some Apple Terminal preferences to my taste in the target OS!
 
-Unplug macOS USB installer, plug again Arch installer.
+# plutil -convert xml1 /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 
-Make sure Ethernet is disconnected!
 
-Boot, F12, USB, UEFI Shell, Arch systemd-boot, "e", "module_blacklist=b43,b43legacy,bcm43xx,bcma,brcm80211,brcmfmac,brcmsmac,ssb quiet loglevel=0"
 
-# systemctl stop reflector systemd-{networkd-wait-online,timesyncd}
-# systemctl disable reflector systemd-{networkd-wait-online,timesyncd}
-# setfont ter-i16b
+Now at this point it's better to open a new Terminal window and copy/paste the following long commands!
 
-Connect Ethernet cable now
+Cmd+N
 
-# pacman-key --init
-# pacman-key --populate archlinux
-# pacman -Sy
-# pacman -S --noconfirm git
-# git clone --depth 1 https://github.com/leon9078/Z97X-SLI_Monterey.git
-# lsblk -po +FSTYPE,LABEL,PARTLABEL,PARTTYPENAME
-# mount -o nosuid,nodev,noexec,noatime,umask=0077,tz=UTC /dev/sdX1 /mnt
-# mkdir -p /mnt/EFI
-# cp -R Z97X-SLI_Monterey/EFI_Target/OC /mnt/EFI/
-# sync
-# umount /mnt
-# gdisk /dev/sdX
-d
-3
-w
-y
+# printf '\33c\e[3J' && curl -Ls https://github.com/leon9078/Z97X-SLI_Monterey/raw/refs/heads/master/Instructions.txt | tail -n 108
 
-# partprobe /dev/sdX
-# efibootmgr -O
-# for i in $(seq 9 -1 0); do efibootmgr -Bb $i 2> /dev/null; done
-# systemctl poweroff
+Let's first handle "Pro" and "Novel" profiles, which already have "ShowWindowSettingsNameInTitle" set, we just need to set it as true!
 
-Unplug Arch USB, power on the PC, finish macOS install. Done!
+Pro:
+
+# printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
+-c "Add 'Window Settings:Pro:ShowActiveProcessArgumentsInTitle' bool" \
+-c "Add 'Window Settings:Pro:ShowActiveProcessArgumentsInTabTitle' bool" \
+-c "Set 'Window Settings:Pro:ShowWindowSettingsNameInTitle' 1" \
+-c "Add 'Window Settings:Pro:ShowRepresentedURLPathInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+
+Novel:
+
+# printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
+-c "Add 'Window Settings:Novel:ShowActiveProcessArgumentsInTitle' bool" \
+-c "Add 'Window Settings:Novel:ShowActiveProcessArgumentsInTabTitle' bool" \
+-c "Set 'Window Settings:Novel:ShowWindowSettingsNameInTitle' 1" \
+-c "Add 'Window Settings:Novel:ShowRepresentedURLPathInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 
 
 
 
 
-Post-install
-- Open Terminal
-% cp /etc/zshrc ~/.zshrc
-% chmod 600 ~/.zshrc
-% perl -i -pe 's/(^PS1=).*/$1"%~ %# "/' ~/.zshrc
-% printf '\n# Make sure line content is cleared from cursor position till the beginning of line when Ctrl-U is typed\nbindkey "^U" backward-kill-line\n' >> ~/.zshrc
+Now start covering all other profiles!
 
-Go to Terminal > Settings... > Profiles and select the profile you're using.
+Basic:
 
-Go to the 'Window' tab:
-- under 'Working directory or document', check 'Path'
-- under 'Active process name', uncheck 'Arguments'
-- check 'Profile name'
+# printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
+-c "Add 'Window Settings:Basic:ShowActiveProcessArgumentsInTitle' bool" \
+-c "Add 'Window Settings:Basic:ShowActiveProcessArgumentsInTabTitle' bool" \
+-c "Add 'Window Settings:Basic:ShowWindowSettingsNameInTitle' bool 1" \
+-c "Add 'Window Settings:Basic:ShowRepresentedURLPathInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 
-Go to the 'Tab' tab and under 'Active process name', uncheck 'Arguments'.
+Grass:
 
-Go to the 'Shell' tab and under the 'Startup' heading, check 'Run command:' and enter into the box: login -fpql my_username /bin/zsh -l
-Make sure 'Run inside shell' is unchecked.
-If you have the 'Ask before closing: Only if there are processes other than the login shell and:' option selected, add 'login' and 'zsh' to the list of processes it will not prompt for.
+# printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
+-c "Add 'Window Settings:Grass:ShowActiveProcessArgumentsInTitle' bool" \
+-c "Add 'Window Settings:Grass:ShowActiveProcessArgumentsInTabTitle' bool" \
+-c "Add 'Window Settings:Grass:ShowWindowSettingsNameInTitle' bool 1" \
+-c "Add 'Window Settings:Grass:ShowRepresentedURLPathInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 
-% rm -rf ~/.zsh_sessions ; rm -f ~/.zsh_history ; kill -9 $$
+Ocean:
+
+# printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
+-c "Add 'Window Settings:Ocean:ShowActiveProcessArgumentsInTitle' bool" \
+-c "Add 'Window Settings:Ocean:ShowActiveProcessArgumentsInTabTitle' bool" \
+-c "Add 'Window Settings:Ocean:ShowWindowSettingsNameInTitle' bool 1" \
+-c "Add 'Window Settings:Ocean:ShowRepresentedURLPathInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+
+Homebrew:
+
+# printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
+-c "Add 'Window Settings:Homebrew:ShowActiveProcessArgumentsInTitle' bool" \
+-c "Add 'Window Settings:Homebrew:ShowActiveProcessArgumentsInTabTitle' bool" \
+-c "Add 'Window Settings:Homebrew:ShowWindowSettingsNameInTitle' bool 1" \
+-c "Add 'Window Settings:Homebrew:ShowRepresentedURLPathInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+
+Man Page:
+
+# printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
+-c "Add 'Window Settings:Man Page:ShowActiveProcessArgumentsInTitle' bool" \
+-c "Add 'Window Settings:Man Page:ShowActiveProcessArgumentsInTabTitle' bool" \
+-c "Add 'Window Settings:Man Page:ShowWindowSettingsNameInTitle' bool 1" \
+-c "Add 'Window Settings:Man Page:ShowRepresentedURLPathInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+
+Red Sands:
+
+# printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
+-c "Add 'Window Settings:Red Sands:ShowActiveProcessArgumentsInTitle' bool" \
+-c "Add 'Window Settings:Red Sands:ShowActiveProcessArgumentsInTabTitle' bool" \
+-c "Add 'Window Settings:Red Sands:ShowWindowSettingsNameInTitle' bool 1" \
+-c "Add 'Window Settings:Red Sands:ShowRepresentedURLPathInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+
+Solid Colors:
+
+# printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
+-c "Add 'Window Settings:Solid Colors:ShowActiveProcessArgumentsInTitle' bool" \
+-c "Add 'Window Settings:Solid Colors:ShowActiveProcessArgumentsInTabTitle' bool" \
+-c "Add 'Window Settings:Solid Colors:ShowWindowSettingsNameInTitle' bool 1" \
+-c "Add 'Window Settings:Solid Colors:ShowRepresentedURLPathInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+
+Silver Aerogel:
+
+# printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
+-c "Add 'Window Settings:Silver Aerogel:ShowActiveProcessArgumentsInTitle' bool" \
+-c "Add 'Window Settings:Silver Aerogel:ShowActiveProcessArgumentsInTabTitle' bool" \
+-c "Add 'Window Settings:Silver Aerogel:ShowWindowSettingsNameInTitle' bool 1" \
+-c "Add 'Window Settings:Silver Aerogel:ShowRepresentedURLPathInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+
+# plutil -convert binary1 /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+# rm -r /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/.zsh_*
+
+Cmd+Q to quit Terminal
+
+Click on Apple Logo > Riavvia
+
+Done Post Install!
+
+
+
+
+
+Bonus Terminal commands!
+
+- Get a list of Sleep/Wake cycles in the current boot session
+
+% printf '\33c\e[3J' && log show --last boot --style syslog --predicate 'process == "powerd" AND category == "sleepWake" AND composedMessage CONTAINS "Entering " OR composedMessage CONTAINS "Wake from "' >&2 >/dev/null
+

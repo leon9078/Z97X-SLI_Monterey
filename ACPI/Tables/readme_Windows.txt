@@ -26,6 +26,16 @@ This will generate a disassembled file (*.dsl)
 
 
 
+Then, to create a listing file from a asl/dsl file:
+
+> iasl -l SSDT-MCHC.asl
+
+This command will create 2 files:
+- SSDT-MCHC.lst
+- SSDT-MCHC.aml
+
+
+
 
 
 In order to disassemble a binary ACPI table with a custom method implementation we need to "Include ACPI table(s) for external symbol resolution". So we must include our "mod" DSDT.
@@ -42,9 +52,8 @@ Shell> FS0:
 FS0:\> mkdir OpenCore_ACPI_tables
 FS0:\> cd OpenCore_ACPI_tables
 FS0:\OpenCore_ACPI_tables\> acpiview -d -s DSDT
-FS0:\OpenCore_ACPI_tables\> acpiview -d -s SSDT
 
-This command will dump DSDT and SSDTs patched tables in the current directory. Within this UEFI Shell, we achieve the "final ACPI configuration including all the patches and added tables".
+This command will dump DSDT patched table in the current directory. Within this UEFI Shell, we achieve the "final ACPI configuration including all the patches and added tables".
 
 REMEMBER: OpenCore will apply ACPI changes globally (to every operating system) with the following effective order: Delete, Quirks, Patch, Add
 
@@ -56,17 +65,6 @@ Boot Windows and copy the newly generated ACPI tables into the "C:\path\to\iasl-
 
 Then, back to Windows in CMD
 
-> iasl -d SSDT0000.aml -e DSDT0000.aml SSDT0001.aml SSDT0002.aml SSDT0003.aml SSDT0004.aml SSDT0005.aml
+> iasl -e DSDT0000.bin -d SSDT-PRWPSW.aml
 
-This will correctly generate a disassembled file (*.dsl)
-
-
-
-
-Then, to create a listing file from a asl/dsl file:
-
-> iasl -l SSDT-MCHC.asl
-
-This command will create 2 files:
-- SSDT-MCHC.lst
-- SSDT-MCHC.aml
+This will correctly generate a disassembled file (*.dsl) with all External resolution

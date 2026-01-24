@@ -1,6 +1,6 @@
 DefinitionBlock ("", "SSDT", 2, "HACK", "PLUG", 0x00000000)
 {
-    External (\_PR_.CPU0, DeviceObj)
+    External (\_PR_.CPU0, ProcessorObj)
 
     Scope (\_PR.CPU0)
     {
@@ -18,15 +18,12 @@ DefinitionBlock ("", "SSDT", 2, "HACK", "PLUG", 0x00000000)
 
                 Return (Package (0x02)
                 {
-                    "plugin-type", 
+                    "plugin-type",
                     One
                 })
             }
 
-            Return (Buffer (One)
-            {
-                 0x00
-            })
+            Return (Buffer (One) {})
         }
     }
 }

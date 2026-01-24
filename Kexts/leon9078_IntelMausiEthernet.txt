@@ -1,7 +1,5 @@
 Use my version, which has a reimplementation of WoL from S5, thx @jpz4085!
 
-Wake on LAN functionality should work out of the box.
-On misconfigured hardware one may try to force-enable it by injecting `mausi-force-wol` device property (with any value, recommended), or `-mausiwol` boot argument (for testing purposes).
-In macOS, Wake on LAN from sleep is controlled by the system setting "Wake for network access" or pmset "womp". The same is applied by default for WoL from shutdown.
+In macOS, Wake on LAN from sleep is controlled by the system setting "Wake for network access" (pmset "womp"). The same is applied by default for WoL from S5.
 To force-enable WoL use `mausi-wol-override=1` boot-arg.
 To force-disable WoL use `mausi-wol-override=0` boot-arg.

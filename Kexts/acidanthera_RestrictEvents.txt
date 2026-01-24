@@ -1,0 +1,9 @@
+Remove 2 duplicates entries (pci8086,8c44 and pci8086,8c4b) and move specific entries in order to follow alphabetical sort
+
+% head -n 106 EFI_*/OC/Kexts/RestrictEvents.kext/Contents/Info.plist | tail -n 5 > buf0.txt
+% sed -i '' '100,106d' EFI_*/OC/Kexts/RestrictEvents.kext/Contents/Info.plist
+% perl -i -ple "print \"$(cat buf0.txt)\" if $. == 115; close ARGV if eof" EFI_*/OC/Kexts/RestrictEvents.kext/Contents/Info.plist
+% head -n 131 EFI_*/OC/Kexts/RestrictEvents.kext/Contents/Info.plist | tail -n 3 > buf1.txt
+% sed -i '' '129,131d' EFI_*/OC/Kexts/RestrictEvents.kext/Contents/Info.plist
+% perl -i -ple "print \"$(cat buf1.txt)\" if $. == 122; close ARGV if eof" EFI_*/OC/Kexts/RestrictEvents.kext/Contents/Info.plist
+% rm buf*
