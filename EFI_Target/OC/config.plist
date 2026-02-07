@@ -24,6 +24,14 @@
 			</dict>
 			<dict>
 				<key>Comment</key>
+				<string>Disable Root Port 4</string>
+				<key>Enabled</key>
+				<true/>
+				<key>Path</key>
+				<string>SSDT-INI.aml</string>
+			</dict>
+			<dict>
+				<key>Comment</key>
 				<string>Fake MCHC device</string>
 				<key>Enabled</key>
 				<true/>
@@ -203,29 +211,59 @@
 			</dict>
 			<dict>
 				<key>Base</key>
-				<string></string>
+				<string>\_SB_.PCI0.RP01.PXSX</string>
 				<key>BaseSkip</key>
 				<integer>0</integer>
 				<key>Comment</key>
-				<string>Replace RP06.PXSX with ARPT in DSDT, 1 of 3</string>
+				<string>Replace RP01.PXSX with SSD0 in DSDT, 1 of 3</string>
 				<key>Count</key>
 				<integer>1</integer>
 				<key>Enabled</key>
 				<true/>
 				<key>Find</key>
-				<data>W4IAUFhTWA==</data>
+				<data>UFhTWA==</data>
 				<key>Limit</key>
 				<integer>0</integer>
 				<key>Mask</key>
-				<data>//8A/////w==</data>
+				<data></data>
 				<key>OemTableId</key>
 				<data>QSBNIEkAAAA=</data>
 				<key>Replace</key>
-				<data>AAAAQVJQVA==</data>
+				<data>U1NEMA==</data>
 				<key>ReplaceMask</key>
-				<data>AAAA/////w==</data>
+				<data></data>
 				<key>Skip</key>
-				<integer>5</integer>
+				<integer>0</integer>
+				<key>TableLength</key>
+				<integer>67704</integer>
+				<key>TableSignature</key>
+				<data>RFNEVA==</data>
+			</dict>
+			<dict>
+				<key>Base</key>
+				<string>\_SB.PCI0.RP01.HPME</string>
+				<key>BaseSkip</key>
+				<integer>0</integer>
+				<key>Comment</key>
+				<string>Replace RP01.PXSX with SSD0 in DSDT, 2 of 3</string>
+				<key>Count</key>
+				<integer>1</integer>
+				<key>Enabled</key>
+				<true/>
+				<key>Find</key>
+				<data>UFhTWA==</data>
+				<key>Limit</key>
+				<integer>0</integer>
+				<key>Mask</key>
+				<data></data>
+				<key>OemTableId</key>
+				<data>QSBNIEkAAAA=</data>
+				<key>Replace</key>
+				<data>U1NEMA==</data>
+				<key>ReplaceMask</key>
+				<data></data>
+				<key>Skip</key>
+				<integer>0</integer>
 				<key>TableLength</key>
 				<integer>67704</integer>
 				<key>TableSignature</key>
@@ -237,13 +275,43 @@
 				<key>BaseSkip</key>
 				<integer>0</integer>
 				<key>Comment</key>
-				<string>Replace RP06.PXSX with ARPT in DSDT, 2 of 3</string>
+				<string>Replace RP01.PXSX with SSD0 in DSDT, 3 of 3</string>
 				<key>Count</key>
 				<integer>1</integer>
 				<key>Enabled</key>
 				<true/>
 				<key>Find</key>
-				<data>hlBYU1g=</data>
+				<data>EAAALwRfU0JfUENJMFJQMDFQWFNY</data>
+				<key>Limit</key>
+				<integer>0</integer>
+				<key>Mask</key>
+				<data>/wAA////////////////////////</data>
+				<key>OemTableId</key>
+				<data>QSBNIEkAAAA=</data>
+				<key>Replace</key>
+				<data>AAAAAAAAAAAAAAAAAAAAAABTU0Qw</data>
+				<key>ReplaceMask</key>
+				<data>AAAAAAAAAAAAAAAAAAAAAAD/////</data>
+				<key>Skip</key>
+				<integer>0</integer>
+				<key>TableLength</key>
+				<integer>67704</integer>
+				<key>TableSignature</key>
+				<data>RFNEVA==</data>
+			</dict>
+			<dict>
+				<key>Base</key>
+				<string>\_SB_.PCI0.RP06.PXSX</string>
+				<key>BaseSkip</key>
+				<integer>0</integer>
+				<key>Comment</key>
+				<string>Replace RP06.PXSX with ARPT in DSDT, 1 of 3</string>
+				<key>Count</key>
+				<integer>1</integer>
+				<key>Enabled</key>
+				<true/>
+				<key>Find</key>
+				<data>UFhTWA==</data>
 				<key>Limit</key>
 				<integer>0</integer>
 				<key>Mask</key>
@@ -251,11 +319,41 @@
 				<key>OemTableId</key>
 				<data>QSBNIEkAAAA=</data>
 				<key>Replace</key>
-				<data>AEFSUFQ=</data>
+				<data>QVJQVA==</data>
 				<key>ReplaceMask</key>
-				<data>AP////8=</data>
+				<data></data>
 				<key>Skip</key>
-				<integer>5</integer>
+				<integer>0</integer>
+				<key>TableLength</key>
+				<integer>67704</integer>
+				<key>TableSignature</key>
+				<data>RFNEVA==</data>
+			</dict>
+			<dict>
+				<key>Base</key>
+				<string>\_SB.PCI0.RP06.HPME</string>
+				<key>BaseSkip</key>
+				<integer>0</integer>
+				<key>Comment</key>
+				<string>Replace RP06.PXSX with ARPT in DSDT, 2 of 3</string>
+				<key>Count</key>
+				<integer>1</integer>
+				<key>Enabled</key>
+				<true/>
+				<key>Find</key>
+				<data>UFhTWA==</data>
+				<key>Limit</key>
+				<integer>0</integer>
+				<key>Mask</key>
+				<data></data>
+				<key>OemTableId</key>
+				<data>QSBNIEkAAAA=</data>
+				<key>Replace</key>
+				<data>QVJQVA==</data>
+				<key>ReplaceMask</key>
+				<data></data>
+				<key>Skip</key>
+				<integer>0</integer>
 				<key>TableLength</key>
 				<integer>67704</integer>
 				<key>TableSignature</key>
@@ -273,11 +371,11 @@
 				<key>Enabled</key>
 				<true/>
 				<key>Find</key>
-				<data>EAAAAABfU0JfUENJMFJQAABQWFNY</data>
+				<data>EAAALwRfU0JfUENJMFJQMDZQWFNY</data>
 				<key>Limit</key>
 				<integer>0</integer>
 				<key>Mask</key>
-				<data>/wAAAAD/////////////AAD/////</data>
+				<data>/wAA////////////////////////</data>
 				<key>OemTableId</key>
 				<data>QSBNIEkAAAA=</data>
 				<key>Replace</key>
@@ -285,7 +383,7 @@
 				<key>ReplaceMask</key>
 				<data>AAAAAAAAAAAAAAAAAAAAAAD/////</data>
 				<key>Skip</key>
-				<integer>5</integer>
+				<integer>0</integer>
 				<key>TableLength</key>
 				<integer>67704</integer>
 				<key>TableSignature</key>
@@ -348,6 +446,306 @@
 				<integer>0</integer>
 				<key>TableLength</key>
 				<integer>0</integer>
+				<key>TableSignature</key>
+				<data>U1NEVA==</data>
+			</dict>
+			<dict>
+				<key>Base</key>
+				<string></string>
+				<key>BaseSkip</key>
+				<integer>0</integer>
+				<key>Comment</key>
+				<string>Replace unknown methods in DSDT, 1 of 6</string>
+				<key>Count</key>
+				<integer>6</integer>
+				<key>Enabled</key>
+				<true/>
+				<key>Find</key>
+				<data>oABbElwvBF9TQl9QQ0kwAAAAAFBTAFgAUFMAWA==</data>
+				<key>Limit</key>
+				<integer>0</integer>
+				<key>Mask</key>
+				<data>/wD/////////////////AAAAAP//AP////8A/w==</data>
+				<key>OemTableId</key>
+				<data>QSBNIEkAAAA=</data>
+				<key>Replace</key>
+				<data>AAAAAAAAAAAAAAAAAAAAWEhDX19EU1cAUElOSQ==</data>
+				<key>ReplaceMask</key>
+				<data>AAAAAAAAAAAAAAAAAAAA/////////////////w==</data>
+				<key>Skip</key>
+				<integer>0</integer>
+				<key>TableLength</key>
+				<integer>67704</integer>
+				<key>TableSignature</key>
+				<data>RFNEVA==</data>
+			</dict>
+			<dict>
+				<key>Base</key>
+				<string></string>
+				<key>BaseSkip</key>
+				<integer>0</integer>
+				<key>Comment</key>
+				<string>Replace unknown methods in DSDT, 2 of 6</string>
+				<key>Count</key>
+				<integer>9</integer>
+				<key>Enabled</key>
+				<true/>
+				<key>Find</key>
+				<data>oABbElwvBV9TQl9QQ0kwAAAAAAAAAABQUwBYAFBTAFg=</data>
+				<key>Limit</key>
+				<integer>0</integer>
+				<key>Mask</key>
+				<data>/wD/////////////////AAAAAAAAAAD//wD/////AP8=</data>
+				<key>OemTableId</key>
+				<data>QSBNIEkAAAA=</data>
+				<key>Replace</key>
+				<data>AAAAAAAAAAAAAAAAAAAAWEhDX1JIVUJfUFMwAFBJTkk=</data>
+				<key>ReplaceMask</key>
+				<data>AAAAAAAAAAAAAAAAAAAA//////////////////////8=</data>
+				<key>Skip</key>
+				<integer>0</integer>
+				<key>TableLength</key>
+				<integer>67704</integer>
+				<key>TableSignature</key>
+				<data>RFNEVA==</data>
+			</dict>
+			<dict>
+				<key>Base</key>
+				<string></string>
+				<key>BaseSkip</key>
+				<integer>0</integer>
+				<key>Comment</key>
+				<string>Replace unknown methods in DSDT, 3 of 6</string>
+				<key>Count</key>
+				<integer>1</integer>
+				<key>Enabled</key>
+				<true/>
+				<key>Find</key>
+				<data>oABbElwvA19TQl9UUE1fUFRTXwBcLwNfU0JfVFBNX1BUU19o</data>
+				<key>Limit</key>
+				<integer>0</integer>
+				<key>Mask</key>
+				<data>/wD/////////////////////////////////////////////</data>
+				<key>OemTableId</key>
+				<data>QSBNIEkAAAA=</data>
+				<key>Replace</key>
+				<data>AAAAAAAABgAAAABQQ0kwWEhDX1JIVUJTU1AxX0FEUgBQSU5J</data>
+				<key>ReplaceMask</key>
+				<data>AAAAAAAA/wAAAAD/////////////////////////////////</data>
+				<key>Skip</key>
+				<integer>0</integer>
+				<key>TableLength</key>
+				<integer>67704</integer>
+				<key>TableSignature</key>
+				<data>RFNEVA==</data>
+			</dict>
+			<dict>
+				<key>Base</key>
+				<string></string>
+				<key>BaseSkip</key>
+				<integer>0</integer>
+				<key>Comment</key>
+				<string>Replace unknown methods in DSDT, 4 of 6</string>
+				<key>Count</key>
+				<integer>2</integer>
+				<key>Enabled</key>
+				<true/>
+				<key>Find</key>
+				<data>oABbElwvBV9TQl9QQ0kwSTJDMFNIVUJQUwBYAF5eLlNIVUJQUwBY</data>
+				<key>Limit</key>
+				<integer>0</integer>
+				<key>Mask</key>
+				<data>/wD//////////////////////////////wD//////////////wD/</data>
+				<key>OemTableId</key>
+				<data>QSBNIEkAAAA=</data>
+				<key>Replace</key>
+				<data>AAAAAAAAAwAAAAAAAAAAX0JCTgBcLwRfU0JfUENJMFhIQ18AADkA</data>
+				<key>ReplaceMask</key>
+				<data>AAAAAAAA/wAAAAAAAAAA//////////////////////////8AAP8A</data>
+				<key>Skip</key>
+				<integer>0</integer>
+				<key>TableLength</key>
+				<integer>67704</integer>
+				<key>TableSignature</key>
+				<data>RFNEVA==</data>
+			</dict>
+			<dict>
+				<key>Base</key>
+				<string></string>
+				<key>BaseSkip</key>
+				<integer>0</integer>
+				<key>Comment</key>
+				<string>Replace unknown methods in DSDT, 5 of 6</string>
+				<key>Count</key>
+				<integer>2</integer>
+				<key>Enabled</key>
+				<true/>
+				<key>Find</key>
+				<data>oABbElwvBF9TQl9QQ0kwAAAAAABVQU0AXC8EX1NCX1BDSTAAAAAAAFVBTQ==</data>
+				<key>Limit</key>
+				<integer>0</integer>
+				<key>Mask</key>
+				<data>/wD/////////////////AAAAAAD///////////////////8AAAAAAP///w==</data>
+				<key>OemTableId</key>
+				<data>QSBNIEkAAAA=</data>
+				<key>Replace</key>
+				<data>AAAAAAAAAAAAAAAAAAAAWEhDX19EU1cAAAAAAAAAAAAAAABYSENfUFM5WA==</data>
+				<key>ReplaceMask</key>
+				<data>AAAAAAAAAAAAAAAAAAAA//////////8AAAAAAAAAAAAAAAD//////////w==</data>
+				<key>Skip</key>
+				<integer>0</integer>
+				<key>TableLength</key>
+				<integer>67704</integer>
+				<key>TableSignature</key>
+				<data>RFNEVA==</data>
+			</dict>
+			<dict>
+				<key>Base</key>
+				<string></string>
+				<key>BaseSkip</key>
+				<integer>0</integer>
+				<key>Comment</key>
+				<string>Replace unknown methods in DSDT, 6 of 6</string>
+				<key>Count</key>
+				<integer>1</integer>
+				<key>Enabled</key>
+				<true/>
+				<key>Find</key>
+				<data>oABbElwvBV9TQl9QQ0kwUlAwNVBFR1BFUE9OAFwvBV9TQl9QQ0kwUlAwNVBFR1BFUE9O</data>
+				<key>Limit</key>
+				<integer>0</integer>
+				<key>Mask</key>
+				<data>/wD/////////////////////////////////////////////////////////////////</data>
+				<key>OemTableId</key>
+				<data>QSBNIEkAAAA=</data>
+				<key>Replace</key>
+				<data>AAAAAAAABgAAAAAAAAAAWEhDX1JIVUJTU1AxX0FEUgBcLwRfU0JfUENJMFhIQ19QUzlY</data>
+				<key>ReplaceMask</key>
+				<data>AAAAAAAA/wAAAAAAAAAA////////////////////////////////////////////////</data>
+				<key>Skip</key>
+				<integer>0</integer>
+				<key>TableLength</key>
+				<integer>67704</integer>
+				<key>TableSignature</key>
+				<data>RFNEVA==</data>
+			</dict>
+			<dict>
+				<key>Base</key>
+				<string></string>
+				<key>BaseSkip</key>
+				<integer>0</integer>
+				<key>Comment</key>
+				<string>Replace unknown methods in SSDT size 23390, 1 of 4</string>
+				<key>Count</key>
+				<integer>1</integer>
+				<key>Enabled</key>
+				<true/>
+				<key>Find</key>
+				<data>oABbEkhET1MASERPUw==</data>
+				<key>Limit</key>
+				<integer>0</integer>
+				<key>Mask</key>
+				<data>/wD//////////////w==</data>
+				<key>OemTableId</key>
+				<data>U2FTc2R0IAA=</data>
+				<key>Replace</key>
+				<data>AAAAAFBJTkkAUElOSQ==</data>
+				<key>ReplaceMask</key>
+				<data>AAAAAP////8A/////w==</data>
+				<key>Skip</key>
+				<integer>0</integer>
+				<key>TableLength</key>
+				<integer>23390</integer>
+				<key>TableSignature</key>
+				<data>U1NEVA==</data>
+			</dict>
+			<dict>
+				<key>Base</key>
+				<string></string>
+				<key>BaseSkip</key>
+				<integer>0</integer>
+				<key>Comment</key>
+				<string>Replace unknown methods in SSDT size 23390, 2 of 4</string>
+				<key>Count</key>
+				<integer>1</integer>
+				<key>Enabled</key>
+				<true/>
+				<key>Find</key>
+				<data>oABbEkhOT1QASE5PVGihAA==</data>
+				<key>Limit</key>
+				<integer>0</integer>
+				<key>Mask</key>
+				<data>/wD/////////////////AA==</data>
+				<key>OemTableId</key>
+				<data>U2FTc2R0IAA=</data>
+				<key>Replace</key>
+				<data>AA8AAFJETUEAUkRNQQBpag==</data>
+				<key>ReplaceMask</key>
+				<data>AP8AAP////8A/////wD//w==</data>
+				<key>Skip</key>
+				<integer>0</integer>
+				<key>TableLength</key>
+				<integer>23390</integer>
+				<key>TableSignature</key>
+				<data>U1NEVA==</data>
+			</dict>
+			<dict>
+				<key>Base</key>
+				<string></string>
+				<key>BaseSkip</key>
+				<integer>0</integer>
+				<key>Comment</key>
+				<string>Replace unknown methods in SSDT size 23390, 3 of 4</string>
+				<key>Count</key>
+				<integer>1</integer>
+				<key>Enabled</key>
+				<true/>
+				<key>Find</key>
+				<data>oAAAWxJcLwVfU0JfUENJMFBFRzBQRUdQU0dQTwBcLwVfU0JfUENJMFBFRzBQRUdQU0dQT0hMUlMBXC8FX1NCX1BDSTBQRUcwUEVHUFNHUE9QV0VOAA==</data>
+				<key>Limit</key>
+				<integer>0</integer>
+				<key>Mask</key>
+				<data>/wAA/////////////////////////////////////////////////////////////////////////////////////////////////////////////w==</data>
+				<key>OemTableId</key>
+				<data>U2FTc2R0IAA=</data>
+				<key>Replace</key>
+				<data>AAAAkZJbElwvBl9TQl9QQ0kwWEhDX1JIVUJTU1AxX0FEUgCSWxJcLwZfU0JfUENJMFhIQ19SSFVCU1NQMl9BRFIAXC8EX1NCX1BDSTBYSENfUFM5WA==</data>
+				<key>ReplaceMask</key>
+				<data>AAAA/////////////////////////////////////////////////////////////////////////////////////////////////////////////w==</data>
+				<key>Skip</key>
+				<integer>0</integer>
+				<key>TableLength</key>
+				<integer>23390</integer>
+				<key>TableSignature</key>
+				<data>U1NEVA==</data>
+			</dict>
+			<dict>
+				<key>Base</key>
+				<string></string>
+				<key>BaseSkip</key>
+				<integer>0</integer>
+				<key>Comment</key>
+				<string>Replace unknown methods in SSDT size 23390, 4 of 4</string>
+				<key>Count</key>
+				<integer>1</integer>
+				<key>Enabled</key>
+				<true/>
+				<key>Find</key>
+				<data>oAAAWxJcLwVfU0JfUENJMFBFRzBQRUdQU0dQTwBcLwVfU0JfUENJMFBFRzBQRUdQU0dQT0hMUlMBXC8FX1NCX1BDSTBQRUcwUEVHUFNHUE9QV0VOAVsiRExQV1wvBV9TQl9QQ0kwUEVHMFBFR1BTR1BPSExSUwBbIkRMSFI=</data>
+				<key>Limit</key>
+				<integer>0</integer>
+				<key>Mask</key>
+				<data>/wAA//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8=</data>
+				<key>OemTableId</key>
+				<data>U2FTc2R0IAA=</data>
+				<key>Replace</key>
+				<data>AAAAkZGSWxJcLwVfU0JfUENJMFhIQ19SSFVCX1BTMACSWxJcLwZfU0JfUENJMFhIQ19SSFVCU1NQMV9BRFIAklsSXC8GX1NCX1BDSTBYSENfUkhVQlNTUDJfQURSAFsiRExQV1wvBF9TQl9QQ0kwWEhDX1BTOVgAAAAAAAA=</data>
+				<key>ReplaceMask</key>
+				<data>AAAA//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8AAAAAAAA=</data>
+				<key>Skip</key>
+				<integer>0</integer>
+				<key>TableLength</key>
+				<integer>23390</integer>
 				<key>TableSignature</key>
 				<data>U1NEVA==</data>
 			</dict>
@@ -441,6 +839,36 @@
 				<key>TableSignature</key>
 				<data>RFNEVA==</data>
 			</dict>
+			<dict>
+				<key>Base</key>
+				<string></string>
+				<key>BaseSkip</key>
+				<integer>0</integer>
+				<key>Comment</key>
+				<string>Disable Root Port 4 in DSDT, only for macOS</string>
+				<key>Count</key>
+				<integer>1</integer>
+				<key>Enabled</key>
+				<true/>
+				<key>Find</key>
+				<data>X0lOSQBwCwAAT1NZUw==</data>
+				<key>Limit</key>
+				<integer>0</integer>
+				<key>Mask</key>
+				<data>/////wD//wAA/////w==</data>
+				<key>OemTableId</key>
+				<data>QSBNIEkAAAA=</data>
+				<key>Replace</key>
+				<data>WAAAAAAAAAAAAAAAAA==</data>
+				<key>ReplaceMask</key>
+				<data>/wAAAAAAAAAAAAAAAA==</data>
+				<key>Skip</key>
+				<integer>0</integer>
+				<key>TableLength</key>
+				<integer>67704</integer>
+				<key>TableSignature</key>
+				<data>RFNEVA==</data>
+			</dict>
 		</array>
 		<key>Quirks</key>
 		<dict>
@@ -525,6 +953,8 @@
 			<dict>
 				<key>brcmfx-country</key>
 				<string>#a</string>
+				<key>brcmfx-delay</key>
+				<integer>15000</integer>
 				<key>brcmfx-driver</key>
 				<integer>2</integer>
 			</dict>
@@ -818,13 +1248,13 @@
 				<key>Enabled</key>
 				<true/>
 				<key>Find</key>
-				<data>sAIAAAA=</data>
+				<data>ugIAAAA=</data>
 				<key>Identifier</key>
 				<string>com.apple.driver.AppleACPIPlatform</string>
 				<key>Limit</key>
 				<integer>0</integer>
 				<key>Mask</key>
-				<data>8P////8=</data>
+				<data></data>
 				<key>MaxKernel</key>
 				<string></string>
 				<key>MinKernel</key>
@@ -832,7 +1262,7 @@
 				<key>Replace</key>
 				<data>AAEAAAA=</data>
 				<key>ReplaceMask</key>
-				<data>AA8AAAA=</data>
+				<data>AP8AAAA=</data>
 				<key>Skip</key>
 				<integer>0</integer>
 			</dict>

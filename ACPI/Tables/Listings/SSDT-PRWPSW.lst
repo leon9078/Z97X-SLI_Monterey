@@ -3,12 +3,12 @@ Intel ACPI Component Architecture
 ASL Optimizing Compiler version 20120711-32 [Jul 11 2012]
 Copyright (c) 2000 - 2012 Intel Corporation
 
-Compilation of "SSDT-PRWPSW.asl" - Fri Jan 23 20:09:10 2026
+Compilation of "SSDT-PRWPSW.asl" - Mon Feb 02 11:17:26 2026
 
        1....DefinitionBlock ("", "SSDT", 2, "HACK", "PRWPSW", 0x00000000)
 
-00000000....53 53 44 54 35 01 00 00     "SSDT5..."
-00000008....02 5A 48 41 43 4B 00 00     ".ZHACK.."
+00000000....53 53 44 54 3C 01 00 00     "SSDT<..."
+00000008....02 FE 48 41 43 4B 00 00     "..HACK.."
 00000010....50 52 57 50 53 57 00 00     "PRWPSW.."
 00000018....00 00 00 00 49 4E 54 4C     "....INTL"
 00000020....11 07 12 20 ............    "... "
@@ -160,7 +160,7 @@ Compilation of "SSDT-PRWPSW.asl" - Fri Jan 23 20:09:10 2026
       58....
       59....    Scope (\_SB.PCI0.XHC)
 
-000000F2....10 42 04 5C 2F 03 5F 53     ".B.\/._S"
+000000F2....10 49 04 5C 2F 03 5F 53     ".I.\/._S"
 000000FA....42 5F 50 43 49 30 58 48     "B_PCI0XH"
 00000102....43 5F ..................    "C_"
 
@@ -199,10 +199,17 @@ Compilation of "SSDT-PRWPSW.asl" - Fri Jan 23 20:09:10 2026
 
 0000012F....A4 .....................    "."
 00000130....5E 58 50 52 57 .........    "^XPRW"
+
       71....        }
-      72....    }
-      73....}
-      74....
+      72....
+      73....        Method (PS9X, 0, NotSerialized)
+
+00000135....14 06 50 53 39 58 00 ...    "..PS9X."
+      74....        {
+      75....        }
+      76....    }
+      77....}
+      78....
 
 
 Summary of errors and warnings
@@ -210,9 +217,9 @@ Summary of errors and warnings
 
 ASL Optimizing Compiler version 20120711-32 [Jul 11 2012]
 
-ASL Input:     SSDT-PRWPSW.asl - 75 lines, 1873 bytes, 40 keywords
-AML Output:    SSDT-PRWPSW.aml - 309 bytes, 8 named objects, 32 executable opcodes
-Listing File:  SSDT-PRWPSW.lst - 6758 bytes
+ASL Input:     SSDT-PRWPSW.asl - 79 lines, 1933 bytes, 41 keywords
+AML Output:    SSDT-PRWPSW.aml - 316 bytes, 9 named objects, 32 executable opcodes
+Listing File:  SSDT-PRWPSW.lst - 6926 bytes
 
 Compilation complete. 0 Errors, 0 Warnings, 0 Remarks, 0 Optimizations
 

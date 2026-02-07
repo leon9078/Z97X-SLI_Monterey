@@ -1,5 +1,5 @@
         Type         |        Subtype        |   Base   |   Size   |  CRC32   |   Name 
- Image               | Intel                 | 00000000 | 00800000 | 5BE1A8A9 |  Intel image
+ Image               | Intel                 | 00000000 | 00800000 | 315364B2 |  Intel image
  Region              | Descriptor            | 00000000 | 00001000 | 6F475F96 | - Descriptor region
  Region              | GbE                   | 00001000 | 00002000 | 926D1DDC | - GbE region
  Region              | ME                    | 00003000 | 001FD000 | CC2D5EFC | - ME region
@@ -35,13 +35,13 @@
  FPT partition       | Code                  | 000D2000 | 00077000 | 385FE6E9 | -- NFTP
  FPT partition       | Code                  | 00149000 | 00037000 | 7F08783B | -- MDMV
  Padding             | Empty (FFh)           | 00180000 | 00080000 | 504BF849 | -- Padding
- Region              | BIOS                  | 00200000 | 00600000 | 6E926248 | - BIOS region
- Volume              | FFSv2                 | 00200000 | 00020000 | 65661A5A | -- 8C8CE578-8A3D-4F1C-9935-896185C32DD3
- File                | Raw                   | 00200048 | 0001FFB8 | EFDE9ADB | --- CEF5B9A3-476D-497F-9FDC-E98143E0422C | NVAR store
- NVAR entry          | Full                  | 00200060 | 0000091B | 17943999 | ---- 4599D26F-1A11-49B8-B91F-858745CFF824 | StdDefaults
+ Region              | BIOS                  | 00200000 | 00600000 | 0420AE53 | - BIOS region
+ Volume              | FFSv2                 | 00200000 | 00020000 | 0F5C6B24 | -- 8C8CE578-8A3D-4F1C-9935-896185C32DD3
+ File                | Raw                   | 00200048 | 0001FFB8 | 85E4EBA5 | --- CEF5B9A3-476D-497F-9FDC-E98143E0422C | NVAR store
+ NVAR entry          | Full                  | 00200060 | 0000091B | A8F57F29 | ---- 4599D26F-1A11-49B8-B91F-858745CFF824 | StdDefaults
  NVAR entry          | Full                  | 00200077 | 00000756 | C8252C9E | ----- EC87D643-EBA4-4BB5-A1E5-3F3E36B20DA9 | Setup
  NVAR entry          | Full                  | 002007CD | 0000001E | 94187FA9 | ----- 8BE4DF61-93CA-11D2-AA0D-00E098032B8C | PlatformLang
- NVAR entry          | Full                  | 002007EB | 00000015 | F0B3B0A4 | ----- 8BE4DF61-93CA-11D2-AA0D-00E098032B8C | Timeout
+ NVAR entry          | Full                  | 002007EB | 00000015 | C285D226 | ----- 8BE4DF61-93CA-11D2-AA0D-00E098032B8C | Timeout
  NVAR entry          | Full                  | 00200800 | 00000069 | 682D533C | ----- C811FA38-42C8-4579-A9BB-60E94EDDFB34 | AMITSESetup
  NVAR entry          | Full                  | 00200869 | 00000038 | 3EE9A4A9 | ----- EC87D643-EBA4-4BB5-A1E5-3F3E36B20DA9 | UsbSupport
  NVAR entry          | Full                  | 002008A1 | 0000001F | B85AD71E | ----- D1405D16-7AFC-4695-BB12-41459D3695A2 | NetworkStackVar
@@ -53,11 +53,11 @@
  Padding             | Empty (FFh)           | 0020097B | 0001F675 | BF2214C0 | ---- Padding
  NVAR GUID store     |                       | 0021FFF0 | 00000010 | 2F82779F | ---- GUID store
  Padding             | Empty (FFh)           | 00220000 | 00030000 | 523F1D19 | -- Padding
- Volume              | FFSv2                 | 00250000 | 004B0000 | 8C755331 | -- 8C8CE578-8A3D-4F1C-9935-896185C32DD3
- File                | Volume image          | 00250048 | 002B554D | 2D466B0E | --- AE717C2F-1A42-4F2B-8861-78B79CA07E07 | FV_MAIN_NESTED
- Section             | Compressed            | 00250060 | 002B5535 | 9536EDD7 | ---- Compressed section
- Section             | Volume image          |   N/A    | 00929004 | 45EC2BD9 | ----- Volume image section
- Volume              | FFSv2                 |   N/A    | 00929000 | 4147DCB9 | ------ 8C8CE578-8A3D-4F1C-9935-896185C32DD3
+ Volume              | FFSv2                 | 00250000 | 004B0000 | EFA2E853 | -- 8C8CE578-8A3D-4F1C-9935-896185C32DD3
+ File                | Volume image          | 00250048 | 002B53C5 | 08B7236A | --- AE717C2F-1A42-4F2B-8861-78B79CA07E07 | FV_MAIN_NESTED
+ Section             | Compressed            | 00250060 | 002B53AD | 62657AE8 | ---- Compressed section
+ Section             | Volume image          |   N/A    | 00929004 | 4375ECA0 | ----- Volume image section
+ Volume              | FFSv2                 |   N/A    | 00929000 | 47DE1BC0 | ------ 8C8CE578-8A3D-4F1C-9935-896185C32DD3
  File                | DXE driver            |   N/A    | 00001295 | 001AEEDD | ------- 5C266089-E103-4D43-9AB5-12D7095BE2AF | IntelSaGopDriver
  Section             | DXE dependency        |   N/A    | 00000028 | 5880F2EA | -------- DXE dependency section
  Section             | Compressed            |   N/A    | 00001255 | 9E365A87 | -------- Compressed section
@@ -83,13 +83,13 @@
  File                | Freeform              |   N/A    | 000174F9 | 6E916F10 | ------- DAC2B117-B5FB-4964-A312-0DCC77061B9B
  Section             | Compressed            |   N/A    | 000174E1 | CC7469A5 | -------- Compressed section
  Section             | Freeform subtype GUID |   N/A    | 000174D6 | 4AC03DC5 | --------- 97E409E6-4CC1-11D9-81F6-000000000000
- File                | Freeform              |   N/A    | 00000960 | E2D5E627 | ------- 9221315B-30BB-46B5-813E-1B1BF4712BD3 | NVRAM external defaults
- Section             | Compressed            |   N/A    | 00000948 | 7033227B | -------- Compressed section
- Section             | Raw                   |   N/A    | 0000093F | BDCE2B0B | --------- Raw section
- NVAR entry          | Full                  |   N/A    | 0000091B | 17943999 | ---------- 4599D26F-1A11-49B8-B91F-858745CFF824 | StdDefaults
+ File                | Freeform              |   N/A    | 00000960 | 4A6A20D5 | ------- 9221315B-30BB-46B5-813E-1B1BF4712BD3 | NVRAM external defaults
+ Section             | Compressed            |   N/A    | 00000948 | B0D2E196 | -------- Compressed section
+ Section             | Raw                   |   N/A    | 0000093F | 7D2FE8E6 | --------- Raw section
+ NVAR entry          | Full                  |   N/A    | 0000091B | A8F57F29 | ---------- 4599D26F-1A11-49B8-B91F-858745CFF824 | StdDefaults
  NVAR entry          | Full                  |   N/A    | 00000756 | C8252C9E | ----------- EC87D643-EBA4-4BB5-A1E5-3F3E36B20DA9 | Setup
  NVAR entry          | Full                  |   N/A    | 0000001E | 94187FA9 | ----------- 8BE4DF61-93CA-11D2-AA0D-00E098032B8C | PlatformLang
- NVAR entry          | Full                  |   N/A    | 00000015 | F0B3B0A4 | ----------- 8BE4DF61-93CA-11D2-AA0D-00E098032B8C | Timeout
+ NVAR entry          | Full                  |   N/A    | 00000015 | C285D226 | ----------- 8BE4DF61-93CA-11D2-AA0D-00E098032B8C | Timeout
  NVAR entry          | Full                  |   N/A    | 00000069 | 682D533C | ----------- C811FA38-42C8-4579-A9BB-60E94EDDFB34 | AMITSESetup
  NVAR entry          | Full                  |   N/A    | 00000038 | 3EE9A4A9 | ----------- EC87D643-EBA4-4BB5-A1E5-3F3E36B20DA9 | UsbSupport
  NVAR entry          | Full                  |   N/A    | 0000001F | B85AD71E | ----------- D1405D16-7AFC-4695-BB12-41459D3695A2 | NetworkStackVar
@@ -676,11 +676,11 @@
  Section             | Compressed            |   N/A    | 00000FB1 | 3E75C721 | -------- Compressed section
  Section             | PE32 image            |   N/A    | 00000F84 | BDC298CC | --------- PE32 image section
  Section             | UI                    |   N/A    | 00000022 | B6D5A58D | --------- UI section
- File                | DXE driver            |   N/A    | 000BB823 | 6B7A5589 | ------- B1DA0ADF-4F77-4070-A88E-BFFE1C60529A | AMITSE
- Section             | Compressed            |   N/A    | 000BB80B | C9546CA9 | -------- Compressed section
+ File                | DXE driver            |   N/A    | 000BB823 | 149D0889 | ------- B1DA0ADF-4F77-4070-A88E-BFFE1C60529A | AMITSE
+ Section             | Compressed            |   N/A    | 000BB80B | D67B9001 | -------- Compressed section
  Section             | PE32 image            |   N/A    | 00066A44 | 3E09D5C7 | --------- PE32 image section
  Section             | Freeform subtype GUID |   N/A    | 000362FD | 6753A9F0 | --------- 97E409E6-4CC1-11D9-81F6-000000000000
- Section             | Freeform subtype GUID |   N/A    | 0001EAAC | 4F33E84E | --------- FE612B72-203C-47B1-8560-A66D946EB371
+ Section             | Freeform subtype GUID |   N/A    | 0001EAAC | 628AADC2 | --------- FE612B72-203C-47B1-8560-A66D946EB371
  Section             | UI                    |   N/A    | 00000012 | DCE07A8B | --------- UI section
  File                | Freeform              |   N/A    | 000000A8 | 63E3BE0D | ------- A59A0056-3341-44B5-9C9C-6D76F7673817
  Section             | Freeform subtype GUID |   N/A    | 00000090 | 463E582C | -------- 2EBE0275-6458-4AF9-91ED-D3F4EDB100AA
@@ -950,28 +950,28 @@
  Section             | UI                    |   N/A    | 00000012 | C22DE216 | --------- UI section
  Free space          |                       |   N/A    | 00002738 | 951F7AA2 | ------- Volume free space
  Section             | UI                    |   N/A    | 00000022 | 9AEF7991 | ----- UI section
- File                | Raw                   | 00505598 | 00014C18 | 8A3B7FAF | --- 17088572-377F-44EF-8F4E-B09FFF46A070
- Microcode           | Intel                 | 005055B0 | 00003800 | 7C50E0C6 | ---- Intel microcode
- Microcode           | Intel                 | 00508DB0 | 00005C00 | 887F028B | ---- Intel microcode
- Microcode           | Intel                 | 0050E9B0 | 00005800 | 2F75FA4C | ---- Intel microcode
- Microcode           | Intel                 | 005141B0 | 00006000 | EFEEFF19 | ---- Intel microcode
- File                | Freeform              | 0051A1B0 | 00048B2B | 99C193CD | --- 8A0A450A-BEE9-42C1-9549-2BB8296AB3C3
- Section             | Compressed            | 0051A1C8 | 00048B13 | 6620FFF5 | ---- Compressed section
+ File                | Raw                   | 00505410 | 00014C18 | 8A3B7FAF | --- 17088572-377F-44EF-8F4E-B09FFF46A070
+ Microcode           | Intel                 | 00505428 | 00003800 | 7C50E0C6 | ---- Intel microcode
+ Microcode           | Intel                 | 00508C28 | 00005C00 | 887F028B | ---- Intel microcode
+ Microcode           | Intel                 | 0050E828 | 00005800 | 2F75FA4C | ---- Intel microcode
+ Microcode           | Intel                 | 00514028 | 00006000 | EFEEFF19 | ---- Intel microcode
+ File                | Freeform              | 0051A028 | 00048B2B | 99C193CD | --- 8A0A450A-BEE9-42C1-9549-2BB8296AB3C3
+ Section             | Compressed            | 0051A040 | 00048B13 | 6620FFF5 | ---- Compressed section
  Section             | Raw                   |   N/A    | 0016FFE4 | 3820F150 | ----- Raw section
- File                | Freeform              | 00562CE0 | 000861F9 | 69DAE311 | --- CD4275AA-71CD-4146-A723-1A4957F02578
- Section             | Compressed            | 00562CF8 | 000861E1 | C2253A19 | ---- Compressed section
+ File                | Freeform              | 00562B58 | 000861F9 | 69DAE311 | --- CD4275AA-71CD-4146-A723-1A4957F02578
+ Section             | Compressed            | 00562B70 | 000861E1 | C2253A19 | ---- Compressed section
  Section             | Raw                   |   N/A    | 000E0EEF | F0923C03 | ----- Raw section
- File                | DXE driver            | 005E8EE0 | 0006E150 | 26DAAB3E | --- 899407D7-99FE-43D8-9A21-79EC328CAC21 | Setup
- Section             | DXE dependency        | 005E8EF8 | 00000016 | 8981F64B | ---- DXE dependency section
- Section             | Compressed            | 005E8F10 | 0006E120 | 8A854C37 | ---- Compressed section
+ File                | DXE driver            | 005E8D58 | 0006E152 | 73A00E62 | --- 899407D7-99FE-43D8-9A21-79EC328CAC21 | Setup
+ Section             | DXE dependency        | 005E8D70 | 00000016 | 8981F64B | ---- DXE dependency section
+ Section             | Compressed            | 005E8D88 | 0006E122 | 0B53B3A9 | ---- Compressed section
  Section             | PE32 image            |   N/A    | 00043E04 | EAC992FF | ----- PE32 image section
- Section             | Freeform subtype GUID |   N/A    | 0033D00C | F802A137 | ----- 97E409E6-4CC1-11D9-81F6-000000000000
+ Section             | Freeform subtype GUID |   N/A    | 0033D00C | 1D211B6B | ----- 97E409E6-4CC1-11D9-81F6-000000000000
  Section             | UI                    |   N/A    | 00000010 | C755844E | ----- UI section
- File                | PEI module            | 00657030 | 0000211C | 87D3EC7B | --- EFD652CC-0E99-40F0-96C0-E08C089070FC | S3Restore
- Section             | PEI dependency        | 00657048 | 00000028 | 2CAB6DA9 | ---- PEI dependency section
- Section             | PE32 image            | 00657070 | 000020C4 | B0DEF0D7 | ---- PE32 image section
- Section             | UI                    | 00659134 | 00000018 | 83BC0090 | ---- UI section
- Free space          |                       | 00659150 | 000A6EB0 | E382C784 | --- Volume free space
+ File                | PEI module            | 00656EB0 | 0000211C | E5F8C1A9 | --- EFD652CC-0E99-40F0-96C0-E08C089070FC | S3Restore
+ Section             | PEI dependency        | 00656EC8 | 00000028 | 2CAB6DA9 | ---- PEI dependency section
+ Section             | PE32 image            | 00656EF0 | 000020C4 | 80FE4166 | ---- PE32 image section
+ Section             | UI                    | 00658FB4 | 00000018 | 83BC0090 | ---- UI section
+ Free space          |                       | 00658FD0 | 000A7030 | FB2A590E | --- Volume free space
  Volume              | FFSv2                 | 00700000 | 00100000 | D2250748 | -- 8C8CE578-8A3D-4F1C-9935-896185C32DD3
  File                | PEI module            | 00700048 | 00001B1A | 41142045 | --- CA9D8617-D652-403B-B6C5-BA47570116AD | TxtPei
  Section             | PEI dependency        | 00700060 | 0000004C | 994747FC | ---- PEI dependency section

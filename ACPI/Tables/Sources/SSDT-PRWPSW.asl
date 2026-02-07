@@ -69,5 +69,9 @@ DefinitionBlock ("", "SSDT", 2, "HACK", "PRWPSW", 0x00000000)
 
             Return (^XPRW ())
         }
+
+        Method (PS9X, 0, NotSerialized)
+        {
+        }
     }
 }

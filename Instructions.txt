@@ -99,8 +99,8 @@ Click on Apple logo > Riavvia
 Login, then download Arch Linux installer ISO from their official website
 
 % cd ~/Music
-% curl -O https://it.mirrors.cicku.me/archlinux/iso/2026.01.01/{archlinux-2026.01.01-x86_64.iso,sha256sums.txt}
-% shasum -a 256 archlinux-2026.01.01-x86_64.iso | grep --color=yes "<paste SHA-256 of archlinux-2026.01.01.iso>"
+% curl -O https://it.mirrors.cicku.me/archlinux/iso/2026.02.01/{archlinux-2026.02.01-x86_64.iso,sha256sums.txt}
+% shasum -a 256 archlinux-2026.02.01-x86_64.iso | grep --color=yes "<paste SHA-256 of archlinux-2026.02.01.iso>"
 
 Insert an empty 2+ GB USB flash drive
 
@@ -108,7 +108,7 @@ Insert an empty 2+ GB USB flash drive
 
 Get the size of the Arch .iso and add 100 MiB in order to create a partition where the file system will have enough free space
 
-% echo +$(( $(wc -c < archlinux-2026.01.01-x86_64.iso) / 2 ** 20 + 100 ))M
+% echo +$(( $(wc -c < archlinux-2026.02.01-x86_64.iso) / 2 ** 20 + 100 ))M
 
 % sudo ./gdisk /dev/rdiskX
 n
@@ -126,17 +126,17 @@ v
 w
 y
 
-% dd if=archlinux-2026.01.01-x86_64.iso bs=1 skip=$(( 0x8028 )) count=32 status=none | perl -pe 's/[ ]+$/\n/'
-% sudo newfs_msdos -v ARCH_202601 /dev/rdiskXs1
+% dd if=archlinux-2026.02.01-x86_64.iso bs=1 skip=$(( 0x8028 )) count=32 status=none | perl -pe 's/[ ]+$/\n/'
+% sudo newfs_msdos -v ARCH_202602 /dev/rdiskXs1
 % sudo diskutil mount nobrowse /dev/diskXs1
-% bsdtar -x -v --exclude EFI/BOOT/BOOTIA32.EFI --exclude boot/syslinux/ --exclude shellia32.efi -f archlinux-2026.01.01-x86_64.iso -C /Volumes/ARCH_202601
-% perl -i -pe 's/(timeout).*/$1 5/;s/(beep).*/$1 off/' /Volumes/ARCH_202601/loader/loader.conf
-% mv /Volumes/ARCH_202601/EFI/BOOT/{,ARCH-}BOOTx64.EFI
-% cp /Volumes/ARCH_202601/{shellx64.efi,EFI/BOOT/BOOTx64.EFI}
-% cp Z97X-SLI_Monterey-master/BIOS/BIOS_settings.nsh /Volumes/ARCH_202601/EFI/BOOT/
-% mkdir /Volumes/ARCH_202601/EFI/TOOLS/
-% cp Z97X-SLI_Monterey-master/EFI_USB/TOOLS/uvt.efi /Volumes/ARCH_202601/EFI/TOOLS/
-% printf '@echo -off\r\nARCH-BOOTx64.EFI\r\n' | perl -0777pe 's/(.)/$1\x00/gs;s/^/\xFF\xFE/' > /Volumes/ARCH_202601/EFI/BOOT/startup.nsh
+% bsdtar -x -v --exclude EFI/BOOT/BOOTIA32.EFI --exclude boot/syslinux/ --exclude shellia32.efi -f archlinux-2026.02.01-x86_64.iso -C /Volumes/ARCH_202602
+% perl -i -pe 's/(timeout).*/$1 5/;s/(beep).*/$1 off/' /Volumes/ARCH_202602/loader/loader.conf
+% mv /Volumes/ARCH_202602/EFI/BOOT/{,ARCH-}BOOTx64.EFI
+% cp /Volumes/ARCH_202602/{shellx64.efi,EFI/BOOT/BOOTx64.EFI}
+% cp Z97X-SLI_Monterey-master/BIOS/BIOS_settings.nsh /Volumes/ARCH_202602/EFI/BOOT/
+% mkdir /Volumes/ARCH_202602/EFI/TOOLS/
+% cp Z97X-SLI_Monterey-master/EFI_USB/TOOLS/uvt.efi /Volumes/ARCH_202602/EFI/TOOLS/
+% printf '@echo -off\r\nARCH-BOOTx64.EFI\r\n' | perl -0777pe 's/(.)/$1\x00/gs;s/^/\xFF\xFE/' > /Volumes/ARCH_202602/EFI/BOOT/startup.nsh
 % sudo sync
 % diskutil umount /dev/diskXs1
 % diskutil eject /dev/diskX
@@ -179,7 +179,7 @@ Plug power cable again.
 Power on the PC.
 A message will show up saying "BIOS has been reset - Please decide how to continue"
 Select "Load optimized defaults then reboot"
-After reboot, a new WARNING will appear saying "No bootable device is detected"
+After reboot, a new WARNING will appear saying "No bootable device is detected."
 
 Plug Arch USB drive to the target PC
 Press the reset button, F12, Arch USB, at UEFI Shell press ESC key (within 5 seconds) to skip "startup.nsh" (which will otherwise load Arch systemd-boot)
@@ -188,7 +188,7 @@ Also we can omit typing the script extension ".nsh"
 
 Shell> bios_settings
 
-After reboot, quickly unplug USB flash drive, wait for "No bootable device is detected" message. Plug again the Arch USB flash drive and press the reset button.
+After reboot, quickly unplug USB flash drive, wait for "No bootable device is detected." message. Plug again the Arch USB flash drive and press the reset button.
 Again, at UEFI Shell press ESC key (within 5 seconds).
 
 Go to this website on another device: https://time.is/UTC

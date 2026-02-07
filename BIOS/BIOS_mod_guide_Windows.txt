@@ -8,11 +8,13 @@ Complete list of modifications:
    - Intel GOP driver + OPROM
    - Intel LAN driver + OPROM
    - CPU microcodes
-5) Change Setup, AMITSE and NVRAM to enable "ACPI Debug"
+5) Update Setup, AMITSE and NVRAM modules:
+   - enable "ACPI Debug"
+   - increase EFI_GLOBAL_VARIABLE_GUID "Timeout" value from 1 to 3
 6) Delete 2 Microcode GUID ffs (fake, and last of the duplicates one)
 7) Delete 2 "Padding file" sections, by adjusting Attributes
 8) Replace AMI's "FileSystem" driver with "Fat" (EnhancedFatDxe from FatPkg audk [fork of EDK II project focused on security])
-9) Change CORE_DXE to add "OpenCore" and "Gentoo" for automatic detection of specific bootloader paths. Plus, make all UEFI bootloader paths uppercase
+9) Update CORE_DXE to add "OpenCore" and "Gentoo" for automatic detection of specific bootloader paths. Plus, make all UEFI bootloader paths uppercase
 
 Prerequisites:
 - Clean install of Windows 10 version 1607 or higher
@@ -39,25 +41,27 @@ We need this files/softwares:
 Click on "Start" icon > select "Windows System" folder > select "Command Prompt"
 Right click on "Command Prompt" icon > select "Pin to taskbar"
 Click on "Command Prompt" icon, then run:
+> cls
 > cd Documents
-> curl -LO https://github.com/mullvad/mullvad-browser/releases/download/15.0.2/mullvad-browser-windows-x86_64-15.0.2.exe
+> curl -LO https://github.com/mullvad/mullvad-browser/releases/download/15.0.4/mullvad-browser-windows-x86_64-15.0.4.exe
 > curl -LO https://aka.ms/vs/17/release/vc_redist.x86.exe
 > curl -LO https://aka.ms/vs/17/release/vc_redist.x64.exe
-> curl -LO https://www.python.org/ftp/python/3.13.9/python-3.13.9-amd64.exe
+> curl -LO https://www.python.org/ftp/python/3.13.11/python-3.13.11-amd64.exe
 > curl -LO https://www.7-zip.org/a/7z2501-x64.exe
-> curl -LO https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.8.8/npp.8.8.8.Installer.x64.exe
+> curl -LO https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.9.1/npp.8.9.1.Installer.x64.exe
 > curl -LO https://github.com/digitalw0lf/hextor/releases/download/v0.14/HextorSetup.exe
 > curl -LO https://download.gigabyte.com/FileList/BIOS/mb_bios_ga-z97x-sli_f10b.zip
-> curl -LO https://github.com/LongSoft/UEFITool/releases/download/A72/UEFITool_NE_A72_win64.zip
+> curl -LO https://github.com/LongSoft/UEFITool/releases/download/A73/UEFITool_NE_A73_win64.zip
 > curl -LO https://github.com/LongSoft/UEFITool/releases/download/0.28.0/UEFITool_0.28.0_win32.zip
 > curl -LO https://github.com/LongSoft/IFRExtractor-RS/releases/download/v1.6.0/ifrextractor_1.6.0_win32.zip
 > curl -LO https://github.com/leon9078/OpenCorePkg/releases/download/1.0.7/OpenCore-1.0.7-Darwin-XCODE5-RELEASE.zip
 > curl -LO https://github.com/leon9078/OpenCorePkg/releases/download/1.0.7/OpenCore-1.0.7-Windows-VS2019-RELEASE.zip
 
 Click on "Start" icon > select "Documents"
-Click twice on "Date modified"
+Right click on the "Name" column > select "Date created"
+Click twice on "Date created"
 
-Open "mullvad-browser-windows-x86_64-15.0.2.exe"
+Open "mullvad-browser-windows-x86_64-15.0.4.exe"
 "Installation type" > Select "Advanced"
 Next >
 Uncheck "Add desktop icon"
@@ -143,14 +147,14 @@ Back to CMD
 > MainForm.bat
 > Updater.bat
 > del Editor.bat MainForm.bat Updater.bat
-> vc_redist.x86.exe /install /passive /norestart
-> vc_redist.x64.exe /install /passive /norestart
+> vc_redist.x86 /install /passive /norestart
+> vc_redist.x64 /install /passive /norestart
 
 
 
-Back to File Explorer, press F5 to refresh the new downloaded files
+Back to File Explorer
 
-Right click on "python-3.13.9-amd64.exe" > "Run as administrator" > "Yes"
+Right click on "python-3.13.11-amd64.exe" > "Run as administrator" > "Yes"
 Check "Use admin privileges when installing py.exe"
 Check "Add python.exe to PATH"
 
@@ -170,7 +174,7 @@ Close
 
 
 
-Right click on "npp.8.8.8.Installer.x64.exe" > "Run as administrator" > "Yes"
+Right click on "npp.8.9.1.Installer.x64.exe" > "Run as administrator" > "Yes"
 (English is fine, otherwise choose your language)
 OK
 Next >
@@ -178,7 +182,7 @@ I Agree
 Next >
 Next >
 Install
-Uncheck "Run Notepad++ v8.8.8"
+Uncheck "Run Notepad++ v8.9.1"
 Finish
 
 
@@ -252,21 +256,22 @@ Quit Hextor
 
 
 
-Select with Ctrl modifier:
-"mb_bios_ga-z97x-sli_f10b.zip"
-"UEFITool_NE_A72_win64.zip"
-"ifrextractor_1.6.0_win32.zip"
-"MMTool_Aptio_5.02.0024_Mod.7z"
-"ME System Tools v9.1 r7.rar"
-"ME 9.1 1.5MB v9.1.40.1000.rar"
+Back to CMD
+> tar -xf mb_bios_ga-z97x-sli_f10b.zip
+> tar -xf UEFITool_NE_A73_win64.zip
+> tar -xf ifrextractor_1.6.0_win32.zip
+> set PATH=%PATH%;C:\Program Files\7-Zip\
+> 7z x MMTool_Aptio_5.02.0024_Mod.7z
+> 7z x ME System Tools v9.1 r7.rar
+> 7z x ME 9.1 1.5MB v9.1.40.1000.rar
+> 7z x UEFITool_0.28.0_win32.zip -oUEFITool_0.28.0_win32
+> 7z x OpenCore-1.0.7-Darwin-XCODE5-RELEASE.zip -oOpenCore-1.0.7-Darwin-XCODE5-RELEASE
+> 7z x OpenCore-1.0.7-Windows-VS2019-RELEASE.zip -oOpenCore-1.0.7-Windows-VS2019-RELEASE
+> 7z x UBU_v1_80_b1.rar -oUBU_v1_80_b1
+> 7z x Intel_VBIOS_and_BSF_r3.7z -oIntel_VBIOS_and_BSF_r3
 
-and with all this files selected (6) > 7-Zip > Extract Here
 
-Right click on "UEFITool_0.28.0_win32.zip" > 7-Zip > Extract to "UEFITool_0.28.0_win32\"
-Right click on "OpenCore-1.0.7-Darwin-XCODE5-RELEASE.zip" > 7-Zip > Extract to "OpenCore-1.0.7-Darwin-XCODE5-RELEASE\"
-Right click on "OpenCore-1.0.7-Windows-VS2019-RELEASE.zip" > 7-Zip > Extract to "OpenCore-1.0.7-Windows-VS2019-RELEASE\"
-Right click on "UBU_v1_80_b1.rar" > 7-Zip > Extract to "UBU_v1_80_b1\"
-Right click on "Intel_VBIOS_and_BSF_r3.7z" > 7-Zip > Extract to "Intel_VBIOS_and_BSF_r3\"
+
 
 
 
@@ -340,17 +345,24 @@ Uncheck "Generate intermediate build files" > OK
 In the top section change from "Intel(R) H81 - Desktop" to "Intel(R) Z97 - Desktop"
 
 ME Region > Configuration > ME > WLAN Power Well Config: 0x86
-ME Region > Configuration > Integrated Clock Controller [right click > Add Profile > Overclocking]
-ME Region > Configuration > Integrated Clock Controller > ICC Profile 0 - UserProfile [right click > Remove Profile > Yes]
+ME Region > Configuration > Integrated Clock Controller > [right click] > Add Profile > Overclocking
+ME Region > Configuration > Integrated Clock Controller > ICC Profile 0 - UserProfile > [right click] > Remove Profile > Yes
 Profile Name/Description: Full_OCProfile
+
+Expand "ICC Profile 0 - Full_OCProfile"
+
 PCI and Flex Clock Settings > Flex Clock Source Selection: FLEX1 Source Clock: 2: 48/24MHz
 PCI and Flex Clock Settings > Flex Clock Source Selection: FLEX2 Source Clock: 2: 48/24MHz
 Clock Range Definition Records > DMI Clock Source Range Limits > Min Nominal Frequency: 45.000000MHz
 Clock Range Definition Records > DMI Clock Source Range Limits > SSC Spread Percentage: 0.50%
 Clock Range Definition Records > PCIe Clock Source Range Limits > Min Nominal Frequency: 100.000000MHz
 
-ME Region > Configuration > Integrated Clock Controller [right click > Add Profile > Overclocking]
-Profile Name/Description: PEG_OCProfile
+ME Region > Configuration > Integrated Clock Controller > [right click] > Add Profile > Overclocking
+
+Click on "ICC Profile 1 - Overclocking" > Profile Name/Description: PEG_OCProfile
+
+Expand "ICC Profile 1 - PEG_OCProfile"
+
 PCI and Flex Clock Settings > Flex Clock Source Selection: FLEX1 Source Clock: 2: 48/24MHz
 PCI and Flex Clock Settings > Flex Clock Source Selection: FLEX2 Source Clock: 2: 48/24MHz
 DMI and PCIe Clock Settings > Differential Clock Source Selection > PEGA Source Clock: 1:100MHzBCLK
@@ -359,7 +371,10 @@ Clock Range Definition Records > DMI Clock Source Range Limits > Min Nominal Fre
 Clock Range Definition Records > DMI Clock Source Range Limits > SSC Spread Percentage: 0.50%
 Clock Range Definition Records > PCIe Clock Source Range Limits > Min Nominal Frequency: 100.000000MHz
 
-ME Region > Configuration > Integrated Clock Controller [right click > Add Profile > Standard]
+ME Region > Configuration > Integrated Clock Controller [right click] > Add Profile > Standard
+
+Expand "ICC Profile 2 - Standard"
+
 PCI and Flex Clock Settings > Flex Clock Source Selection: FLEX1 Source Clock: 2: 48/24MHz
 PCI and Flex Clock Settings > Flex Clock Source Selection: FLEX2 Source Clock: 2: 48/24MHz
 
@@ -387,7 +402,7 @@ Back to CMD
 
 
 
-Back to File Explorer > Documents folder
+Back to File Explorer's Documents window
 Drag "BIOS Region.bin" into Hextor icon while holding Shift
 Edit > Select Range... > Range end: 0x200000 > Select
 Hit the Insert key, then Del key, then Insert key again
@@ -435,14 +450,10 @@ File > Exit
 
 Now let's compare the SHA-256 of the two files:
 
-Back to File Explorer
-Right click on "Section_Raw_821D110C-D0A3-4CF7-AEF3-E28088491704_body.bin" > 7-Zip > CRC SHA > SHA-256
-Right click on "Original_first_512KiB_SPI.bin" > 7-Zip > CRC SHA > SHA-256
+Back to CMD
+> 7z h -scrcSHA256 Section_Raw_821D110C-D0A3-4CF7-AEF3-E28088491704_body.bin Original_first_512KiB_SPI.bin
 
 We will have exactly the same result!!!
-
-
-Back to CMD
 
 > del Section_Raw_821D110C-D0A3-4CF7-AEF3-E28088491704_body.bin Original_first_512KiB_SPI.bin Z97XSLI.10b
 
@@ -452,7 +463,7 @@ But first let's check some important stuff
 
 Back to UEFITool
 Click above on "Compressed section" and check "Compression algorithm", it says "None". We can extract the module "As is".
-There are usually different types of compression algorithms for section files (https://github.com/LongSoft/UEFITool/blob/A72/common/basetypes.h#L130-L140)
+There are usually different types of compression algorithms for section files (https://github.com/LongSoft/UEFITool/blob/A73/common/basetypes.h#L131-L142)
 If we have a module with a "Compression algorithm" different than "None", we need to uncompress with a specific tool.
 
 Click on "821D110C-D0A3-4CF7-AEF3-E28088491704" and take note of the following info:
@@ -464,8 +475,8 @@ Click on "821D110C-D0A3-4CF7-AEF3-E28088491704" and take note of the following i
 
 We have to find the section type and ffs type, so we can use that info later.
 
-File Types: https://github.com/LongSoft/UEFITool/blob/A72/common/ffs.cpp#L282-L297
-Section Types: https://github.com/LongSoft/UEFITool/blob/A72/common/ffs.cpp#L305-L321
+File Types: https://github.com/LongSoft/UEFITool/blob/A73/common/ffs.cpp#L284-L299
+Section Types: https://github.com/LongSoft/UEFITool/blob/A73/common/ffs.cpp#L307-L323
 
 In UEFITool check the "Subtype" value of the "File" type, it says "Freeform"
 Double check on the link above the result: EFI_FV_FILETYPE_FREEFORM
@@ -475,7 +486,7 @@ And so on, till the end of the module.
 
 
 
-In (https://github.com/LongSoft/UEFITool/blob/A72/common/ffs.h#L328-L335)
+In (https://github.com/LongSoft/UEFITool/blob/A73/common/ffs.h#L328-L335)
 "FFS_ATTRIB_CHECKSUM" is bit 6h (0x40)
 
 In (https://uefi.org/specs/PI/1.9/V3_Code_Definitions.html#efi-ffs-file-header)
@@ -584,17 +595,18 @@ Open UEFITool.exe
 File > Open image file... > "mod_bios.bin" > Open
 Action > Search... > Text > "MDBG", uncheck "Unicode", check "Case sensitive" > OK
 
-There are 3 results, 2 inside AmiBoardInfo/.../PE32 image section (DSDT). 1 inside an unknown GUID/.../Raw section. If we double click on it, right click on "Raw section" > Body hex view... we see it's a SSDT!
+There are 3 results, 2 inside AmiBoardInfo/.../PE32 image section (DSDT). 1 inside an unknown GUID/.../Raw section. If we double click on it, go to the "Hex view" tab on the right, we see it's a SSDT!
 
 So we know there is this ACPI table inside the BIOS. We need to find a way to activate this SSDT at runtime. The only way is by searching for a hidden BIOS setting
 Let's try with the IFR extractor to find hidden BIOS settings
 
 Back to UEFITool
-File > Open image file... > "mod_bios.bin" > Open
+Click on "Information" tab
+Alt+1 to quickly open the last recent file
 
 Search for a known BIOS setting like: "XHCI Mode". (Refer to the GIGABYTE user manual => Chapter 2: BIOS Setup => Peripherals)
 
-Action > Search... > Text > "XHCI Mode", check "Unicode", check "Case sensitive" > OK
+Action > Search... > Text > "XHCI Mode", check "Unicode" > OK
 
 There will be 1 result inside Setup/.../MiniSetupResourceSection
 Double click on it, it will select "MiniSetupResourceSection"
@@ -628,10 +640,10 @@ Our dictionary size: 800000h
 00 80 00 00 # dictionary size is 4 byte size, add a leading zero
 00 00 80 00 # convert the result to little endian (swap the bytes from right to left)
 
-Back to File Explorer, drag "Setup.ffs" into Hextor icon while holding Shift
-Search > Find/Replace... > "?? 00 00 80 00" > HEX > Extended syntax > List > Search pattern found 1 time(s) > OK => Find next >> => << Find prev
-Close Find/Replace window
 
+
+Back to File Explorer, drag "Setup.ffs" into Hextor icon while holding Shift
+Search > Find/Replace... > "?? 00 00 80 00" > HEX > Extended syntax > List > Search pattern found 1 time(s) > OK => Find next >> => << Find prev => Esc
 Edit > Select Range... > Range end: +0x6E120 > Select
 File > Save selection as... > "Setup.lzma" > Save
 File > Exit
@@ -643,11 +655,11 @@ Back to CMD
 
 
 Back to UEFITool
-Click on "MiniSetupResourceSection", right click "Hex view...", select the first 16 HEX bytes from offset 00000000, Ctrl+C, close the window
+Right click on "MiniSetupResourceSection" > "Hex view...", select the first 16 HEX bytes from offset 00000000, Ctrl+C, Esc
 
 Back to File Explorer, drag "Setup_Uncompressed.bin" into Hextor icon while holding Shift
-Search > Find/Replace... > Ctrl+V > HEX > Find next >> > << Find prev
-Close Find/Replace window
+Search > Find/Replace... > Ctrl+V > HEX => Find next >> => << Find prev => Esc
+
 
 
 Back to UEFITool
@@ -660,13 +672,14 @@ File > Save selection as... > "Setup_MiniSetupResourceSection.sec" > Save
 
 Back to CMD
 > ifrextractor Setup_MiniSetupResourceSection.sec verbose
+
 Now we need to search for something descriptive inside those *.txt files (like "mdbg", "adbg" or "debug")
 
 Open Notepad++
 Search > Find in Files...
 Find what: "ADBG"
 Replace with: [empty]
-Filters: *.txt
+Filters: Setup_MiniSetupResourceSection.sec*.txt
 Directory: > ... > Select Documents folder > Select Folder
 Match case: uncheck
 Search Mode: Normal
@@ -676,7 +689,7 @@ Find All
 There is 1 result in 1 text file!
 Double click on it.
 
-0x337726:                OneOf Prompt: "ACPI Debug", Help: "Open a memory buffer for storing debug strings.Use method ADBG to write strings to buffer.", [...] QuestionId: 0x318, VarStoreId: 0x1, VarOffset: 0x6EA, [...] { 05 A6 1C 0F 1D 0F 18 03 [...] }
+0x337726:                OneOf Prompt: "ACPI Debug", Help: "Open a memory buffer for storing debug strings.Use method ADBG to write strings to buffer.", [...] QuestionId: 0x318, VarStoreId: 0x1, VarOffset: 0x6EA, [...] Size: 8 [...] { 05 A6 1C 0F 1D 0F 18 03 [...] }
 0x33774C:                        OneOfOption Option: "Disabled" Value: 0, Default, MfgDefault { 09 0E 04 00 30 00 00 00 00 00 00 00 00 00 }
 0x33775A:                        OneOfOption Option: "Enabled" Value: 1 { 09 0E 03 00 00 00 01 00 00 00 00 00 00 00 }
 0x337768:                End  { 29 02 }
@@ -696,23 +709,61 @@ Copy the HEX sequence between curly braces in "OneOf Prompt" line
 
 Back to Hextor
 
-Search > Find/Replace > Ctrl-V => Find next >> => << Find prev => Find next >>
-Close Find/Replace window
+Search > Find/Replace > Ctrl-V => Find next >> => << Find prev => Find next >> => Esc
 Search > Go To address... > +0x4 > OK
 Type "00"
 Search > Go To address... > +0xD > OK
 Type "30"
-File > Save as... > "Setup_Uncompressed_ACPI_Debug.bin" > Save
+
+
+
+
+
+I also want to increase the Timeout default value of 1 to 3. Increasing it by 2 seconds, we make sure our AMI boot logo is always showed, even if our monitor is slow at waking the screen during boot or during hibernation wake
+
+Back to Notepad++
+Search > Find in Files...
+Find what: ""Timeout""
+
+Find All
+
+There is 1 result in 1 text file!
+Double click on it.
+
+0x337EB9:	VarStore Guid: 8BE4DF61-93CA-11D2-AA0D-00E098032B8C, VarStoreId: 0x4, Size: 0x2, Name: "Timeout" { 24 1E 61 DF E4 8B CA 93 D2 11 AA 0D 00 E0 98 03 2B 8C 04 00 02 00 54 69 6D 65 6F 75 74 00 }
+
+VarStoreId value is 0x4
+
+Search > Find... > Find what: "VarStoreId: 0x4" > Find All in Current Document
+
+Double click on the 2nd result > Home key
+
+0x3381F7:				Numeric Prompt: "Setup Prompt Timeout", Help: "Number of seconds to wait for setup activation key. 65535(0xFFFF) means indefinite waiting.", [...] QuestionId: 0x2, VarStoreId: 0x4, VarOffset: 0x0, [...] Size: 16 [...] { 07 A6 37 00 38 00 02 00 [...] }
+
+We can see it has interesting elements:
+- it is a "Numeric Prompt" instead of "OneOf Prompt"
+- it's Size is 16 instead of 8
+- it has a default value of 1 (1 second)
+
+As we did before, copy the HEX sequence between curly braces in "Numeric Prompt" line
+
+Back to Hextor
+
+Search > Find/Replace > Ctrl+V => Find next >> => Find next >> => Esc
+Search > Go To address... > +0x5 > OK
+Type "03"
+
+File > Save as... > "Setup_Uncompressed_ACPI_Debug_Timeout_3.bin" > Save
 File > Exit
 
 
 Back to CMD
 > del Setup_Uncompressed.bin
-> LzmaCompress -e -o Setup_ACPI_Debug.lzma d 23 Setup_Uncompressed_ACPI_Debug.bin
-> del Setup_Uncompressed_ACPI_Debug.bin
-> GenSec -o Setup_ACPI_Debug.com -s EFI_SECTION_COMPRESSION -c PI_NONE Setup_ACPI_Debug.lzma
+> LzmaCompress -e -o Setup_ACPI_Debug_Timeout_3.lzma d 23 Setup_Uncompressed_ACPI_Debug_Timeout_3.bin
+> del Setup_Uncompressed_ACPI_Debug_Timeout_3.bin
+> GenSec -o Setup_ACPI_Debug_Timeout_3.com -s EFI_SECTION_COMPRESSION -c PI_NONE Setup_ACPI_Debug_Timeout_3.lzma
 
-Back to File Explorer, drag "Setup_ACPI_Debug.com" into Hextor icon while holding Shift
+Back to File Explorer, drag "Setup_ACPI_Debug_Timeout_3.com" into Hextor icon while holding Shift
 Search > Go To address... > 0x8
 Type "02"
 File > Save
@@ -721,12 +772,11 @@ File > Exit
 
 
 Back to UEFITool
-Click on "DXE dependency section", right click "Hex view...", select the first 16 HEX bytes from offset 00000000, Ctrl+C, close the window
+Click on "DXE dependency section", right click "Hex view...", select the first 16 HEX bytes from offset 00000000, Ctrl+C, Esc
 
 
 Back to File Explorer, drag again "Setup.ffs" into Hextor icon while holding Shift
-Search > Find/Replace > Ctrl-V > HEX > Find next >> > << Find prev
-Close Find/Replace window
+Search > Find/Replace > Ctrl-V > HEX => Find next >> => << Find prev => Esc
 
 Back to UEFITool
 Check on the right: "Full size: 16h (22)"
@@ -741,11 +791,11 @@ File > Exit
 
 
 Back to CMD
-> GenFfs -o Setup_ACPI_Debug.ffs -t EFI_FV_FILETYPE_DRIVER -g "899407D7-99FE-43D8-9A21-79EC328CAC21" -s -i Setup.dpx -i Setup_ACPI_Debug.com
-> del Setup.dpx Setup_ACPI_Debug.com Setup_ACPI_Debug.lzma Setup.ffs
+> GenFfs -o Setup_ACPI_Debug_Timeout_3.ffs -t EFI_FV_FILETYPE_DRIVER -g "899407D7-99FE-43D8-9A21-79EC328CAC21" -s -i Setup.dpx -i Setup_ACPI_Debug_Timeout_3.com
+> del Setup.dpx Setup_ACPI_Debug_Timeout_3.com Setup_ACPI_Debug_Timeout_3.lzma Setup.ffs
 
 
-File "Setup_ACPI_Debug.ffs" will be used later!
+File "Setup_ACPI_Debug_Timeout_3.ffs" will be used later!
 
 
 
@@ -762,8 +812,8 @@ This module has a signature at the beginning of the file "$SPF"
 
 
 Back to UEFITool
-File > Open image file... > "mod_bios.bin" > Open
-Action > Search... > Text > "$SPF", uncheck "Unicode", check "Case sensitive" > OK
+Alt+1
+Action > Search... > Text > "$SPF", uncheck "Unicode" > OK
 
 There will be 1 result inside AMITSE/.../setupdata.
 
@@ -783,9 +833,11 @@ Back to CMD
 
 Back to File Explorer, drag "AMITSE.ffs" into Hextor icon while holding Shift
 
-Now we need to find where are the 2 HEX bytes to change. Remember, we want to change "ACPI Debug" from "Disabled" to "Enabled" in both Failsafe and Optimal value
+Now we need to find where are the 2 HEX bytes to change. Remember, we want to change "ACPI Debug" from "Disabled" to "Enabled" in both Failsafe and Optimal values
 
 Back to Notepad++
+Click on the 1st tab
+Home key
 Inside "Setup_MiniSetupResourceSection.sec.1.0.en-US.ifr.txt" file where we previously found the ACPI Debug setting. Here we are interested in 3 elements:
 1) QuestionId
 2) Label ID
@@ -814,12 +866,54 @@ Lastly, 2 HEX bytes to match. We can short the syntax: ??
 
 So, the final sequence in Hextor is: \x18\x03{byte::18}\x1D\x0F{byte::26}\x1C\x0F??
 
-Search > Find/Replace... > Find: "\x18\x03{byte::18}\x1D\x0F{byte::26}\x1C\x0F??" > Text > Extended syntax > List > Search pattern found 1 time(s) > OK => Find next >> => Find next >>
+
+
+Back to Hextor
+Search > Find/Replace... > Find: "\x18\x03{byte::18}\x1D\x0F{byte::26}\x1C\x0F??" > Text > Extended syntax > List > Search pattern found 1 time(s) > OK => Find next >> => Find next >> => Esc
 
 So we are clicking on it (Find next >>) twice to jump to the byte immediately after the selection
-Close the Find/Replace window
 
 Type "0101"
+
+
+
+
+
+Now we want to do the same for the Timeout value!
+
+Back to Notepad++
+Click on the 2nd tab
+Home key
+Inside "Setup_MiniSetupResourceSection.sec.2.0.en-US.ifr.txt" file where we previously found the Timeout setting. Here we are interested in 3 elements:
+1) QuestionId
+2) Label ID
+3) Help Label ID
+
+QuestionId value is 0x2
+QuestionId is always encoded as 16-bit in Little Endian, so our initial Find sequence will be: "\x02\x00"
+Label ID is: 37 00
+Help Label ID is: 38 00
+
+So, our Find sequence is: "\x02\x00{byte::18}\x38\x00{byte::26}\x37\x00??"
+
+
+
+Back to Hextor
+Search > Find/Replace... > Find: "\x02\x00{byte::18}\x38\x00{byte::26}\x37\x00??" > Text > Extended syntax > List > Search pattern found 1 time(s) > OK => Find next >> => Find next >> => Esc
+
+
+
+Remember, "Timeout" size is 16-bit, so our Failsafe/Optimal values are 2-bytes long
+We basically want to do this edit:
+Failsafe: 00 00 (0) ---> 03 00 (3) [Little Endian]
+Optimal: 01 00 (1) ---> 03 00 (3) [Little Endian]
+
+Edit > Select Range... > Range end: +0x4 > Select
+Operations > Insert bytes / Fill selection > Hex Pattern: 0300 > OK
+
+
+
+
 
 Now that we made this edit we have to recalculate the Data Checksum. As written above, the Data Checksum value is located inside ffs file header at offset 11h
 
@@ -827,25 +921,31 @@ So, in Hextor
 Search > Go To address... > 0x11 > OK
 
 Original value is 0x90
-We changed the Failsafe and Optimal value from 00 to 01
-1) Failsafe HEX: 00 => 01 (+0x1)
-2) Optimal HEX: 00 => 01 (+0x1)
 
-So we added +0x2 HEX bytes
-The final "Data checksum" value is: 0x90 - 0x2 = 0x8E
+We changed:
+- "ACPI Debug" Failsafe and Optimal values from 00 to 01
+- "Timeout" Failsafe value from 00 to 03 and Optimal value from 01 to 03
+
+1) "ACPI Debug" Failsafe HEX: 00 => 01 (+0x1)
+2) "ACPI Debug" Optimal HEX: 00 => 01 (+0x1)
+3) "Timeout" Failsafe HEX: 00 => 03 (+0x3)
+4) "Timeout" Optimal HEX: 01 => 03 (+0x2)
+
+So we added +0x7 HEX bytes
+The final "Data checksum" value is: 0x90 - 0x7 = 0x89
 
 So, in Hextor
 Edit > Select Range... > Range end: +0x1 > Select
-Operations > Modify with expression > x-0x2 > OK
+Operations > Modify with expression > x-0x7 > OK
 
 
-File > Save as... > "AMITSE_ACPI_Debug.ffs" > Save
+File > Save as... > "AMITSE_ACPI_Debug_Timeout_3.ffs" > Save
 File > Exit
 
 Back to CMD
 > del AMITSE.ffs
 
-File "AMITSE_ACPI_Debug.ffs" will be used later!
+File "AMITSE_ACPI_Debug_Timeout_3.ffs" will be used later!
 
 
 
@@ -853,7 +953,7 @@ Next, we need to modify NVRAM. As user Lost_N_BIOS noted, there are usually mult
 The best way to found them is by searching a specific GUID (4599D26F-1A11-49B8-B91F-858745CFF824), which is AmiStandardDefaultsVariable
 
 Back to UEFITool
-File > Open image file... > "mod_bios.bin" > Open
+Alt+1
 Action > Search... > GUID > "4599D26F-1A11-49B8-B91F-858745CFF824" > Header and body > OK
 There will be multiple results. We have to choose the ones that end with "/GUID store". There are 2 results:
 1) NVRAM/GUID store
@@ -873,6 +973,7 @@ Data checksum: AAh, valid
 We have to focus on finding the exact offset where "ACPI Debug" value resides in NVRAM
 
 Back to Notepad++
+Click on the 1st tab
 Inside "Setup_MiniSetupResourceSection.sec.1.0.en-US.ifr.txt" file, go to the "ACPI Debug" line. This time search for:
 - VarStoreId
 - VarOffset
@@ -896,10 +997,12 @@ We can use this website (https://tomeko.net/online_tools/ascii.php?lang=en) to c
 ASCII: "Setup" => HEX: "5365747570"
 Now we append the NUL terminated byte (\0) to the result: "536574757000"
 
+
+
 So now, back in UEFITool
 Action > Search... > Hex pattern > "536574757000" > Header and body > OK
 
-There will be a bunch of results. We are interested in the NVRAM ones (first 3 results)
+There will be a bunch of results. We are interested in the ones that begin with "NVRAM/.../"
 Double click each entry and look on the "Text" column. We need to find the only one that has "Setup" name, and on the right:
 - Variable GUID: EC87D643-EBA4-4BB5-A1E5-3F3E36B20DA9
 - Body size: 745h (1861)
@@ -924,25 +1027,70 @@ Search > Incremental Search > Find: "ACPI Debug"
 
 In that line copy the VarOffset value: 0x6EA
 
-Quit Notepad++
-
 Back to Hextor again
 Search > Go to address... > +0x6EA > OK
 Type "01"
-File > Save as... > "mod_bios_NVRAM_ACPI_Debug.fd" > Save
+
+
+
+
+
+Now we want to do the same for the Timeout value!
+"Timeout" is part of Globally Defined Variables defined in the UEFI spec (https://uefi.org/specs/UEFI/2.11/03_Boot_Manager.html#globally-defined-variables)
+It's body size is 2 bytes, being it a UINT16
+
+We have to search for the NUL terminated name of the variable: "Timeout\x00"
+This is a mix of ASCII: "Timeout" and HEX "0x0". UEFITool search engine does not support Extended syntax like Hextor, therefore we have to convert the entire ASCII string to HEX first
+We can use this website (https://tomeko.net/online_tools/ascii.php?lang=en) to convert an ASCII string to HEX
+ASCII: "Timeout" => HEX: "54696D656F7574"
+Now we append the NUL terminated byte (\0) to the result: "54696D656F757400"
+
+
+
+Back in UEFITool
+Action > Search... > Hex pattern > "54696D656F757400" > Header and body > OK
+
+Now there will be just 3 results. We are interested in the ones that begin with "NVRAM/.../" (the 1st result)
+
+Double click on the "NVRAM/.../" option
+
+Here we need:
+- Base: 2007EBh
+- Header size: 13h (19)
+
+"Base" is the starting offset of the module since the beginning of the large BIOS file. We also need "Header size" to go to the beginning offset of the body.
+So, 0x2007EB + 0x13 = 0x2007FE
+
+Back to Hextor
+Search > Go To address... > 0x2007FE > OK
+
+This time we must not specify any offset to jump to, because we are already here!
+
+Type "03"
+
+
+
+File > Save as... > "mod_bios_NVRAM_ACPI_Debug_Timeout_3.fd" > Save
 File > Exit
 
+
+Quit Notepad++
 
 
 Back in CMD, run:
 > del Setup_MiniSetupResourceSection.sec*
 
-
-
 Ok, so we are done with the first of the two NVRAM locations!
 
-Now we need to go to the second one, "Defaults"
-In UEFITool, double click on the second result of "GUID pattern [...] Defaults/.../GUID store"
+
+
+
+
+Now we need to go through the second one, "Defaults"
+
+Back to UEFITool
+In the "Search" tab, scroll up
+This time, double click on the second result: "GUID pattern [...] Defaults/.../GUID store"
 Click on "Compressed section" above. On the right "Compression algorithm: None". We can extract the module "As is"
 Unlike the first result (NVRAM), this time the "Defaults" module resides in a Volume which has a "Compressed section" LZMA. So it's not possible to directly edit the whole BIOS file like before
 We need to "Extract" with MMTool, make the edit, Replace
@@ -953,44 +1101,23 @@ Click on "Defaults" and check on the right:
 
 Attribute bit set (0x40) AND Data checksum value different than AA. So we know we have to calculate file checksum for this module, this info is useful later
 
+Quit UEFITool
+
 Inside CMD
-> start /b /min /wait MMTool mod_bios_NVRAM_ACPI_Debug.fd /ec 9221315B-30BB-46B5-813E-1B1BF4712BD3 Defaults.ffs
+> start /b /min /wait MMTool mod_bios_NVRAM_ACPI_Debug_Timeout_3.fd /ec 9221315B-30BB-46B5-813E-1B1BF4712BD3 Defaults.ffs
 
 Back to File Explorer, drag "Defaults.ffs" into Hextor icon while holding Shift
 
 The module has the "Data checksum" bit (0x40) set, so we need to make the edit to the Data checksum later, after we edit the default value
 
-Back in UEFITool, go to the "Search" tab. We are now interested in the 3 Defaults results in Hex pattern
-As before, double click them until you found on the "Text" column "Setup" with this informations on the right:
-- Variable GUID: EC87D643-EBA4-4BB5-A1E5-3F3E36B20DA9
-- Body size: 745h (1861)
-
-As before it's the 1st result!
-
-Now, we need to calculate the offset to go later in Hextor. This time is a little bit difficult than before
-We need to calculate the "Header size" sum of the sections above until main "Defaults" module
-In other words, after we take note of the "Header size" up arrow, to go to the preceding section:
-
-On the left (Structure tab) | On the right (Information tab)
-EfiSetupVariableGuid        | Header size: 11h (17)
-AmiStandardDefaultsVariable | Header size: 17h (23)
-Raw section                 | Header size: 4h (4)
-Compressed section          | Header size: 9h (9)
-Defaults                    | Header size: 18h (24)
-
-Now sum each "Header size": 0x11 + 0x17 + 0x4 + 0x9 + 0x18 = 0x4D
-
-Quit UEFITool
-
-Back in Hextor
-Search > Go To address... > 0x4D > OK
-
-We are at the beginning of the "Setup" body section (offset 0x0). We need to edit "ACPI Debug" from 00 (Disabled) to 01 (Enabled) which is at offset 0x6EA
-
-Search > Go to address... > +0x6EA > OK
+Search > Find/Replace... > Find: "Setup\x00{byte::0x6EA}" > Text > Extended syntax > List > Search pattern found 1 time(s) > OK => Find next >> => Find next >> => Esc
 Type "01"
+Search > Find/Replace... > Find: "Timeout\x00" > Text > Extended syntax > List > Search pattern found 1 time(s) > OK => Find next >> => Find next >> => Esc
+Type "03"
 
-Now we need to edit the "Data checksum", we added +0x1 to that offset, we need to remove -0x1 from original Data checksum
+
+
+Now we need to edit the "Data checksum", we added +0x1 and +0x1 to those offsets, we need to remove -0x3 from original Data checksum
 "Data checksum" is at byte 0x11. So:
 
 Search > Go to address... > 0x11 > OK
@@ -998,8 +1125,8 @@ Search > Go to address... > 0x11 > OK
 Value is 0x51
 
 Edit > Select Range... > Range end: +0x1 > Select
-Operations > Modify with expression > x-0x1 > OK
-File > Save as... > "Defaults_ACPI_Debug.ffs" > Save
+Operations > Modify with expression > x-0x3 > OK
+File > Save as... > "Defaults_ACPI_Debug_Timeout_3.ffs" > Save
 File > Exit
 
 Back to CMD
@@ -1014,12 +1141,13 @@ We are done with the second of the two NVRAM locations!
 Now we want to delete 2 "Microcode" modules.
 Back to File Explorer
 Open UEFITool.exe
-File > Open image file... > "mod_bios_NVRAM_ACPI_Debug.fd" > Open
+File > Open image file... > "mod_bios_NVRAM_ACPI_Debug_Timeout_3.fd" > Open
 Action > Search... > GUID > "17088572-377F-44EF-8F4E-B09FFF46A070" > Header only > OK
 
 We have 3 results.
 Double click on the first result. It is a fake module.
-Indeed, right click on "Microcode" > "Body hex view...", it contains only FF. We can simply remove it.
+Indeed, if we go on the right and click on "Hex view" tab, the body (not the green part) contains only FF. We can simply remove it!
+Click on "Information" tab
 
 Double click on 2nd and 3rd results. They are exactly the same modules. So we can remove one of them as well without any issues!
 
@@ -1027,14 +1155,14 @@ Quit UEFITool
 
 Back to File Explorer
 Open MMTool.exe
-Load Image > "mod_bios_NVRAM_ACPI_Debug.fd" > Open
-Delete > Volume Index: 02:01-00, File Index: 02 > Delete
-Volume Index: 03, File Index: 02 > Delete
+     Load Image > "mod_bios_NVRAM_ACPI_Debug_Timeout_3.fd" > Open
+         Delete > Volume Index: 02:01-00, File Index: 02, Source size: 00005018 > Delete
+                  Volume Index: 03, File Index: 02, Source size: 00014C18 > Delete
 Save Image as.. > "mod_bios_tmp" > Save
 Close
 
 Back to CMD
-> del mod_bios_NVRAM_ACPI_Debug.fd
+> del mod_bios_NVRAM_ACPI_Debug_Timeout_3.fd
 
 
 
@@ -1108,7 +1236,7 @@ Back to CMD
 > GenSec -o Fat.com -s EFI_SECTION_COMPRESSION -c PI_NONE Fat.pe32 Fat.ui
 
 Create the final ffs with this specific GUID: 961578FE-B6B7-44C3-AF35-6BC705CD2B1F
-GUID source: https://github.com/acidanthera/audk/blob/master/FatPkg/EnhancedFatDxe/Fat.inf#L18C36-L18C72
+GUID source: https://github.com/acidanthera/audk/blob/f1cd03097231d167bfc888636fcb34c45ffe5181/FatPkg/EnhancedFatDxe/Fat.inf#L18C36-L18C72
 
 > GenFfs -o Fat.ffs -t EFI_FV_FILETYPE_DRIVER -g "961578FE-B6B7-44C3-AF35-6BC705CD2B1F" -s -i Fat.com
 > del Fat.com Fat.ui Fat.pe32
@@ -1121,10 +1249,10 @@ Done with the creation of the Fat ffs module!
 
 Now we want to change some default UEFI boot entries in order to add "OpenCore" and "Gentoo" to the list of recognized UEFI default boot entries in our firmware.
 
-For OpenCore, I took the string from here: https://github.com/acidanthera/OpenCorePkg/blob/507907a2dbebea24cf22f5dfaf0509d4097545fe/Library/OcMainLib/OpenCoreMisc.c#L690C11-L690C19
+For OpenCore, I took the string from here: https://github.com/acidanthera/OpenCorePkg/blob/1.0.6/Library/OcMainLib/OpenCoreMisc.c#L690C11-L690C19
 Basically it's the same as if OpenCore was launched with "LauncherOption" set to "Short"
 
-For Gentoo, I took the string from here: https://github.com/gentoo/gentoo/blob/8f3e1123e053127bab087ab0b8bbfc16a0c38748/sys-boot/grub/files/grub.default-4#L11C19-L11C25
+For Gentoo, I took the string from here: https://github.com/gentoo/gentoo/blob/81e838bcee091ab342610d59feac08954a7667e1/sys-boot/grub/files/grub.default-4#L11C19-L11C25
 
 This entries are auto-generated at runtime by the underlying firmware as Boot####, where # is an HEX value containing numbers (0-9) and uppercase HEX letters (A-F).
 This auto-generation works much like the user have created a UEFI entry from the UEFI shell with this command:
@@ -1144,16 +1272,17 @@ Let's try to search for "UEFI OS" string in our BIOS
 
 Back to File Explorer
 Open UEFITool.exe
-File > Open image file... > "mod_bios_tmp.fd" > Open
-Action > Search... > Text > "UEFI OS", check "Unicode", check "Case sensitive" > OK
+Alt+1
+Action > Search... > Text > "UEFI OS", check "Unicode" > OK
 
 There will be 1 result inside CORE_DXE/.../PE32 image section.
 Double click on it, it will select "PE32 image section"
 Click on "Compressed section" above, check on the right "Compression algorithm", it says "None". We don't have to uncompress it!
 Click on "CORE_DXE" above, check this important info on the right:
 
-Attributes: 40h
-Data checksum: F0h, valid
+- File GUID: 5AE3F37E-4EAE-41AE-8240-35465B5E81EB
+- Attributes: 40h
+- Data checksum: F0h, valid
 
 The module has the "Data checksum" bit (0x40) set, so we need to edit the "Data checksum" value later, after we make the edit.
 Unfortunately, since the edit will be huge this time, we need to use UEFITool 0.28.0 which will calculate the new 8-Bit Checksum for us.
@@ -1171,10 +1300,13 @@ Back to File Explorer, drag "CORE_DXE.ffs" into Hextor icon while holding Shift
 
 For this whole part, the text is encoded in Unicode (UCS-2) string, so every character is 2 bytes length
 
-Search > Find/Replace... > Find: "UEFI OS" > Text: "1200 (Unicode)" > List > Search pattern found 1 time(s) > OK > Find next >>
-Close Find/Replace window.
+Search > Find/Replace... > Find: "UEFI OS" > Text: "1200 (Unicode)" > List > Search pattern found 1 time(s) > OK => Esc
 
-Now, put the cursor to the Text pane, and select "UEFI OS" up to the end of "Windows Boot Manager" DevPath (\EFI\Microsoft\Boot\bootmgfw.efi) which is a bit down there.
+Take note in the "SearchResult" tab on the right the "Address" value
+
+Search > Go To address... > 0x5ADCD > OK
+
+Now, hold down Shift key and with the arrow keys select "UEFI OS" up to the end of "Windows Boot Manager" DevPath (\EFI\Microsoft\Boot\bootmgfw.efi) which is a bit down there.
 Do not care about those dots, between the ASCII letters. This are part of the Unicode encoding, they are "\x00" bytes, and we will get rid of them shortly.
 We do this in order to have a better reading of the text itself.
 
@@ -1420,14 +1552,11 @@ Search > Find/Replace...
 Find: "opensuse({u16:0x00}){u16::207}"
 Text: "1200 (Unicode)"
 check "Extended syntax"
-Find next >>
 
 Expand "Replace" section
 Replace with: "OpenSUSE$1$1$1$1\\EFI\\OPENSUSE\\GRUBX64.EFI$1$1$1OpenCore$1$1$1$1$1$1$1$1$1$1$1$1\\EFI\\OC\\OPENCORE.EFI$1$1$1$1Gentoo$1$1\\EFI\\GENTOO\\BZIMAGE.EFI$1Suse Boot Manager$1$1$1\\EFI\\SUSE\\ELILO.EFI$1Windows Boot Manager$1$1$1$1\\EFI\\MICROSOFT\\BOOT\\BOOTMGFW.EFI$1$1$1$1"
 uncheck both "Hex" and "Ask each replace"
-Replace all > [Search pattern replaced 1 time(s)] > OK
-
-Close Find/Replace window
+Replace all > [Search pattern replaced 1 time(s)] > OK > Esc
 
 File > Save as... > "CORE_DXE_mod.ffs" > Save
 File > Exit
@@ -1445,7 +1574,7 @@ Back to CMD
 > copy mod_bios_tmp.fd UEFITool_0.28.0_win32\
 > copy CORE_DXE_mod.ffs UEFITool_0.28.0_win32\
 > start cmd /k cd UEFITool_0.28.0_win32\
-> UEFITool.exe mod_bios_tmp.fd
+> UEFITool mod_bios_tmp.fd
 
 
 File > Search... > GUID: "5AE3F37E-4EAE-41AE-8240-35465B5E81EB", check "Header only" > OK
@@ -1494,16 +1623,16 @@ Done with the creation of "CORE_DXE_mod.ffs", we will use this file later in the
 Now we have our mod .ffs files to be replaced/insert into our original file!
 
 Back to CMD
-> start /b /min /wait MMTool mod_bios_tmp.fd /r 899407D7-99FE-43D8-9A21-79EC328CAC21 Setup_ACPI_Debug.ffs
+> start /b /min /wait MMTool mod_bios_tmp.fd /r 899407D7-99FE-43D8-9A21-79EC328CAC21 Setup_ACPI_Debug_Timeout_3.ffs
 > start /b /min /wait MMTool mod_bios_tmp.fd /r 93022F8C-1F09-47EF-BBB2-5814FF609DF5 Fat.ffs
-> start /b /min /wait MMTool mod_bios_tmp.fd /r 9221315B-30BB-46B5-813E-1B1BF4712BD3 Defaults_ACPI_Debug.ffs
+> start /b /min /wait MMTool mod_bios_tmp.fd /r 9221315B-30BB-46B5-813E-1B1BF4712BD3 Defaults_ACPI_Debug_Timeout_3.ffs
 > start /b /min /wait MMTool mod_bios_tmp.fd /r 5AE3F37E-4EAE-41AE-8240-35465B5E81EB CORE_DXE_mod.ffs
 > start /b /min /wait MMTool mod_bios_tmp.fd /r 821D110C-D0A3-4CF7-AEF3-E28088491704 Updated_512KiB.ffs
-> start /b /min /wait MMTool mod_bios_tmp.fd /r B1DA0ADF-4F77-4070-A88E-BFFE1C60529A AMITSE_ACPI_Debug.ffs
+> start /b /min /wait MMTool mod_bios_tmp.fd /r B1DA0ADF-4F77-4070-A88E-BFFE1C60529A AMITSE_ACPI_Debug_Timeout_3.ffs
 > start /b /min /wait MMTool mod_bios_tmp.fd /r 2D27C618-7DCD-41F5-BB10-21166BE7E143 BiosAc_fix.ffs
 > start /b /min /wait MMTool mod_bios_tmp.fd /r D1E59F50-E8C3-4545-BF61-11F002233C97 TxtPeiAp_fix.ffs
 > move mod_bios_tmp.fd Z97XSLI.fd
-> del CORE_DXE_mod.ffs Fat.ffs TxtPeiAp_fix.ffs BiosAc_fix.ffs Defaults_ACPI_Debug.ffs AMITSE_ACPI_Debug.ffs Setup_ACPI_Debug.ffs Updated_512KiB.ffs
+> del CORE_DXE_mod.ffs Fat.ffs TxtPeiAp_fix.ffs BiosAc_fix.ffs Defaults_ACPI_Debug_Timeout_3.ffs AMITSE_ACPI_Debug_Timeout_3.ffs Setup_ACPI_Debug_Timeout_3.ffs Updated_512KiB.ffs
 
 We have finished editing the BIOS! The last step is to create the report of it
 
