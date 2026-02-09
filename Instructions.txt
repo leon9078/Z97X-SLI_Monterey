@@ -334,7 +334,10 @@ It will take a while, then it will load into Recovery mode!
 
 Type Cmd+Shift+T to quickly enter Terminal
 
+# diskutil list
 # mount | grep " /Volumes/"
+# dd if=/dev/rdiskX of=/Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Music/.ESP.img bs=1m skip=1 count=600 conv=notrunc status=progress
+# sync
 # tee < /Volumes/Macintosh\ HD/etc/zshrc > /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/.zshrc
 # perl -i -pe 's/(^PS1=).*/$1"%~ %# "/' /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/.zshrc
 # chmod 600 /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/.zshrc

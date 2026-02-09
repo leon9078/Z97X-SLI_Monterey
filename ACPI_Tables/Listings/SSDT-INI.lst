@@ -1,0 +1,69 @@
+
+Intel ACPI Component Architecture
+ASL Optimizing Compiler version 20120711-32 [Jul 11 2012]
+Copyright (c) 2000 - 2012 Intel Corporation
+
+Compilation of "SSDT-INI.asl" - Sat Feb 07 14:14:26 2026
+
+       1....DefinitionBlock ("", "SSDT", 2, "HACK", "INI", 0x00000000)
+
+00000000....53 53 44 54 5D 00 00 00     "SSDT]..."
+00000008....02 74 48 41 43 4B 00 00     ".tHACK.."
+00000010....49 4E 49 00 00 00 00 00     "INI....."
+00000018....00 00 00 00 49 4E 54 4C     "....INTL"
+00000020....11 07 12 20 ............    "... "
+
+       2....{
+       3....    External (\_SB_.PCI0, DeviceObj)
+       4....    External (\_SB_.PCI0.RP04.D3HT, FieldUnitObj)
+       5....    External (\_SB_.PCI0.XINI, MethodObj)
+       6....    External (RP4D, FieldUnitObj)
+       7....
+       8....    Scope (\_SB.PCI0)
+
+00000024....10 38 5C 2E 5F 53 42 5F     ".8\._SB_"
+0000002C....50 43 49 30 ............    "PCI0"
+
+       9....    {
+      10....        Method (_INI, 0, Serialized)  
+
+00000030....14 2C 5F 49 4E 49 08 ...    ".,_INI."
+
+      11....        {
+      12....            ^XINI ()
+
+00000037....5E 58 49 4E 49 .........    "^XINI"
+
+      13....            If (_OSI ("Darwin"))
+
+0000003C....A0 20 ..................    ". "
+0000003E....5F 4F 53 49 0D 44 61 72     "_OSI.Dar"
+00000046....77 69 6E 00 ............    "win."
+
+      14....            {
+      15....                Store (0x03, ^RP04.D3HT)
+
+0000004A....70 0A 03 5E 2E 52 50 30     "p..^.RP0"
+00000052....34 44 33 48 54 .........    "4D3HT"
+
+      16....                Store (One, RP4D)
+
+00000057....70 01 52 50 34 44 ......    "p.RP4D"
+      17....            }
+      18....        }
+      19....    }
+      20....}
+      21....
+
+
+Summary of errors and warnings
+
+
+ASL Optimizing Compiler version 20120711-32 [Jul 11 2012]
+
+ASL Input:     SSDT-INI.asl - 22 lines, 476 bytes, 5 keywords
+AML Output:    SSDT-INI.aml - 93 bytes, 2 named objects, 3 executable opcodes
+Listing File:  SSDT-INI.lst - 1976 bytes
+
+Compilation complete. 0 Errors, 0 Warnings, 0 Remarks, 0 Optimizations
+
