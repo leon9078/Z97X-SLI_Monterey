@@ -12,7 +12,7 @@
 				<key>Enabled</key>
 				<true/>
 				<key>Path</key>
-				<string>SSDT-BUS0.aml</string>
+				<string>SSDT-BUS0BUS1.aml</string>
 			</dict>
 			<dict>
 				<key>Comment</key>

@@ -3,13 +3,13 @@ Intel ACPI Component Architecture
 ASL Optimizing Compiler version 20120711-32 [Jul 11 2012]
 Copyright (c) 2000 - 2012 Intel Corporation
 
-Compilation of "SSDT-BUS0.asl" - Sat Dec 27 20:07:05 2025
+Compilation of "SSDT-BUS0BUS1.asl" - Mon Feb 09 17:35:02 2026
 
-       1....DefinitionBlock ("", "SSDT", 2, "HACK", "BUS0", 0x00000000)
+       1....DefinitionBlock ("", "SSDT", 2, "HACK", "BUS0BUS1", 0x00000000)
 
-00000000....53 53 44 54 69 00 00 00     "SSDTi..."
-00000008....02 0E 48 41 43 4B 00 00     "..HACK.."
-00000010....42 55 53 30 00 00 00 00     "BUS0...."
+00000000....53 53 44 54 9C 00 00 00     "SSDT...."
+00000008....02 A3 48 41 43 4B 00 00     "..HACK.."
+00000010....42 55 53 30 42 55 53 31     "BUS0BUS1"
 00000018....00 00 00 00 49 4E 54 4C     "....INTL"
 00000020....11 07 12 20 ............    "... "
 
@@ -18,7 +18,7 @@ Compilation of "SSDT-BUS0.asl" - Sat Dec 27 20:07:05 2025
        4....
        5....    Scope (\_SB.PCI0.SBUS)
 
-00000024....10 44 04 5C 2F 03 5F 53     ".D.\/._S"
+00000024....10 47 07 5C 2F 03 5F 53     ".G.\/._S"
 0000002C....42 5F 50 43 49 30 53 42     "B_PCI0SB"
 00000034....55 53 ..................    "US"
 
@@ -58,11 +58,50 @@ Compilation of "SSDT-BUS0.asl" - Sat Dec 27 20:07:05 2025
       18....                Return (Zero)
 
 00000067....A4 00 ..................    ".."
+
       19....            }
       20....        }
-      21....    }
-      22....}
-      23....
+      21....
+      22....        Device (BUS1)
+
+00000069....5B 82 31 42 55 53 31 ...    "[.1BUS1"
+
+      23....        {
+      24....            Name (_CID, "smbus")  
+
+00000070....08 5F 43 49 44 0D 73 6D     "._CID.sm"
+00000078....62 75 73 00 ............    "bus."
+
+      25....            Name (_ADR, One)  
+
+0000007C....08 5F 41 44 52 01 ......    "._ADR."
+
+      26....            Method (_STA, 0, NotSerialized)  
+
+00000082....14 19 5F 53 54 41 00 ...    ".._STA."
+
+      27....            {
+      28....                If (_OSI ("Darwin"))
+
+00000089....A0 10 ..................    ".."
+0000008B....5F 4F 53 49 0D 44 61 72     "_OSI.Dar"
+00000093....77 69 6E 00 ............    "win."
+
+      29....                {
+      30....                    Return (0x0F)
+
+00000097....A4 0A 0F ...............    "..."
+
+      31....                }
+      32....
+      33....                Return (Zero)
+
+0000009A....A4 00 ..................    ".."
+      34....            }
+      35....        }
+      36....    }
+      37....}
+      38....
 
 
 Summary of errors and warnings
@@ -70,9 +109,9 @@ Summary of errors and warnings
 
 ASL Optimizing Compiler version 20120711-32 [Jul 11 2012]
 
-ASL Input:     SSDT-BUS0.asl - 24 lines, 465 bytes, 8 keywords
-AML Output:    SSDT-BUS0.aml - 105 bytes, 5 named objects, 3 executable opcodes
-Listing File:  SSDT-BUS0.lst - 2148 bytes
+ASL Input:     SSDT-BUS0BUS1.asl - 39 lines, 788 bytes, 15 keywords
+AML Output:    SSDT-BUS0BUS1.aml - 156 bytes, 9 named objects, 6 executable opcodes
+Listing File:  SSDT-BUS0BUS1.lst - 3200 bytes
 
 Compilation complete. 0 Errors, 0 Warnings, 0 Remarks, 0 Optimizations
 
