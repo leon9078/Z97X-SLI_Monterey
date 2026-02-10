@@ -1,4 +1,4 @@
-DefinitionBlock ("", "SSDT", 2, "HACK", "BUS0BUS1", 0x00000000)
+DefinitionBlock ("", "SSDT", 2, "HACK", "SBUS", 0x00000000)
 {
     External (\_SB_.PCI0.SBUS, DeviceObj)
 
@@ -16,6 +16,21 @@ DefinitionBlock ("", "SSDT", 2, "HACK", "BUS0BUS1", 0x00000000)
                 }
 
                 Return (Zero)
+            }
+
+            Device (BLC0)
+            {
+                Name (_CID, "smbus-blc")  // _CID: Compatible ID
+                Name (_ADR, Zero)  // _ADR: Address
+                Method (_STA, 0, NotSerialized)  // _STA: Status
+                {
+                    If (_OSI ("Darwin"))
+                    {
+                        Return (0x0F)
+                    }
+
+                    Return (Zero)
+                }
             }
         }
 
