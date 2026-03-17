@@ -1,4 +1,4 @@
-me_cleaner BIOS mod guide
+ME_cleaner BIOS mod guide
 
 WARNING: macOS heavily rely on Intel Management Engine. If ME is cleared, then macOS will have the following issues:
 - Booting will be slower, with a message saying "DRMStatus: iTunes/Apple Store Content Access Problem. Content playback may be disabled on this computer. You can continue to use the machine, but you should contact an Apple support representative. ErrorCode: 8877652"
@@ -12,7 +12,7 @@ So, IF you want to use macOS than FORGET this guide and just use BIOS/Z97XSLI.fd
 
 
 Complete list of modifications:
-1) Delete MERecoveryDxe ffs
+1) Delete MERecoveryDxe ffs using MMTool
 2) Use "me_cleaner" python tool with "-S" switch (code removal + HAP/AltMeDisable bit)
 
 Prerequisites:
@@ -21,29 +21,30 @@ Prerequisites:
 - Already followed BIOS/BIOS_mod_guide_Windows.txt
 - modded BIOS/Z97XSLI.fd
 
-We will work entirely in the Documents folder
+We will work entirely in the Documents\ME_cleaner folder
 
 We need this files/softwares:
-1) me_cleaner from master branch (https://github.com/corna/me_cleaner)
-2) UEFITool NE latest for Windows [x64] (https://github.com/LongSoft/UEFITool/releases/latest)
+1) UEFITool NE latest for Windows [x64] (https://github.com/LongSoft/UEFITool/releases/latest)
+2) MMTool 5.02.0024 Mod (https://www.mediafire.com/file/t5w592roapx6wzl/MMTool_Aptio_5.02.0024_Mod.7z/file)
+3) me_cleaner from master branch (https://github.com/corna/me_cleaner)
 
 
 
 
-
-Click on "Start" icon > select "Documents"
-Check that UEFITool.exe exist. If not, download it with Command Prompt
 
 Open Command Prompt, then:
 > cd Documents
+> mkdir ME_cleaner
+> cd ME_cleaner
 > curl -LO https://github.com/LongSoft/UEFITool/releases/download/A73/UEFITool_NE_A73_win64.zip
 > tar -xf UEFITool_NE_A73_win64.zip
 
-Check that MMTool.exe exist. If not, open Mullvad Browser and download MMTool 5.02.0024 Mod (https://www.mediafire.com/file/t5w592roapx6wzl/MMTool_Aptio_5.02.0024_Mod.7z/file)
+Open Mullvad Browser and download MMTool 5.02.0024 Mod (https://www.mediafire.com/file/t5w592roapx6wzl/MMTool_Aptio_5.02.0024_Mod.7z/file)
 
 Back to CMD
+> copy "..\MMTool Aptio 5.02.0024 Mod.7z" .
 > set PATH=%PATH%;C:\Program Files\7-Zip\
-> 7z x MMTool_Aptio_5.02.0024_Mod.7z
+> 7z x "MMTool Aptio 5.02.0024 Mod.7z"
 
 
 
@@ -51,8 +52,8 @@ We want to delete "MERecoveryDxe" module, otherwise Intel ME is not really neutr
 
 Grab your copy of the modded BIOS (Z97XSLI.fd), either locally or through:
 > curl -LO https://github.com/leon9078/Z97X-SLI_Monterey/raw/refs/heads/master/BIOS/Z97XSLI.fd
+> explorer .
 
-Back to File Explorer
 Open MMTool.exe
      Load Image > "Z97XSLI.fd" > Open
          Delete > Volume Index: 02:01-00, File Index: 5C, Source size: 0000470D > Delete
@@ -64,7 +65,6 @@ Close
 Now we want to actually neutralize Intel ME with "me_cleaner" tool!!!
 
 Back to CMD
-
 > del Z97XSLI.fd
 > curl -LJO https://github.com/corna/me_cleaner/archive/refs/heads/master.zip
 > tar -xf me_cleaner-master.zip
@@ -74,6 +74,7 @@ Back to CMD
 > move Z97XSLI_no_ME.fd ..
 > cd ..
 > rmdir /s /q me_cleaner-master
+> del me_cleaner-master.zip
 
 
 
@@ -88,15 +89,18 @@ File > Open image file... > "Z97XSLI_no_ME.fd" > Open
 File > Generate report... > [default name is fine] > Save
 File > Quit
 
-Back to CMD
-> reg delete HKCU\SOFTWARE\CodeRush /f
-> reg delete HKCU\SOFTWARE\QtProject /f
-> exit
-
+Back to File Explorer
 Open MMTool.exe
 Load Image > "Z97XSLI_no_ME.fd" > Open
 Create Report > OK
 Close
+
+Back to CMD
+> reg delete HKCU\SOFTWARE\CodeRush /f
+> reg delete HKCU\SOFTWARE\QtProject /f
+> attrib -r MMTool.exe
+> del MMTool.exe "MMTool Aptio 5.02.0024 Mod.7z" UEFITool.exe UEFITool_NE_A73_win64.zip
+> exit
 
 We now have 3 files:
 1) Z97XSLI_no_ME.fd (edited BIOS file)

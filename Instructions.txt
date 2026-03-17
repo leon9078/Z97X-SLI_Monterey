@@ -4,16 +4,17 @@ Prerequirements:
 - empty 2+ GB USB flash drive for Arch Linux
 
 In a macOS environment:
+- Install latest Python version for macOS x64
 - Download macOS Monterey full installer using "installinstallmacos.py" (https://github.com/munki/macadmin-scripts)
 - Download GPT fdisk (gdisk) tool
 - Download latest Arch Linux ISO
 
-Make sure internet connection is available
+Make sure internet connection is available and latest Python version has been installed
 
 % cd ~/Music
-% xcode-select --install
-% git clone --depth 1 https://github.com/munki/macadmin-scripts.git
-% cd macadmin-scripts
+% curl -LJO https://github.com/munki/macadmin-scripts/archive/refs/heads/main.zip
+% unzip -q macadmin-scripts-main.zip
+% cd macadmin-scripts-main
 % pip3 install xattr
 % sudo python3 installinstallmacos.py
 [type the number of the macOS version you want to install]
@@ -24,7 +25,7 @@ Make sure internet connection is available
 % sudo sync
 % hdiutil detach mnt
 % cd ..
-% rm -rf macadmin-scripts
+% rm -rf macadmin-scripts-main*
 
 Download GPT fdisk (gdisk) tool
 
@@ -65,8 +66,9 @@ y
 % sudo newfs_msdos -v EFI /dev/rdiskXs1
 % curl -LJO https://github.com/leon9078/Z97X-SLI_Monterey/archive/refs/heads/master.zip
 % unzip -q Z97X-SLI_Monterey-master.zip
+% mv Z97X-SLI_Monterey-master/EFI{_USB,}
 % sudo diskutil mount nobrowse /dev/diskXs1
-% cp -R Z97X-SLI_Monterey-master/EFI_USB /Volumes/EFI/EFI
+% cp -R Z97X-SLI_Monterey-master/EFI /Volumes/EFI/
 % sudo sync
 % diskutil umount /dev/diskXs1
 % diskutil eject /dev/diskX
@@ -96,19 +98,19 @@ Unplug macOS Monterey USB drive
 
 Click on Apple logo > Riavvia
 
-Login, then download Arch Linux installer ISO from their official website
+Login, then download latest Arch Linux installer ISO from their official website
 
 % cd ~/Music
-% curl -O https://it.mirrors.cicku.me/archlinux/iso/2026.02.01/{archlinux-2026.02.01-x86_64.iso,sha256sums.txt}
-% shasum -a 256 archlinux-2026.02.01-x86_64.iso | grep --color=yes "<paste SHA-256 of archlinux-2026.02.01.iso>"
+% curl -O https://it.mirrors.cicku.me/archlinux/iso/latest/{archlinux-x86_64.iso,sha256sums.txt}
+% shasum -a 256 archlinux-x86_64.iso | grep --color=yes "<paste SHA-256 of archlinux-x86_64.iso>"
 
 Insert an empty 2+ GB USB flash drive
 
 % printf '\33c\e[3J' && diskutil list
 
-Get the size of the Arch .iso and add 100 MiB in order to create a partition where the file system will have enough free space
+Get the size of the Arch .iso and add 50 MiB in order to create a partition where the file system will have enough free space
 
-% echo +$(( $(wc -c < archlinux-2026.02.01-x86_64.iso) / 2 ** 20 + 100 ))M
+% echo +$(( $(wc -c < archlinux-x86_64.iso) / 2 ** 20 + 50 ))M
 
 % sudo ./gdisk /dev/rdiskX
 n
@@ -126,17 +128,18 @@ v
 w
 y
 
-% dd if=archlinux-2026.02.01-x86_64.iso bs=1 skip=$(( 0x8028 )) count=32 status=none | perl -pe 's/[ ]+$/\n/'
-% sudo newfs_msdos -v ARCH_202602 /dev/rdiskXs1
+% export ARCHFSLABEL="$(dd if=archlinux-x86_64.iso bs=1 skip=$(( 0x8028 )) count=32 status=none | perl -pe 's/[ ]+$//')"
+% sudo newfs_msdos -v $ARCHFSLABEL /dev/rdiskXs1
 % sudo diskutil mount nobrowse /dev/diskXs1
-% bsdtar -x -v --exclude EFI/BOOT/BOOTIA32.EFI --exclude boot/syslinux/ --exclude shellia32.efi -f archlinux-2026.02.01-x86_64.iso -C /Volumes/ARCH_202602
-% perl -i -pe 's/(timeout).*/$1 5/;s/(beep).*/$1 off/' /Volumes/ARCH_202602/loader/loader.conf
-% mv /Volumes/ARCH_202602/EFI/BOOT/{,ARCH-}BOOTx64.EFI
-% cp /Volumes/ARCH_202602/{shellx64.efi,EFI/BOOT/BOOTx64.EFI}
-% cp Z97X-SLI_Monterey-master/BIOS/BIOS_settings.nsh /Volumes/ARCH_202602/EFI/BOOT/
-% mkdir /Volumes/ARCH_202602/EFI/TOOLS/
-% cp Z97X-SLI_Monterey-master/EFI_USB/TOOLS/uvt.efi /Volumes/ARCH_202602/EFI/TOOLS/
-% printf '@echo -off\r\nARCH-BOOTx64.EFI\r\n' | perl -0777pe 's/(.)/$1\x00/gs;s/^/\xFF\xFE/' > /Volumes/ARCH_202602/EFI/BOOT/startup.nsh
+% bsdtar -x -v --exclude EFI/BOOT/BOOTIA32.EFI --exclude boot/syslinux/ --exclude shellia32.efi -f archlinux-x86_64.iso -C /Volumes/$ARCHFSLABEL
+% perl -i -pe 's/(timeout).*/$1 5/;s/(beep).*/$1 off/' /Volumes/$ARCHFSLABEL/loader/loader.conf
+% mv /Volumes/$ARCHFSLABEL/EFI/BOOT/{,ARCH-}BOOTx64.EFI
+% cp /Volumes/$ARCHFSLABEL/{shellx64.efi,EFI/BOOT/BOOTx64.EFI}
+% cp Z97X-SLI_Monterey-master/BIOS/BIOS_settings.nsh /Volumes/$ARCHFSLABEL/EFI/BOOT/
+% mkdir /Volumes/$ARCHFSLABEL/EFI/TOOLS/
+% cp Z97X-SLI_Monterey-master/EFI/TOOLS/uvt.efi /Volumes/$ARCHFSLABEL/EFI/TOOLS/
+% printf '@echo -off\r\nARCH-BOOTx64.EFI\r\n' | perl -0777pe 's/(.)/$1\x00/gs;s/^/\xFF\xFE/' > /Volumes/$ARCHFSLABEL/EFI/BOOT/startup.nsh
+% unset ARCHFSLABEL
 % sudo sync
 % diskutil umount /dev/diskXs1
 % diskutil eject /dev/diskX
@@ -188,8 +191,8 @@ Also we can omit typing the script extension ".nsh"
 
 Shell> bios_settings
 
-After reboot, quickly unplug USB flash drive, wait for "No bootable device is detected." message. Plug again the Arch USB flash drive and press the reset button.
-Again, at UEFI Shell press ESC key (within 5 seconds).
+After reboot, quickly unplug USB flash drive, wait for "No bootable device is detected." message. Plug again the Arch USB flash drive.
+Ctrl-Alt-Del, F12, Arch USB, at UEFI Shell press ESC key (within 5 seconds)
 
 Go to this website on another device: https://time.is/UTC
 
@@ -203,7 +206,7 @@ Boot the PC, "No bootable device is detected.", insert Arch USB installer.
 
 Make sure Ethernet cable is disconnected!
 
-Reset button, F12, USB, UEFI Shell, Arch systemd-boot, "e", "module_blacklist=b43,b43legacy,bcm43xx,bcma,brcm80211,brcmfmac,brcmsmac,ssb quiet loglevel=0"
+Ctrl-Alt-Del, F12, Arch USB, UEFI Shell, Arch systemd-boot, "e", "module_blacklist=b43,b43legacy,bcm43xx,bcma,brcm80211,brcmfmac,brcmsmac,ssb quiet loglevel=0"
 
 # systemctl stop reflector systemd-{networkd-wait-online,timesyncd}
 # systemctl disable reflector systemd-{networkd-wait-online,timesyncd}
@@ -249,13 +252,13 @@ y
 Unplug Arch USB installer.
 Boot the PC, "No bootable device is detected", insert macOS Monterey USB installer.
 
-Ctrl-Alt-Del, F12, USB, "Install macOS Monterey (external)" will be automatically selected and booted in 5 seconds.
+Ctrl-Alt-Del, F12, macOS USB, "Install macOS Monterey (external)" will be automatically selected and booted in 5 seconds.
 
 Type Cmd+Shift+T to quickly enter Terminal
 
 # diskutil list
 # newfs_hfs -J -v 'Macintosh HD' /dev/rdiskXs2
-# diskutil mount nobrowse diskXs2
+# diskutil mount nobrowse /dev/diskXs2
 
 Cmd+Q to quit Terminal
 
@@ -263,7 +266,7 @@ Install macOS Monterey to Macintosh HD.
 
 There will be multiple reboots in the middle.
 Reboot -> "macOS Installer" -> Reboot -> "macOS Installer" -> Reboot -> "Macintosh HD"
-When you see "Macintosh HD" inside OpenCore Boot Menu, select again "Install macOS Monterey (external)"
+When you see "Macintosh HD" inside OpenCore Boot Menu, select again "Install macOS Monterey (external)" and boot from it
 
 Type Cmd+Shift+T to quickly enter Terminal
 
@@ -278,7 +281,8 @@ Unplug Ethernet cable now!
 
 # unzip -q Z97X-SLI_Monterey-master.zip
 # diskutil mount nobrowse /dev/diskXs1
-# cp -R Z97X-SLI_Monterey-master/EFI_Target /Volumes/EFI/EFI
+# mkdir /Volumes/EFI/EFI/
+# cp -R Z97X-SLI_Monterey-master/EFI_Target/OC /Volumes/EFI/EFI/
 # sync
 # diskutil umount /dev/diskXs1
 # rm -r Z97X-SLI_Monterey-master*
@@ -288,14 +292,16 @@ Cmd+Q to quit Terminal
 Click on Apple logo > Spegni
 
 Unplug macOS USB installer.
-Boot the PC, "No bootable device is detected", insert Arch installer one more time.
 
-Ctrl-Alt-Del, F12, USB, UEFI Shell, Arch systemd-boot, "e", "module_blacklist=b43,b43legacy,bcm43xx,bcma,brcm80211,brcmfmac,brcmsmac,ssb quiet loglevel=0"
+Insert Arch installer one more time.
+Boot the PC, F12, Arch USB, UEFI Shell, Arch systemd-boot, "e", "module_blacklist=b43,b43legacy,bcm43xx,bcma,brcm80211,brcmfmac,brcmsmac,ssb quiet loglevel=0"
 
 # lsblk -po +FSTYPE,LABEL,PARTLABEL,PARTTYPENAME
 # gdisk /dev/sdX
+p
 d
 3
+p
 x
 h
 v
@@ -312,7 +318,7 @@ Unplug Arch USB drive.
 
 Make sure Ethernet is disconnected during macOS first setup!
 
-Power on the PC, finish macOS install. Done!
+Power on the PC, finish macOS first setup. Done!
 
 
 
@@ -330,7 +336,7 @@ Reboot macOS into Recovery mode
 
 Click on Apple logo > Riavvia
 After initial American Megatrends Inc screen, press and hold Win+R (equivalent Cmd+R Apple shortcut combo)
-It will take a while, then it will load into Recovery mode!
+It will take a while, then it will load Recovery mode!
 
 Type Cmd+Shift+T to quickly enter Terminal
 
@@ -338,7 +344,7 @@ Type Cmd+Shift+T to quickly enter Terminal
 # mount | grep " /Volumes/"
 # dd if=/dev/rdiskX of=/Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Music/.ESP.img bs=1m skip=1 count=600 conv=notrunc status=progress
 # sync
-# tee < /Volumes/Macintosh\ HD/etc/zshrc > /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/.zshrc
+# cp /Volumes/Macintosh\ HD/etc/zshrc /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/.zshrc
 # perl -i -pe 's/(^PS1=).*/$1"%~ %# "/' /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/.zshrc
 # chmod 600 /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/.zshrc
 # echo "set ruler" > /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/.vimrc
@@ -355,6 +361,8 @@ Now manually set some Apple Terminal preferences to my taste in the target OS!
 Now at this point it's better to open a new Terminal window and copy/paste the following long commands!
 
 Cmd+N
+
+Make sure Ethernet cable is connected for this following command, then disconnect it
 
 # printf '\33c\e[3J' && curl -Ls https://github.com/leon9078/Z97X-SLI_Monterey/raw/refs/heads/master/Instructions.txt | tail -n 108
 
