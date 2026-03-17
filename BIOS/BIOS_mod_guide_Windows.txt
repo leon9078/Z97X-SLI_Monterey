@@ -1815,7 +1815,6 @@ Back to CMD
 We have finished editing the BIOS! The last step is to create the report of it
 
 Back to File Explorer
-
 Open UEFITool.exe for the last time
 File > Unload GUID database
 File > Open image file... > "Z97XSLI.fd" > Open

@@ -89,7 +89,6 @@ File > Open image file... > "Z97XSLI_no_ME.fd" > Open
 File > Generate report... > [default name is fine] > Save
 File > Quit
 
-Back to File Explorer
 Open MMTool.exe
 Load Image > "Z97XSLI_no_ME.fd" > Open
 Create Report > OK
