@@ -635,7 +635,7 @@
 				<key>BaseSkip</key>
 				<integer>0</integer>
 				<key>Comment</key>
-				<string>Replace unknown methods in SSDT size 23390, 1 of 4</string>
+				<string>Replace unknown methods in OEM SSDT size 23390, 1 of 4</string>
 				<key>Count</key>
 				<integer>1</integer>
 				<key>Enabled</key>
@@ -665,7 +665,7 @@
 				<key>BaseSkip</key>
 				<integer>0</integer>
 				<key>Comment</key>
-				<string>Replace unknown methods in SSDT size 23390, 2 of 4</string>
+				<string>Replace unknown methods in OEM SSDT size 23390, 2 of 4</string>
 				<key>Count</key>
 				<integer>1</integer>
 				<key>Enabled</key>
@@ -695,7 +695,7 @@
 				<key>BaseSkip</key>
 				<integer>0</integer>
 				<key>Comment</key>
-				<string>Replace unknown methods in SSDT size 23390, 3 of 4</string>
+				<string>Replace unknown methods in OEM SSDT size 23390, 3 of 4</string>
 				<key>Count</key>
 				<integer>1</integer>
 				<key>Enabled</key>
@@ -725,7 +725,7 @@
 				<key>BaseSkip</key>
 				<integer>0</integer>
 				<key>Comment</key>
-				<string>Replace unknown methods in SSDT size 23390, 4 of 4</string>
+				<string>Replace unknown methods in OEM SSDT size 23390, 4 of 4</string>
 				<key>Count</key>
 				<integer>1</integer>
 				<key>Enabled</key>
