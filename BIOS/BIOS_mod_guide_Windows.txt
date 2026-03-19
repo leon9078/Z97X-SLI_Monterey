@@ -1604,18 +1604,18 @@ to this:
 
 For the modified "Gentoo" entry I'm defining "GENTOO.EFI" instead of the traditional "grubx64.efi". This is because I want to use OpenCore bootloader instead of the traditional GRUB 2 bootloader when using Gentoo!
 More over, to make a clear distinction for the end user between booting macOS (through OpenCore) and booting Gentoo (also through OpenCore),
-we rename the "EFI\OC" directory to "EFI\GENTOO" and change "OpenCore.efi" to "GENTOO.EFI"
+we rename (this time for the file system, and not for the UEFI bootloader path) the "EFI\OC" directory to "EFI\GENTOO" and change "OpenCore.efi" to "Gentoo.efi"
 
-The choise of "GENTOO.EFI" comes from a variety of different naming options. The filename "XXX.EFI" without extension ".EFI" must be between 4 and 7 characters inclusive, so possible candidates are:
+The choise of "Gentoo.efi" comes from a variety of different naming options. The filename "*.efi" without extension ".efi" must be between 4 and 7 characters inclusive, so possible candidates are:
 
 - Linux ------> maybe too generic...
 - Gentoo
 - BOOTx64 ----> could be confused with the existing \EFI\BOOT\BOOTX64.EFI already defined...
-- bzImage ----> should be used only for EFI stub (pure UEFI boot, without an additional bootloader)
-- vmlinuz ----> should be used only for EFI stub (pure UEFI boot, without an additional bootloader)
+- bzImage ----> should be typically used only for EFI stub (pure UEFI boot, without an additional bootloader)
+- vmlinuz ----> should be typically used only for EFI stub (pure UEFI boot, without an additional bootloader)
 - OpenCore ---> already have OpenCore.efi defined...
 
-So, at the end I choose "GENTOO.EFI" as the final candidate, becuase it makes more sense!
+So, at the end I choose "Gentoo.efi" as the final candidate, becuase it makes more sense!
 
 Why I choose OpenCore with OpenLinuxBoot instead of pure EFI stub?
 
