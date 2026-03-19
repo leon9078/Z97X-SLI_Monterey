@@ -1330,8 +1330,8 @@ our custom EnhancedFatDxe UEFI driver will load fine, but then GRUB will FAIL to
 Because they also have the FAT32 FsVersion check in their own implementation
 
 Reference here:
-- C header file: https://gitweb.git.savannah.gnu.org/gitweb/?p=grub.git;a=blob;f=include/grub/fat.h#l55
-- C source code: https://gitweb.git.savannah.gnu.org/gitweb/?p=grub.git;a=blob;f=grub-core/fs/fat.c#l370
+- C header file: https://gitlab.freedesktop.org/gnu-grub/grub/-/blob/master/include/grub/fat.h#L55
+- C source code: https://gitlab.freedesktop.org/gnu-grub/grub/-/blob/master/grub-core/fs/fat.c#L370
 
 
 
