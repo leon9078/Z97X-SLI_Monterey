@@ -1,22 +1,22 @@
 Entire BIOS mod guide!
 
 Complete list of modifications:
-1) Update the default 88:88:88:88:87:88 MAC address to my specific one (74:D4:35:E6:42:2C)
+1) Update the default 88:88:88:88:87:88 GbE MAC address to my specific one (74:D4:35:E6:42:2C)
 2) Update Intel ME from 9.1.25.1005 to 9.1.40.1000
-3) Update the module after "MERecoveryDxe" to include updated first 512 KiB of SPI into it
+3) Update the module after "MERecoveryDxe" to include the updated first 512 KiB of SPI
 4) Update with UBU tool:
    - Intel GOP driver + OPROM
    - Intel LAN driver + OPROM
    - Intel CPU microcodes
 5) Update Setup, AMITSE and NVRAM modules:
-   - enable "ACPI Debug" BIOS setting
-   - increase EFI_GLOBAL_VARIABLE_GUID "Timeout" value from 1 to 5
-6) Delete 2 Microcode GUID ffs (fake, and last of the duplicates one)
+   - enable hidden BIOS setting "ACPI Debug"
+   - increase hidden BIOS setting "Setup Prompt Timeout" value from default 1 to 5
+6) Delete 2 Microcode GUID ffs (one of them is a fake one that contains only FF, and the other one is the exact clone of another module)
 7) Delete 2 "Padding file" sections, by adjusting Attributes
 8) Replace bugged AMI "FileSystem" driver with "Fat" (EnhancedFatDxe from FatPkg audk [fork of tianocore EDK II project focused on security])
-    Add my specific version which removes FAT32 FsVersion check during driver initialization
-9) Update CORE_DXE to add "OpenCore" and "Gentoo" for automatic detection of specific bootloader paths
-    Plus, make all UEFI bootloader paths uppercase
+   Add my specific version which removes FAT32 FsVersion check during driver initialization
+9) Update "CORE_DXE" module to include "OpenCore" and "Gentoo" for automatic detection of specific bootloader paths
+   Plus, make all UEFI bootloader paths uppercase
 
 Prerequisites:
 - Clean install of Windows 10 version 1607 or higher
@@ -24,30 +24,33 @@ Prerequisites:
 
 We will work entirely in the Documents folder
 
-We need this files/softwares:
-1) Mullvad Browser latest for Windows [x64] (https://github.com/mullvad/mullvad-browser/releases/latest)
-2) Microsoft Visual C++ Redistributable Version latest [x86] [x64] (https://aka.ms/vs/17/release/vc_redist.x86.exe) (https://aka.ms/vs/17/release/vc_redist.x64.exe)
-3) Python latest for Windows [x64] (https://www.python.org/)
-4) 7-Zip latest for Windows [x64] (https://www.7-zip.org/)
-5) Notepad++ latest Installer [x64] (https://github.com/notepad-plus-plus/notepad-plus-plus/releases/latest)
-6) Hextor latest (https://github.com/digitalw0lf/hextor/releases/latest)
-7) Original latest BIOS from OEM website (F10b, Fix memory compatibility) (https://www.gigabyte.com/Motherboard/GA-Z97X-SLI-rev-10/support)
-8) UEFITool NE latest for Windows [x64] (https://github.com/LongSoft/UEFITool/releases/latest)
-9) UEFITool 0.28.0 for Windows (https://github.com/LongSoft/UEFITool/releases/tag/0.28.0)
-10) IFRExtractor RS latest for Windows [x86] (https://github.com/LongSoft/IFRExtractor-RS/releases/latest)
+We'll need this files/softwares:
+1) Mullvad Browser, latest release for Windows (https://github.com/mullvad/mullvad-browser/releases/latest)
+2) Microsoft Visual C++ Redistributable Version, latest release [x86] [x64] (https://aka.ms/vc14/vc_redist.x86.exe) (https://aka.ms/vc14/vc_redist.x64.exe)
+3) Python, latest release for Windows [x64] (https://www.python.org/)
+4) 7-Zip, latest release for Windows [x64] (https://www.7-zip.org/)
+5) Notepad++, latest Installer release [x64] (https://github.com/notepad-plus-plus/notepad-plus-plus/releases/latest)
+6) Hextor, latest release (https://github.com/digitalw0lf/hextor/releases/latest)
+7) Original latest beta BIOS from OEM website (F10b, Fix memory compatibility) (https://www.gigabyte.com/Motherboard/GA-Z97X-SLI-rev-10/support)
+8) UEFITool NE, latest release for Windows [x64] (https://github.com/LongSoft/UEFITool/releases/latest)
+9) UEFITool 0.28.0, older release for Windows (https://github.com/LongSoft/UEFITool/releases/tag/0.28.0)
+10) IFRExtractor RS, latest release for Windows (https://github.com/LongSoft/IFRExtractor-RS/releases/latest)
 11) My OpenCorePkg fork (Darwin XCODE5) (which include Fat_NO_FsVersion_check.efi) (https://github.com/leon9078/OpenCorePkg/releases/latest)
 12) My OpenCorePkg fork (Windows VS2019) (which include GenSec.exe and LzmaCompress.exe) (https://github.com/leon9078/OpenCorePkg/releases/latest)
 
 
 
 Click on "Start" icon > select "Windows System" folder > select "Command Prompt"
-Right click on "Command Prompt" icon > select "Pin to taskbar"
-Click on "Command Prompt" icon, then run:
+If not done already, right click on "Command Prompt" icon > select "Pin to taskbar", then click on "Command Prompt" icon
+
 > cls
+> powershell -Command "Start-Process cmd -ArgumentList """/K cd %windir%\system32""" -Verb RunAs"
+> reg add HKLM\SYSTEM\CurrentControlSet\Control\FileSystem /v LongPathsEnabled /t REG_DWORD /d 1 /f
+> exit
 > cd Documents
 > curl -LO https://github.com/mullvad/mullvad-browser/releases/download/15.0.7/mullvad-browser-windows-x86_64-15.0.7.exe
-> curl -LO https://aka.ms/vs/17/release/vc_redist.x86.exe
-> curl -LO https://aka.ms/vs/17/release/vc_redist.x64.exe
+> curl -LO https://aka.ms/vc14/vc_redist.x86.exe
+> curl -LO https://aka.ms/vc14/vc_redist.x64.exe
 > curl -LO https://www.python.org/ftp/python/3.13.12/python-3.13.12-amd64.exe
 > curl -LO https://www.7-zip.org/a/7z2600-x64.exe
 > curl -LO https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.9.2/npp.8.9.2.Installer.x64.exe
@@ -61,8 +64,7 @@ Click on "Command Prompt" icon, then run:
 > curl -LO https://github.com/leon9078/OpenCorePkg/releases/download/1.0.7/OpenCore-1.0.7-Windows-VS2019-RELEASE.zip
 
 Click on "Start" icon > select "Documents"
-Right click on the "Name" column > select "Date created"
-Click twice on "Date created"
+If not done already, right click on the "Name" column > select "Date created", then click twice on "Date created"
 
 Open "mullvad-browser-windows-x86_64-15.0.7.exe"
 "Installation type" > Select "Advanced"
@@ -88,19 +90,19 @@ Quit Mullvad Browser, then open it again
 
 Download remaining files through the browser:
 
-- MMTool 5.02.0024 Mod (https://www.mediafire.com/file/t5w592roapx6wzl/MMTool_Aptio_5.02.0024_Mod.7z/file)
-- Intel ME System Tools v9.1 (https://mega.nz/folder/qdVAyDSB#FLCPaDVIsPYiy2TAUjD7RQ/file/fUVnlaQQ)
-- Intel ME v9.1 1.5MB (https://mega.nz/folder/2Q0klQpA#6o04nlV_4xqfx76tjvgi4g/file/2FdiiAIS)
-- UBU v1.80 b1 (https://mega.nz/folder/lLg2GLrA#SnZZd0WjHkULFHg7FESm8g/file/AapTmTBC)
-- Intel VBIOS and BSF r3 (https://mega.nz/folder/lLg2GLrA#SnZZd0WjHkULFHg7FESm8g/file/VeYEWICB)
-- CloneVBT (https://mega.nz/folder/lLg2GLrA#SnZZd0WjHkULFHg7FESm8g/file/4SBG1ChI)
+- MMTool 5.02.0024 Mod: ---------> https://www.mediafire.com/file/t5w592roapx6wzl/MMTool_Aptio_5.02.0024_Mod.7z/file
+- Intel ME System Tools v9.1: ---> https://mega.nz/folder/qdVAyDSB#FLCPaDVIsPYiy2TAUjD7RQ/file/fUVnlaQQ
+- Intel ME v9.1 1.5MB: ----------> https://mega.nz/folder/2Q0klQpA#6o04nlV_4xqfx76tjvgi4g/file/2FdiiAIS
+- UBU v1.80 b1: -----------------> https://mega.nz/folder/lLg2GLrA#SnZZd0WjHkULFHg7FESm8g/file/AapTmTBC
+- Intel VBIOS and BSF r3: -------> https://mega.nz/folder/lLg2GLrA#SnZZd0WjHkULFHg7FESm8g/file/VeYEWICB
+- CloneVBT: ---------------------> https://mega.nz/folder/lLg2GLrA#SnZZd0WjHkULFHg7FESm8g/file/4SBG1ChI
 
 Quit Mullvad Browser
 
 
 
 Click on "Start" icon > select "Windows Accessories" folder > select "Notepad"
-Right click on "Notepad" icon > select "Pin to taskbar"
+If not done already, right click on "Notepad" icon > select "Pin to taskbar"
 Click on "Notepad" icon, then paste this text:
 
 @echo off
@@ -152,6 +154,7 @@ Back to CMD
 > del Editor.bat MainForm.bat Updater.bat
 > vc_redist.x86 /install /passive /norestart
 > vc_redist.x64 /install /passive /norestart
+> del vc_redist.x86.exe vc_redist.x64.exe
 
 
 
@@ -165,8 +168,6 @@ Click on "Customize installation"
 Next
 Check "Install Python 3.13 for all users"
 Install
-
-Click on "Disable path length limit"
 Close
 
 
@@ -302,7 +303,7 @@ Back to CMD
 
 Back to File Explorer, drag "Z97XSLI.10b" into Hextor icon while holding Shift
 Search > Go To address... > 0x1000 > OK
-Type this HEX sequence: "74 D4 35 E6 42 2C"
+Type "74D435E6422C"
 File > Save as... > "C:\Users\Leonardo\Documents\74D435E6422C.fd" > Save
 File > Exit
 
@@ -441,7 +442,7 @@ Action > Search... > Hex pattern > "888888888788" > Header and body > OK
 
 There will be 1 result inside an unknown GUID/.../Raw section!
 
-So we changed our MAC address from the default 88:88:88:88:87:88 to our custom one (74:D4:35:E6:42:2C), so why do we have another one here?!
+So we changed our GbE MAC address from the default 88:88:88:88:87:88 to our custom one (74:D4:35:E6:42:2C), so why do we have another one here?!
 That's because Gigabyte seems to add the initial 512 KiB of the SPI (in my case Descriptor region + GbE region + ME region cut) into this ffs module (maybe for recovery purposes?)
 Here are some references (post 21 through 25): https://winraid.level1techs.com/t/intel-cs-me-cs-txe-cs-sps-gsc-pmc-pchc-phy-orom-firmware-repositories/30869
 
@@ -681,6 +682,7 @@ Back to CMD
 Now we need to search for something descriptive inside those *.txt files (like "mdbg", "adbg" or "debug")
 
 Open Notepad++
+View > Word wrap (check)
 Search > Find in Files...
 Find what: "ADBG"
 Replace with: [empty]
@@ -724,7 +726,8 @@ Type "30"
 
 
 
-I also want to increase the Timeout default value of 1 to 5. By increasing it of adding more seconds, we make sure our AMI boot logo is always shown, even if our monitor is slow at waking the screen during (re)boot or during hibernation wake
+I also want to increase the Timeout default value of 1 to 5. By increasing it of adding more seconds, we make sure our AMI boot logo is always shown, even if our monitor is slow at waking the screen during (re)boot or during hibernation wake.
+This setting is part of UEFI specification (3.3. Globally Defined Variables) (https://uefi.org/specs/UEFI/2.11/03_Boot_Manager.html#globally-defined-variables)
 
 Back to Notepad++
 Search > Find in Files...
@@ -741,7 +744,7 @@ VarStoreId value is 0x4
 
 Search > Find... > Find what: "VarStoreId: 0x4" > Find All in Current Document
 
-Double click on the 2nd result > Home key
+Double click on the 2nd result
 
 0x3381F7:                Numeric Prompt: "Setup Prompt Timeout", Help: "Number of seconds to wait for setup activation key. 65535(0xFFFF) means indefinite waiting.", [...] QuestionId: 0x2, VarStoreId: 0x4, VarOffset: 0x0, [...] Size: 16 [...] { 07 A6 37 00 38 00 02 00 [...] }
 
@@ -765,7 +768,7 @@ File > Exit
 Back to CMD
 > del Setup_Uncompressed.bin
 > LzmaCompress -e -o Setup_ACPI_Debug_Timeout_5.lzma d 23 Setup_Uncompressed_ACPI_Debug_Timeout_5.bin
-> del Setup_Uncompressed_ACPI_Debug_Timeout_5.bin
+> del Setup_Uncompressed_ACPI_Debug_Timeout_5.bin LzmaCompress.exe
 > GenSec -o Setup_ACPI_Debug_Timeout_5.com -s EFI_SECTION_COMPRESSION -c PI_NONE Setup_ACPI_Debug_Timeout_5.lzma
 
 Back to File Explorer, drag "Setup_ACPI_Debug_Timeout_5.com" into Hextor icon while holding Shift
@@ -842,7 +845,6 @@ Now we need to find where are the 2 HEX bytes to change. Remember, we want to ch
 
 Back to Notepad++
 Click on the 1st tab
-Home key
 Inside "Setup_MiniSetupResourceSection.sec.1.0.en-US.ifr.txt" file where we previously found the ACPI Debug setting. Here we are interested in 3 elements:
 1) QuestionId
 2) Label ID
@@ -888,7 +890,6 @@ Now we want to do the same for the Timeout value!
 
 Back to Notepad++
 Click on the 2nd tab
-Home key
 Inside "Setup_MiniSetupResourceSection.sec.2.0.en-US.ifr.txt" file where we previously found the Timeout setting. Here we are interested in 3 elements:
 1) QuestionId
 2) Label ID
@@ -1161,9 +1162,8 @@ Double click on 2nd and 3rd results. They are exactly the same modules. So we ca
 
 Quit UEFITool
 
-Back to File Explorer
 Open MMTool.exe
-     Load Image > "mod_bios_NVRAM_ACPI_Debug_Timeout_5.fd" > Open
+     Load Image > [select Documents folder] > "mod_bios_NVRAM_ACPI_Debug_Timeout_5.fd" > Open
          Delete > Volume Index: 02:01-00, File Index: 02, Source size: 00005018 > Delete
                   Volume Index: 03, File Index: 02, Source size: 00014C18 > Delete
 Save Image as.. > "mod_bios_tmp" > Save
@@ -1361,7 +1361,7 @@ Create the final ffs with this specific GUID: 961578FE-B6B7-44C3-AF35-6BC705CD2B
 GUID source: https://github.com/acidanthera/audk/blob/2f3189030892cbda40c3f1d47d7ec5f1f40a0709/FatPkg/EnhancedFatDxe/Fat.inf#L18C36-L18C72
 
 > GenFfs -o Fat_NO_FsVersion_check.ffs -t EFI_FV_FILETYPE_DRIVER -g "961578FE-B6B7-44C3-AF35-6BC705CD2B1F" -s -i Fat_NO_FsVersion_check.com
-> del Fat_NO_FsVersion_check.com Fat.ui Fat_NO_FsVersion_check.pe32
+> del Fat_NO_FsVersion_check.com Fat.ui Fat_NO_FsVersion_check.pe32 GenFfs.exe GenSec.exe
 
 Done with the creation of the custom Fat ffs module!
 
@@ -1444,7 +1444,6 @@ Copy
 
 
 Open Notepad++
-View > Word wrap (check)
 Edit > Paste
 
 We want to replace those unreadable characters (\x00) to spaces.
@@ -1831,7 +1830,7 @@ Back to CMD
 > reg delete HKCU\SOFTWARE\QtProject /f
 > reg delete HKCU\SOFTWARE\Intel\FlashImageTool /f
 > attrib -r MMTool.exe
-> del MMTool.exe "MMTool Aptio 5.02.0024 Mod.7z" UEFITool.exe UEFITool_NE_A73_win64.zip ifrextractor.exe ifrextractor_1.6.1_windows.zip CloneVBT.exe
+> del MMTool.exe "MMTool Aptio 5.02.0024 Mod.7z" UEFITool.exe UEFITool_NE_A73_win64.zip ifrextractor.exe ifrextractor_1.6.1_windows.zip CloneVBT.exe mullvad-browser-windows-x86_64-15.0.7.exe python-3.13.12-amd64.exe 7z2600-x64.exe npp.8.9.2.Installer.x64.exe HextorSetup.exe
 > exit
 
 We now have 3 files:
