@@ -1539,12 +1539,8 @@
 			<dict>
 				<key>revblock</key>
 				<string>none</string>
-				<key>revcpu</key>
-				<integer>1</integer>
-				<key>revcpuname</key>
-				<string>Intel Core i5-4670K</string>
 				<key>revpatch</key>
-				<string>cpuname,diskread,hashmismatch</string>
+				<string>diskread,hashmismatch</string>
 			</dict>
 			<key>7C436110-AB2A-4BBB-A880-FE41995C9F82</key>
 			<dict>
@@ -1575,8 +1571,6 @@
 			<key>4D1FDA02-38C7-4A6A-9CC6-4BCCA8B30102</key>
 			<array>
 				<string>revblock</string>
-				<string>revcpu</string>
-				<string>revcpuname</string>
 				<string>revpatch</string>
 			</array>
 			<key>7C436110-AB2A-4BBB-A880-FE41995C9F82</key>
@@ -1641,7 +1635,7 @@
 			<key>MaxBIOSVersion</key>
 			<false/>
 			<key>ProcessorType</key>
-			<integer>1541</integer>
+			<integer>0</integer>
 			<key>ROM</key>
 			<data>dNQ15kIs</data>
 			<key>SpoofVendor</key>
