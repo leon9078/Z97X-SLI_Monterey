@@ -1,0 +1,71 @@
+
+1088    Scope (\_SB.PCI0.GFX0)                                                    /* Remove 38 (16 + 22) bytes from this Scope PkgLength */
+1089    {
+1090        Method (_DOS, 1, NotSerialized)  // _DOS: Disable Output Switching    /* Remove 22 bytes from this Method PkgLength */
+1091        {
+              [...]
+1093            If (((Arg0 & 0x03) == Zero))                                      /* 22 bytes to delete */
+1094            {
+1095                If (CondRefOf (HDOS))
+1096                {
+1097                    HDOS ()
+1098                }
+1099            }
+              [...]
+          [...]
+3176        Method (GNOT, 2, NotSerialized)                                       /* Remove 16 bytes from this Method PkgLength */
+3177        {
+              [...]
+3190            If (CondRefOf (HNOT))                                             /* 16 bytes to delete */
+3191            {
+3192                HNOT (Arg0)
+3193            }
+3194            Else
+
+
+
+
+
+3401    Scope (\_SB.PCI0)                                                         /* Remove 263 (245 + 9 * 2) bytes from this Scope PkgLength */
+3402    {
+          [...]
+3735        Method (PGON, 1, Serialized)                                          /* Remove 9 bytes from this Method PkgLength */
+3736        {
+              [...]
+3747            GPPR (PEGI, One)                                                  /* 9 bytes to delete */
+              [...]
+          [...]
+3793        Method (PGOF, 1, Serialized)                                          /* Remove 9 bytes from this Method PkgLength */
+3794        {
+              [...]
+3838            GPPR (PEGI, Zero)                                                 /* 9 bytes to delete */
+              [...]
+          [...]
+4973        Method (GPPR, 2, NotSerialized)                                       /* 245 bytes to delete */
+4974        {
+4975            If ((Arg1 == Zero))
+4976            {
+4977                If ((Arg0 == Zero))
+4978                {
+4979                    If (CondRefOf (\_SB.PCI0.PEG0.PEGP.SGPO))
+4980                    {
+4981                        \_SB.PCI0.PEG0.PEGP.SGPO (HLRS, One)
+4982                        \_SB.PCI0.PEG0.PEGP.SGPO (PWEN, Zero)
+4983                    }
+4984                }
+4985            }
+4986            ElseIf ((Arg1 == One))
+4987            {
+4988                If ((Arg0 == Zero))
+4989                {
+4990                    If (CondRefOf (\_SB.PCI0.PEG0.PEGP.SGPO))
+4991                    {
+4992                        \_SB.PCI0.PEG0.PEGP.SGPO (HLRS, One)
+4993                        \_SB.PCI0.PEG0.PEGP.SGPO (PWEN, One)
+4994                        Sleep (DLPW)
+4995                        \_SB.PCI0.PEG0.PEGP.SGPO (HLRS, Zero)
+4996                        Sleep (DLHR)
+4997                    }
+4998                }
+4999            }
+5000        }

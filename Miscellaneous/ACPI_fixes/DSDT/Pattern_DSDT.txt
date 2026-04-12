@@ -1,0 +1,288 @@
+
+00607    Scope (_SB)                                                                       /* Remove 29 bytes from this Scope PkgLength */
+00608    {
+           [...]
+01805        Device (PCI0)                                                                 /* Remove 29 bytes from this Device PkgLength */
+01806        {
+               [...]
+02928            Device (LPCB)                                                             /* Remove 29 bytes from this Device PkgLength */
+02929            {
+                   [...]
+03355                Device (SIO1)                                                         /* Remove 29 bytes from this Device PkgLength */
+03356                {
+                       [...]
+03635                    Method (DCNT, 2, NotSerialized)                                   /* Remove 29 bytes from this Method PkgLength */
+03636                    {
+                           [...]
+03638                        If (((DMCH < 0x04) && ((Local1 = (DMCH & 0x03)) != Zero)))    /* 29 bytes to delete */
+03639                        {
+03640                            RDMA (Arg0, Arg1, Local1++)
+03641                        }
+
+
+
+
+
+08336    Scope (_SB.PCI0)                                                                  /* Remove 185 (39 * 2 + 51 + 28 * 2) bytes from this Scope PkgLength */
+08337    {
+08338        Device (XHC)                                                                  /* Remove 185 (39 * 2 + 51 + 28 * 2) bytes from this Device PkgLength */
+08339        {
+               [...]
+08592            Method (_PS0, 0, Serialized)  // _PS0: Power State 0                      /* Remove 28 bytes from this Method PkgLength */
+08593            {
+                   [...]
+08744                If (CondRefOf (\_SB.PCI0.XHC.PS0X))                                   /* 28 bytes to delete */
+08745                {
+08746                    PS0X ()
+08747                }
+                   [...]
+               [...]
+08754            Method (_PS3, 0, Serialized)  // _PS3: Power State 3                      /* Remove 28 bytes from this Method PkgLength */
+08755            {
+                   [...]
+08815                If (CondRefOf (\_SB.PCI0.XHC.PS3X))                                   /* 28 bytes to delete */
+08816                {
+08817                    PS3X ()
+08818                }
+                   [...]
+               [...]
+08909            Device (RHUB)                                                             /* Remove 129 (39 * 2 + 51) bytes from this Device PkgLength */
+08910            {
+                   [...]
+08912                Method (_PS0, 0, Serialized)  // _PS0: Power State 0                  /* 51 bytes to delete */
+08913                {
+08914                    If ((DVID == 0xFFFF))
+08915                    {
+08916                        Return (Zero)
+08917                    }
+08918
+08919                    If (CondRefOf (\_SB.PCI0.XHC.RHUB.PS0X))
+08920                    {
+08921                        PS0X ()
+08922                    }
+08923                }
+08924
+08925                Method (_PS2, 0, Serialized)  // _PS2: Power State 2                  /* 39 bytes to delete */
+08926                {
+08927                    If (CondRefOf (\_SB.PCI0.XHC.RHUB.PS2X))
+08928                    {
+08929                        PS2X ()
+08930                    }
+08931                }
+08932
+08933                Method (_PS3, 0, Serialized)  // _PS3: Power State 3                  /* 39 bytes to delete */
+08934                {
+08935                    If (CondRefOf (\_SB.PCI0.XHC.RHUB.PS3X))
+08936                    {
+08937                        PS3X ()
+08938                    }
+08939                }
+
+
+
+
+
+Refactor lines 09447-10147, which cause x8 ACPI errors when compiling using latest iASL release
+
+
+
+
+
+10149    Scope (_SB.PCI0)                                                                  /* 11 bytes to delete */
+10150    {
+10151    }
+
+
+
+
+
+10153    Scope (_SB.PCI0.I2C0)                                                             /* Remove 142 (39 * 2 + 32 * 2) bytes from this Scope PkgLength */
+10154    {
+           [...]
+10536        Device (SHUB)                                                                 /* Remove 64 (32 * 2) bytes from this Device PkgLength */
+10537        {
+               [...]
+10641            Method (_PS0, 0, Serialized)  // _PS0: Power State 0                      /* Remove 32 bytes from this Method PkgLength */
+10642            {
+                   [...]
+10645                If (CondRefOf (\_SB.PCI0.I2C0.SHUB.PS0X))                             /* 32 bytes to delete */
+10646                {
+10647                    PS0X ()
+10648                }
+                   [...]
+               [...]
+10651            Method (_PS3, 0, Serialized)  // _PS3: Power State 3                      /* Remove 32 bytes from this Method PkgLength */
+10652            {
+                   [...]
+10654                If (CondRefOf (\_SB.PCI0.I2C0.SHUB.PS3X))                             /* 32 bytes to delete */
+10655                {
+10656                    PS3X ()
+10657                }
+                   [...]
+               [...]
+           [...]
+10661        Device (DFUD)                                                                 /* Remove 78 (39 * 2) bytes from this Device PkgLength */
+10662        {
+               [...]
+10752            Method (_PS0, 0, Serialized)  // _PS0: Power State 0                      /* Remove 39 bytes from this Method PkgLength */
+10753            {
+                   [...]
+10756                If (CondRefOf (\_SB.PCI0.I2C0.SHUB.PS0X))                             /* 39 bytes to delete */
+10757                {
+10758                    ^^SHUB.PS0X ()
+10759                }
+                   [...]
+               [...]
+10762            Method (_PS3, 0, Serialized)  // _PS3: Power State 3                      /* Remove 39 bytes from this Method PkgLength */
+10763            {
+                   [...]
+10765                If (CondRefOf (\_SB.PCI0.I2C0.SHUB.PS3X))                             /* 39 bytes to delete */
+10766                {
+10767                    ^^SHUB.PS3X ()
+10768                }
+
+
+
+
+
+10940    Scope (_SB.PCI0.I2C1)                                                             /* Remove 64 (32 * 2) bytes from this Scope PkgLength */
+10941    {
+           [...]
+11655        Device (TPD7)                                                                 /* Remove 32 bytes from this Device PkgLength */
+11656        {
+               [...]
+11773            Method (_PS0, 0, Serialized)  // _PS0: Power State 0                      /* Remove 32 bytes from this Method PkgLength */
+11774            {
+                   [...]
+11782                If (CondRefOf (\_SB.PCI0.I2C1.TPD7.PS0X))                             /* 32 bytes to delete */
+11783                {
+11784                    PS0X ()
+11785                }
+                   [...]
+               [...]
+           [...]
+11799        Device (TPD8)                                                                 /* Remove 32 bytes from this Device PkgLength */
+11800        {
+               [...]
+11917            Method (_PS0, 0, Serialized)  // _PS0: Power State 0                      /* Remove 32 bytes from this Method PkgLength */
+11918            {
+                   [...]
+11926                If (CondRefOf (\_SB.PCI0.I2C1.TPD8.PS0X))                             /* 32 bytes to delete */
+11927                {
+11928                    PS0X ()
+11929                }
+
+
+
+
+
+12232    Scope (_SB.PCI0.SDHC)                                                             /* Remove 85 (39 + 7 + 39) bytes from this Scope PkgLength */
+12233    {
+12234        Device (WI01)                                                                 /* Remove 85 bytes from this Device PkgLength */
+12235        {
+               [...]
+12250            Method (_PS0, 0, Serialized)  // _PS0: Power State 0                      /* 39 bytes to delete */
+12251            {
+12252                If (CondRefOf (\_SB.PCI0.SDHC.WI01.PS0X))
+12253                {
+12254                    PS0X ()
+12255                }
+12256            }
+12257
+12258            Method (_PS2, 0, Serialized)  // _PS2: Power State 2                      /* 7 bytes to delete */
+12259            {
+12260            }
+12261
+12262            Method (_PS3, 0, Serialized)  // _PS3: Power State 3                      /* 39 bytes to delete */
+12263            {
+12264                If (CondRefOf (\_SB.PCI0.SDHC.WI01.PS3X))
+12265                {
+12266                    PS3X ()
+12267                }
+12268            }
+
+
+
+
+
+13522    Method (RDMA, 3, NotSerialized)                                                   /* 7 bytes to delete */
+13523    {
+13524    }
+
+
+
+
+
+13844    Method (_PTS, 1, NotSerialized)  // _PTS: Prepare To Sleep                        /* Remove 36 bytes from this Method PkgLength */
+13845    {
+           [...]
+13849        If (CondRefOf (\_SB.TPM.PTS))                                                 /* 36 bytes to delete */
+13850        {
+13851            \_SB.TPM.PTS (Arg0)
+13852        }
+
+
+
+
+
+13887    Method (_WAK, 1, Serialized)  // _WAK: Wake                                       /* Remove 51 bytes from this Method PkgLength */
+13888    {
+           [...]
+13892        If (((Arg0 == 0x03) || (Arg0 == 0x04)))                                       /* Remove 51 bytes from this If PkgLength */
+13893        {
+               [...]
+13899            If (CondRefOf (\_SB.PCI0.RP05.PEGP.EPON))                                 /* 51 bytes to delete */
+13900            {
+13901                \_SB.PCI0.RP05.PEGP.EPON ()
+13902            }
+
+
+
+
+
+14286    Method (GUAM, 1, Serialized)                                                      /* Remove 4 bytes from this Method PkgLength */
+14287    {
+14288        If ((Arg0 != DDPS))                                                           /* Remove 4 bytes from this If PkgLength */
+14289        {
+               [...]
+14331            P_CS ()                                                                   /* 4 bytes to delete */
+
+
+
+
+
+14335    Method (P_CS, 0, Serialized)                                                      /* 104 bytes to delete */
+14336    {
+14337        If (CondRefOf (\_SB.PCI0.PAUD.PUAM))
+14338        {
+14339            \_SB.PCI0.PAUD.PUAM ()
+14340        }
+14341
+14342        If ((OSYS == 0x07DC))
+14343        {
+14344            If (CondRefOf (\_SB.PCI0.XHC.DUAM))
+14345            {
+14346                \_SB.PCI0.XHC.DUAM ()
+14347            }
+14348        }
+14349    }
+
+
+
+
+
+14383    Scope (_SB.PCI0)                                                                  /* Remove 4 bytes from this Scope PkgLength */
+14384    {
+           [...]
+14400        Method (_INI, 0, Serialized)  // _INI: Initialize                             /* Remove 4 bytes from this Method PkgLength */
+14401        {
+               [...]
+14475            PINI ()                                                                   /* 4 bytes to delete */
+
+
+
+
+
+18047    Method (PINI, 0, NotSerialized)                                                   /* 7 bytes to delete */
+18048    {
+18049    }

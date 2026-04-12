@@ -1,0 +1,256 @@
+Fix x8 ACPI errors found when compiling using latest iASL release:
+- Missing dependency SDMA (Device object requires a _HID or _ADR)
+- Missing dependency I2C0 (Device object requires a _HID or _ADR)
+- Missing dependency I2C1 (Device object requires a _HID or _ADR)
+- Missing dependency SPI0 (Device object requires a _HID or _ADR)
+- Missing dependency SPI1 (Device object requires a _HID or _ADR)
+- Missing dependency UA00 (Device object requires a _HID or _ADR)
+- Missing dependency UA01 (Device object requires a _HID or _ADR)
+- Missing dependency SDHC (Device object requires a _HID or _ADR)
+
++ remove "If (CondRefOf (\_SB.PCI0.*)) { [...] }" unknown methods references
+
+
+
+   Find: "{u8 a:0x10} 11 (2E 5F 53 42 5F 50 43 49 30) (5B 82) 05 ({ansi:'S'} {ansi:'D'} {ansi:'M'} {ansi:'A'}) {u8 b:0xA0} 4F 07 (92 93 {ansi:'S'} {ansi:'M'} {ansi:'D'} {ansi:'0'} 0A {u8:0x02}) 10 4? ?? 2F 03 5F 53 42 5F 50 43 49 30 53 44 4D 41 {u8 c::100} A0 22 (93 {ansi:'S'} {ansi:'M'} {ansi:'D'} {ansi:'0'} 0A {u8:0x02}) 10 ?? 2F 03 5F 53 42 5F 50 43 49 30 53 44 4D 41 (08 {ansi:'_'} {ansi:'A'} {ansi:'D'} {ansi:'R'} 0C {u32:0x00150000})"
+Replace: "${a} 45 09 $1 $2 48 08 $3 ${b} 4E 06 $4 ${c} ${b} 12 $5 $6"
+
+After "Replace All" -31 bytes for Device (SDMA)!
+
+
+
+   Find: "{u8 a:0x10} 41 0E (2E 5F 53 42 5F 50 43 49 30) (5B 82) 44 0D ({ansi:'I'}{ansi:'2'}{ansi:'C'}{ansi:'0'}) {u8 b::120} {u8 c:0x14} 2A ({ansi:'_'}{ansi:'P'}{ansi:'S'}{ansi:'0'} 08 4C 50 44 30 53 42 31 31) {u8::28} 14 2A ({ansi:'_'}{ansi:'P'}{ansi:'S'}{ansi:'3'} 08 4C 50 44 33 53 42 31 31) {u8::28} {u8 d:0xA0} 45 0D (92 93 {ansi:'S'}{ansi:'M'}{ansi:'D'}{ansi:'1'} 0A {u8:0x02}) 10 4? ?? 2F 03 5F 53 42 5F 50 43 49 30 49 32 43 30 {u8 e::186} A0 22 (93 {ansi:'S'}{ansi:'M'}{ansi:'D'}{ansi:'1'} 0A {u8:0x02}) 10 ?? 2F 03 5F 53 42 5F 50 43 49 30 49 32 43 30 (08 {ansi:'_'}{ansi:'A'}{ansi:'D'}{ansi:'R'} 0C {u32:0x00150001})"
+Replace: "${a} 41 18 $1 $2 44 17 $3 ${d} 44 0C $6 ${e} ${d} 12 $7 $8 ${b} ${c} 0E $4 ${c} 0E $5"
+
+After "Replace All" -89 bytes for Device (I2C0)!
+
+
+
+   Find: "{u8 a:0x10} 45 0C (2E 5F 53 42 5F 50 43 49 30) (5B 82) 48 0B ({ansi:'I'} {ansi:'2'} {ansi:'C'} {ansi:'1'}) {u8 b::120} {u8 c:0x14} 2A ({ansi:'_'} {ansi:'P'} {ansi:'S'} {ansi:'0'} 08) {u8::28} (4C 50 44 30 53 42 31 32) (14 0E 5F 50 53 33 08 4C 50 44 33 53 42 31 32) {u8 d:0xA0} 46 0D (92 93 {ansi:'S'} {ansi:'M'} {ansi:'D'} {ansi:'2'} 0A {u8:0x02}) 10 4? ?? 2F 03 5F 53 42 5F 50 43 49 30 49 32 43 31 {u8 e::187} A0 22 (93 {ansi:'S'} {ansi:'M'} {ansi:'D'} {ansi:'2'} 0A {u8:0x02}) 10 ?? 2F 03 5F 53 42 5F 50 43 49 30 49 32 43 31 (08 {ansi:'_'} {ansi:'A'} {ansi:'D'} {ansi:'R'} 0C {u32:0x00150002})"
+Replace: "${a} 42 18 $1 $2 45 17 $3 ${d} 45 0C $7 ${e} ${d} 12 $8 $9 ${b} ${c} 0E $4 $5 $6"
+
+After "Replace All" -61 bytes for Device (I2C1)!
+
+
+
+   Find: "{u8 a:0x10} 41 07 (2E 5F 53 42 5F 50 43 49 30) (5B 82) 44 06 ({ansi:'S'} {ansi:'P'} {ansi:'I'} {ansi:'0'}) {u8 b::94} {u8 c:0xA0} 48 07 (92 93 {ansi:'S'} {ansi:'M'} {ansi:'D'} {ansi:'3'} 0A {u8:0x02}) 10 4? ?? 2F 03 5F 53 42 5F 50 43 49 30 53 50 49 30 {u8 d::93} A0 22 (93 {ansi:'S'} {ansi:'M'} {ansi:'D'} {ansi:'3'} 0A {u8:0x02}) 10 ?? 2F 03 5F 53 42 5F 50 43 49 30 53 50 49 30 (08 {ansi:'_'} {ansi:'A'} {ansi:'D'} {ansi:'R'} 0C {u32:0x00150003})"
+Replace: "${a} 4C 0E $1 $2 4F 0D $3 ${c} 47 06 $4 ${d} ${c} 12 $5 $6 ${b}"
+
+After "Replace All" -33 bytes for Device (SPI0)!
+
+
+
+   Find: "{u8 a:0x10} 41 05 (2E 5F 53 42 5F 50 43 49 30) (5B 82) 44 04 ({ansi:'S'} {ansi:'P'} {ansi:'I'} {ansi:'1'}) {u8 b::62} {u8 c:0xA0} 46 0D (92 93 {ansi:'S'} {ansi:'M'} {ansi:'D'} {ansi:'4'} 0A {u8:0x02}) 10 4? ?? 2F 03 5F 53 42 5F 50 43 49 30 53 50 49 31 {u8 d::187} A0 22 (93 {ansi:'S'} {ansi:'M'} {ansi:'D'} {ansi:'4'} 0A {u8:0x02}) 10 ?? 2F 03 5F 53 42 5F 50 43 49 30 53 50 49 31 (08 {ansi:'_'} {ansi:'A'} {ansi:'D'} {ansi:'R'} 0C {u32:0x00150004})"
+Replace: "${a} 4A 12 $1 $2 4D 11 $3 ${c} 45 0C $4 ${d} ${c} 12 $5 $6 ${b}"
+
+After "Replace All" -33 bytes for Device (SPI1)!
+
+
+
+   Find: "{u8 a:0x10} 41 05 (2E 5F 53 42 5F 50 43 49 30) (5B 82) 44 04 ({ansi:'U'} {ansi:'A'} {ansi:'0'} {ansi:'0'}) {u8 b::62} {u8 c:0xA0} 48 09 (92 93 {ansi:'S'} {ansi:'M'} {ansi:'D'} {ansi:'5'} 0A {u8:0x02}) 10 4? ?? 2F 03 5F 53 42 5F 50 43 49 30 55 41 30 30 {u8 d::125} A0 22 (93 {ansi:'S'} {ansi:'M'} {ansi:'D'} {ansi:'5'} 0A {u8:0x02}) 10 ?? 2F 03 5F 53 42 5F 50 43 49 30 55 41 30 30 (08 {ansi:'_'} {ansi:'A'} {ansi:'D'} {ansi:'R'} 0C {u32:0x00150005})"
+Replace: "${a} 4C 0E $1 $2 4F 0D $3 ${c} 47 08 $4 ${d} ${c} 12 $5 $6 ${b}"
+
+After "Replace All" -33 bytes for Device (UA00)!
+
+
+
+   Find: "{u8 a:0x10} 41 05 (2E 5F 53 42 5F 50 43 49 30) (5B 82) 44 04 ({ansi:'U'} {ansi:'A'} {ansi:'0'} {ansi:'1'}) {u8 b::62} {u8 c:0xA0} 46 0D (92 93 {ansi:'S'} {ansi:'M'} {ansi:'D'} {ansi:'6'} 0A {u8:0x02}) 10 4? ?? 2F 03 5F 53 42 5F 50 43 49 30 55 41 30 31 {u8 d::187} A0 22 (93 {ansi:'S'} {ansi:'M'} {ansi:'D'} {ansi:'6'} 0A {u8:0x02}) 10 ?? 2F 03 5F 53 42 5F 50 43 49 30 55 41 30 31 (08 {ansi:'_'} {ansi:'A'} {ansi:'D'} {ansi:'R'} 0C {u32:0x00150006})"
+Replace: "${a} 4A 12 $1 $2 4D 11 $3 ${c} 45 0C $4 ${d} ${c} 12 $5 $6 ${b}"
+
+After "Replace All" -33 bytes for Device (UA01)!
+
+
+
+   Find: "{u8 a:0x10} 4C 04 (2E 5F 53 42 5F 50 43 49 30) (5B 82) 3F ({ansi:'S'} {ansi:'D'} {ansi:'H'} {ansi:'C'}) {u8 b:0x14} 2A ({ansi:'_'} {ansi:'P'} {ansi:'S'} {ansi:'0'} 08 4C 50 44 30 53 42 31 37) {u8::28} (14 0E {ansi:'_'} {ansi:'P'} {ansi:'S'} {ansi:'3'} 08 4C 50 44 33 53 42 31 37) {u8 c:0xA0} 47 08 (92 93 {ansi:'S'} {ansi:'M'} {ansi:'D'} {ansi:'7'} 0A {u8:0x02}) 10 4? ?? 2F 03 5F 53 42 5F 50 43 49 30 53 44 48 43 {u8 d::108} A0 22 (93 {ansi:'S'} {ansi:'M'} {ansi:'D'} {ansi:'7'} 0A {u8:0x02}) 10 ?? 2F 03 5F 53 42 5F 50 43 49 30 53 44 48 43 (08 {ansi:'_'} {ansi:'A'} {ansi:'D'} {ansi:'R'} 0C {u32:0x00170000})"
+Replace: "${a} 4B 0B $1 $2 4E 0A $3 ${c} 46 07 $6 ${d} ${c} 12 $7 $8 ${b} 0E $4 $5"
+
+After "Replace All" -60 bytes for Device (SDHC)!
+
+
+
+
+
+
+
+
+
+
+Shrink PkgLength values in advance before removing unknown method calls!
+
+
+
+   Find: "(10) 84 6A 04 (5F 53 42 5F 08 50 52 30 30)" ###################################################### 01 ---> "Scope (_SB)"
+Replace: "$1 86 68 04 $2" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 1 byte less from the final shrinked PkgLength
+
+   Find: "(5B 82) 88 E6 03 (50 43 49 30)" ################################################################## 02 ---> "Device (PCI0)"
+Replace: "$1 8A E4 03 $2" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 1 byte less from the final shrinked PkgLength
+
+   Find: "(5B 82) 8E 3C 01 (4C 50 43 42)" ################################################################## 03 ---> "Device (LPCB)"
+Replace: "$1 80 3B 01 $2" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 1 byte less from the final shrinked PkgLength
+
+   Find: "(5B 82) 4F 8C (53 49 4F 31)" ##################################################################### 04 ---> "Device (SIO1)"
+Replace: "$1 41 8B $2" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 1 byte less from the final shrinked PkgLength
+
+   Find: "(14) 4F 04 (44 43 4E 54 0?)" ##################################################################### 05 ---> "Method (DCNT, 2, NotSerialized)"
+Replace: "$1 31 $2" @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 1 byte less from the final shrinked PkgLength + (moved from 4? ?? to 0x05..0x3F)
+
+-1 byte
+
+   Find: "(10) 4F B8 (2E 5F 53 42 5F 50 43 49 30 5B 82) 42 B8 (58 48 43 5F)" ############################### 06,07 ---> "Scope (_SB.PCI0)" and "Device (XHC)"
+Replace: "$1 46 AD $2 49 AC $3"
+
+   Find: "(08 58 52 53 54 00 14) 45 34 (5F 50 53 30 0?)" ################################################### 08 ---> "Method (_PS0, 0, Serialized)  // _PS0: Power State 0"
+Replace: "$1 49 32 $2"
+
+   Find: "(70 61 50 44 42 4D 14) 45 17 (5F 50 53 33 0?)" ################################################### 09 ---> "Method (_PS3, 0, Serialized)  // _PS3: Power State 3"
+Replace: "$1 49 15 $2"
+
+   Find: "(5B 82) 48 12 (52 48 55 42)" ##################################################################### 10 ---> "Device (RHUB)"
+Replace: "$1 47 0A $2"
+
+   Find: "(10) 46 CC (2F 03 5F 53 42 5F 50 43 49 30 49 32 43 30 5B 82 4? ?? 41 43 44 30)" ################## 11 ---> "Scope (_SB.PCI0.I2C0)"
+Replace: "$1 48 C3 $2"
+
+   Find: "(5B 82) 45 20 (53 48 55 42)" ##################################################################### 12 ---> "Device (SHUB)"
+Replace: "$1 45 1C $2"
+
+   Find: "(14) 31 (5F 50 53 30 0? {u8::43} 14) 2D (5F 50 53 33 0? {u8::39} 5B 82) 4C 1D (44 46 55 44)" ##### 13,14,15 ---> "Method (_PS0, 0, Serialized)  // _PS0: Power State 0", "Method (_PS3, 0, Serialized)  // _PS3: Power State 3" and "Device (DFUD)"
+Replace: "$1 11 $2 0D $3 4E 18 $4"
+
+   Find: "(14) 38 (5F 50 53 30 0? {u8::50} 14) 34 (5F 50 53 33 0?)" ######################################## 16,17 ---> "Method (_PS0, 0, Serialized)  // _PS0: Power State 0" and "Method (_PS3, 0, Serialized)  // _PS3: Power State 3"
+Replace: "$1 11 $2 0D $3"
+
+   Find: "(10) 4D DB (2F 03 5F 53 42 5F 50 43 49 30 49 32 43 31 5B 82 4? ?? 54 50 4C 30)" ################## 18 ---> "Scope (_SB.PCI0.I2C1)"
+Replace: "$1 4B D7 $2" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 2 bytes less from the final shrinked PkgLength
+
+   Find: "(5B 82) 43 20 (54 50 44 37)" ##################################################################### 19 ---> "Device (TPD7)"
+Replace: "$1 42 1E $2" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 1 byte less from the final shrinked PkgLength
+
+   Find: "(14) 46 05 (5F 50 53 30 0? 41 44 42 47 0D 54 50 44 37 20 43 74 72 6C 72 20 44 30 00)" ############ 20 ---> "Method (_PS0, 0, Serialized)  // _PS0: Power State 0"
+Replace: "$1 35 $2" @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 1 byte less from the final shrinked PkgLength + (moved from 4? ?? to 0x05..0x3F)
+
+-1 byte
+
+   Find: "(5B 82) 44 20 (54 50 44 38)" ##################################################################### 21 ---> "Device (TPD8)"
+Replace: "$1 43 1E $2" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 1 byte less from the final shrinked PkgLength
+
+   Find: "(14) 46 05 (5F 50 53 30 0? 41 44 42 47 0D 54 50 44 38 20 43 74 72 6C 72 20 44 30 00)" ############ 22 ---> "Method (_PS0, 0, Serialized)  // _PS0: Power State 0"
+Replace: "$1 35 $2" @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 1 byte less from the final shrinked PkgLength + (moved from 4? ?? to 0x05..0x3F)
+
+-1 byte
+
+   Find: "(10) 44 11 (2F 03 5F 53 42 5F 50 43 49 30 53 44 48 43 5B 82) 42 10 (57 49 30 31)" ################ 23,24 ---> "Scope (_SB.PCI0.SDHC)" and "Device (WI01)"
+Replace: "$1 4F 0B $2 4D 0A $3"
+
+   Find: "(14) 42 10 (5F 50 54 53 0?)" ##################################################################### 25 ---> "Method (_PTS, 1, NotSerialized)  // _PTS: Prepare To Sleep"
+Replace: "$1 4E 0D $2"
+
+   Find: "(14) 42 6F (5F 57 41 4B 0? {u8::22} A0) 41 06 (91 93 68 0A 03 93 68 0A 04)" ###################### 26,27 ---> "Method (_WAK, 1, Serialized)  // _WAK: Wake", "If (((Arg0 == 0x03) || (Arg0 == 0x04)))" // remove 1 byte
+Replace: "$1 4E 6B $2 2D $3" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 1 byte less from the final shrinked PkgLength
+                             @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 1 byte less from the final shrinked PkgLength + (moved from 4? ?? to 0x05..0x3F)
+
+-1 byte
+
+   Find: "(14) 4B 0F (47 55 41 4D 0? A0) 43 0F (92 93 68 44 44 50 53)" ##################################### 28,29 ---> "Method (GUAM, 1, Serialized)" and "If ((Arg0 != DDPS))"
+Replace: "$1 47 0F $2 4F 0E $3"
+
+   Find: "(A4 53 4D 49 46 10) 4D 37 (2E 5F 53 42 5F 50 43 49 30)" ########################################## 30 ---> "Scope (_SB.PCI0)"
+Replace: "$1 49 37 $2"
+
+   Find: "(14) 4B 1A (5F 49 4E 49 0? 70 0B D9 07 4F 53 59 53)" ############################################# 31 ---> "Method (_INI, 0, Serialized)"
+Replace: "$1 47 1A $2"
+
+
+
+
+
+
+
+
+
+
+Remove unknown method calls!
+
+
+
+   Find: "A0 1C 90 95 44 4D 43 48 0A 04 92 93 7B 44 4D 43 48 0A 03 61 00 52 44 4D 41 68 69 75 61" ########## 01 ---> "If (((DMCH < 0x04) && ((Local1 = (DMCH & 0x03)) != Zero))) { RDMA ([...]) }"
+Replace: ""
+
+-29 bytes
+
+   Find: "A0 1B 5B 12 5C 2F 04 5F 53 42 5F 50 43 49 30 58 48 43 5F 50 53 3? 58 00 50 53 3? 58" ############# 02,03 ---> "If (CondRefOf (\_SB.PCI0.XHC.PS?X)) { PS?X () }"
+Replace: ""
+
+-56 bytes
+
+   Find: "(5B 82 47 0A 52 48 55 42 {u8::6}) {u8::51} {u8::39} {u8::39}" #################################### 04,05,06 ---> "Device (RHUB) ---> Method _PS0/_PS2/_PS3"
+Replace: "$1"
+
+-129 bytes
+
+   Find: "10 0A 2E 5F 53 42 5F 50 43 49 30" ################################################################ 07 ---> "Scope (_SB.PCI0) {}"
+Replace: ""
+
+-11 bytes
+
+   Find: "A0 26 5B 12 5C 2F 05 {u8::16} 50 53 3? 58 00 {u8::7} 50 53 3? 58" ################################ 08,09 ---> "If (CondRefOf (\_SB.PCI0.I2C0.SHUB.PS?X)) { ^^SHUB.PS?X () }"
+Replace: ""
+
+-78 bytes
+
+   Find: "(08 5F 53 34 57 0A 02 08 5F 53 30 57 0A 02) {u8::39} {u8::7} {u8::39}" ########################### 10,11,12 ---> "Device (WI01) ---> Method _PS0/_PS2/_PS3"
+Replace: "$1"
+
+-85 bytes
+
+   Find: "A0 1F 5B 12 5C 2F 05 5F 53 42 5F 50 43 49 30 49 32 43 3? {u8::4} 50 53 3? 58 00 50 53 3? 58" ##### 13,14,15,16 ---> "If (CondRefOf (\_SB.PCI0.I2C?.????.PS?X)) { PS?X () }"
+Replace: ""
+
+-128 bytes
+
+   Find: "14 06 {u8:!0x00..0x1F,0x5F,0x7F..0xFF:4} {u8:0x00..0x0F}" ######################################## 17,18 ---> "Method (!0x5F::4, ?, ?) {}"
+Replace: ""
+
+-14 bytes
+
+   Find: "A0 23 5B 12 5C 2F 03 {u8::12} 00 5C 2F 03 {u8::12} 68" ########################################### 19 ---> "If (CondRefOf (\_SB.TPM.PTS)) { [...] }"
+Replace: ""
+
+-36 bytes
+
+   Find: "A0 32 5B 12 5C 2F 05 {u8::20} 00 5C 2F 05 {u8::20}" ############################################## 20 ---> "If (CondRefOf (\_SB.PCI0.RP05.PEGP.EPON)) { [...] }"
+Replace: ""
+
+-51 bytes
+
+   Find: "50 5F 43 53 14 47 06 50 5F 43 53 08 {u8::96}" #################################################### 21,22 ---> "P_CS ()" and "Method (P_CS, 0, Serialized) { [...] }"
+Replace: ""
+
+-108 bytes
+
+   Find: "50 49 4E 49" ##################################################################################### 23 ---> "PINI ()"
+Replace: ""
+
+-4 bytes
+
+
+
+
+
+
+
+
+
+
+   Find: "({ansi:'D'} {ansi:'S'} {ansi:'D'} {ansi:'T'}) {u32 a:0x00010878} ({u8::2} {u8:!0x01..0x1F,0x7F..0xFF:14}) {u32 b:0x00000088}"
+Replace: "$1 ${a-1106} $2 ${b+1}"
+
+Find: "{ansi:'D'} {ansi:'S'} {ansi:'D'} {ansi:'T'} {u32:} {u8::2} {u8:!0x01..0x1F,0x7F..0xFF:14}" > HEX > Extended syntax: check => << Find prev => << Find prev => Esc
+Search > Go To address... > +66598 > OK
+Operations > Insert bytes / Fill selection > Hex Pattern: 00 > Count: 1106 > OK
+
+Find: "{ansi:'D'} {ansi:'S'} {ansi:'D'} {ansi:'T'} {u32:} {u8:}" > HEX > Extended syntax: check => << Find prev => Find next >> => Esc
+Type "74"
+
+File > Save as... > "AmiBoardInfo_mod.ffs" > Save
+File > Exit

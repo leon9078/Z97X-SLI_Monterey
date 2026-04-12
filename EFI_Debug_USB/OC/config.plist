@@ -85,7 +85,7 @@
 				<key>Skip</key>
 				<integer>0</integer>
 				<key>TableLength</key>
-				<integer>67704</integer>
+				<integer>0</integer>
 				<key>TableSignature</key>
 				<data>RFNEVA==</data>
 			</dict>
@@ -145,7 +145,7 @@
 				<key>Skip</key>
 				<integer>0</integer>
 				<key>TableLength</key>
-				<integer>67704</integer>
+				<integer>0</integer>
 				<key>TableSignature</key>
 				<data>RFNEVA==</data>
 			</dict>
@@ -205,7 +205,7 @@
 				<key>Skip</key>
 				<integer>0</integer>
 				<key>TableLength</key>
-				<integer>67704</integer>
+				<integer>0</integer>
 				<key>TableSignature</key>
 				<data>RFNEVA==</data>
 			</dict>
@@ -235,7 +235,7 @@
 				<key>Skip</key>
 				<integer>0</integer>
 				<key>TableLength</key>
-				<integer>67704</integer>
+				<integer>0</integer>
 				<key>TableSignature</key>
 				<data>RFNEVA==</data>
 			</dict>
@@ -265,7 +265,7 @@
 				<key>Skip</key>
 				<integer>0</integer>
 				<key>TableLength</key>
-				<integer>67704</integer>
+				<integer>0</integer>
 				<key>TableSignature</key>
 				<data>RFNEVA==</data>
 			</dict>
@@ -295,7 +295,7 @@
 				<key>Skip</key>
 				<integer>0</integer>
 				<key>TableLength</key>
-				<integer>67704</integer>
+				<integer>0</integer>
 				<key>TableSignature</key>
 				<data>RFNEVA==</data>
 			</dict>
@@ -325,7 +325,7 @@
 				<key>Skip</key>
 				<integer>0</integer>
 				<key>TableLength</key>
-				<integer>67704</integer>
+				<integer>0</integer>
 				<key>TableSignature</key>
 				<data>RFNEVA==</data>
 			</dict>
@@ -355,7 +355,7 @@
 				<key>Skip</key>
 				<integer>0</integer>
 				<key>TableLength</key>
-				<integer>67704</integer>
+				<integer>0</integer>
 				<key>TableSignature</key>
 				<data>RFNEVA==</data>
 			</dict>
@@ -385,7 +385,7 @@
 				<key>Skip</key>
 				<integer>0</integer>
 				<key>TableLength</key>
-				<integer>67704</integer>
+				<integer>0</integer>
 				<key>TableSignature</key>
 				<data>RFNEVA==</data>
 			</dict>
@@ -415,7 +415,7 @@
 				<key>Skip</key>
 				<integer>0</integer>
 				<key>TableLength</key>
-				<integer>67704</integer>
+				<integer>0</integer>
 				<key>TableSignature</key>
 				<data>RFNEVA==</data>
 			</dict>
@@ -451,306 +451,6 @@
 			</dict>
 			<dict>
 				<key>Base</key>
-				<string></string>
-				<key>BaseSkip</key>
-				<integer>0</integer>
-				<key>Comment</key>
-				<string>Replace unknown methods in DSDT, 1 of 6</string>
-				<key>Count</key>
-				<integer>6</integer>
-				<key>Enabled</key>
-				<true/>
-				<key>Find</key>
-				<data>oABbElwvBF9TQl9QQ0kwAAAAAFBTAFgAUFMAWA==</data>
-				<key>Limit</key>
-				<integer>0</integer>
-				<key>Mask</key>
-				<data>/wD/////////////////AAAAAP//AP////8A/w==</data>
-				<key>OemTableId</key>
-				<data>QSBNIEkAAAA=</data>
-				<key>Replace</key>
-				<data>AAAAAAAAAAAAAAAAAAAAWEhDX19EU1cAUElOSQ==</data>
-				<key>ReplaceMask</key>
-				<data>AAAAAAAAAAAAAAAAAAAA/////////////////w==</data>
-				<key>Skip</key>
-				<integer>0</integer>
-				<key>TableLength</key>
-				<integer>67704</integer>
-				<key>TableSignature</key>
-				<data>RFNEVA==</data>
-			</dict>
-			<dict>
-				<key>Base</key>
-				<string></string>
-				<key>BaseSkip</key>
-				<integer>0</integer>
-				<key>Comment</key>
-				<string>Replace unknown methods in DSDT, 2 of 6</string>
-				<key>Count</key>
-				<integer>9</integer>
-				<key>Enabled</key>
-				<true/>
-				<key>Find</key>
-				<data>oABbElwvBV9TQl9QQ0kwAAAAAAAAAABQUwBYAFBTAFg=</data>
-				<key>Limit</key>
-				<integer>0</integer>
-				<key>Mask</key>
-				<data>/wD/////////////////AAAAAAAAAAD//wD/////AP8=</data>
-				<key>OemTableId</key>
-				<data>QSBNIEkAAAA=</data>
-				<key>Replace</key>
-				<data>AAAAAAAAAAAAAAAAAAAAWEhDX1JIVUJfUFMwAFBJTkk=</data>
-				<key>ReplaceMask</key>
-				<data>AAAAAAAAAAAAAAAAAAAA//////////////////////8=</data>
-				<key>Skip</key>
-				<integer>0</integer>
-				<key>TableLength</key>
-				<integer>67704</integer>
-				<key>TableSignature</key>
-				<data>RFNEVA==</data>
-			</dict>
-			<dict>
-				<key>Base</key>
-				<string></string>
-				<key>BaseSkip</key>
-				<integer>0</integer>
-				<key>Comment</key>
-				<string>Replace unknown methods in DSDT, 3 of 6</string>
-				<key>Count</key>
-				<integer>1</integer>
-				<key>Enabled</key>
-				<true/>
-				<key>Find</key>
-				<data>oABbElwvA19TQl9UUE1fUFRTXwBcLwNfU0JfVFBNX1BUU19o</data>
-				<key>Limit</key>
-				<integer>0</integer>
-				<key>Mask</key>
-				<data>/wD/////////////////////////////////////////////</data>
-				<key>OemTableId</key>
-				<data>QSBNIEkAAAA=</data>
-				<key>Replace</key>
-				<data>AAAAAAAABgAAAABQQ0kwWEhDX1JIVUJTU1AxX0FEUgBQSU5J</data>
-				<key>ReplaceMask</key>
-				<data>AAAAAAAA/wAAAAD/////////////////////////////////</data>
-				<key>Skip</key>
-				<integer>0</integer>
-				<key>TableLength</key>
-				<integer>67704</integer>
-				<key>TableSignature</key>
-				<data>RFNEVA==</data>
-			</dict>
-			<dict>
-				<key>Base</key>
-				<string></string>
-				<key>BaseSkip</key>
-				<integer>0</integer>
-				<key>Comment</key>
-				<string>Replace unknown methods in DSDT, 4 of 6</string>
-				<key>Count</key>
-				<integer>2</integer>
-				<key>Enabled</key>
-				<true/>
-				<key>Find</key>
-				<data>oABbElwvBV9TQl9QQ0kwSTJDMFNIVUJQUwBYAF5eLlNIVUJQUwBY</data>
-				<key>Limit</key>
-				<integer>0</integer>
-				<key>Mask</key>
-				<data>/wD//////////////////////////////wD//////////////wD/</data>
-				<key>OemTableId</key>
-				<data>QSBNIEkAAAA=</data>
-				<key>Replace</key>
-				<data>AAAAAAAAAwAAAAAAAAAAX0JCTgBcLwRfU0JfUENJMFhIQ18AADkA</data>
-				<key>ReplaceMask</key>
-				<data>AAAAAAAA/wAAAAAAAAAA//////////////////////////8AAP8A</data>
-				<key>Skip</key>
-				<integer>0</integer>
-				<key>TableLength</key>
-				<integer>67704</integer>
-				<key>TableSignature</key>
-				<data>RFNEVA==</data>
-			</dict>
-			<dict>
-				<key>Base</key>
-				<string></string>
-				<key>BaseSkip</key>
-				<integer>0</integer>
-				<key>Comment</key>
-				<string>Replace unknown methods in DSDT, 5 of 6</string>
-				<key>Count</key>
-				<integer>2</integer>
-				<key>Enabled</key>
-				<true/>
-				<key>Find</key>
-				<data>oABbElwvBF9TQl9QQ0kwAAAAAABVQU0AXC8EX1NCX1BDSTAAAAAAAFVBTQ==</data>
-				<key>Limit</key>
-				<integer>0</integer>
-				<key>Mask</key>
-				<data>/wD/////////////////AAAAAAD///////////////////8AAAAAAP///w==</data>
-				<key>OemTableId</key>
-				<data>QSBNIEkAAAA=</data>
-				<key>Replace</key>
-				<data>AAAAAAAAAAAAAAAAAAAAWEhDX19EU1cAAAAAAAAAAAAAAABYSENfUFM5WA==</data>
-				<key>ReplaceMask</key>
-				<data>AAAAAAAAAAAAAAAAAAAA//////////8AAAAAAAAAAAAAAAD//////////w==</data>
-				<key>Skip</key>
-				<integer>0</integer>
-				<key>TableLength</key>
-				<integer>67704</integer>
-				<key>TableSignature</key>
-				<data>RFNEVA==</data>
-			</dict>
-			<dict>
-				<key>Base</key>
-				<string></string>
-				<key>BaseSkip</key>
-				<integer>0</integer>
-				<key>Comment</key>
-				<string>Replace unknown methods in DSDT, 6 of 6</string>
-				<key>Count</key>
-				<integer>1</integer>
-				<key>Enabled</key>
-				<true/>
-				<key>Find</key>
-				<data>oABbElwvBV9TQl9QQ0kwUlAwNVBFR1BFUE9OAFwvBV9TQl9QQ0kwUlAwNVBFR1BFUE9O</data>
-				<key>Limit</key>
-				<integer>0</integer>
-				<key>Mask</key>
-				<data>/wD/////////////////////////////////////////////////////////////////</data>
-				<key>OemTableId</key>
-				<data>QSBNIEkAAAA=</data>
-				<key>Replace</key>
-				<data>AAAAAAAABgAAAAAAAAAAWEhDX1JIVUJTU1AxX0FEUgBcLwRfU0JfUENJMFhIQ19QUzlY</data>
-				<key>ReplaceMask</key>
-				<data>AAAAAAAA/wAAAAAAAAAA////////////////////////////////////////////////</data>
-				<key>Skip</key>
-				<integer>0</integer>
-				<key>TableLength</key>
-				<integer>67704</integer>
-				<key>TableSignature</key>
-				<data>RFNEVA==</data>
-			</dict>
-			<dict>
-				<key>Base</key>
-				<string></string>
-				<key>BaseSkip</key>
-				<integer>0</integer>
-				<key>Comment</key>
-				<string>Replace unknown methods in OEM SSDT size 23390, 1 of 4</string>
-				<key>Count</key>
-				<integer>1</integer>
-				<key>Enabled</key>
-				<true/>
-				<key>Find</key>
-				<data>oABbEkhET1MASERPUw==</data>
-				<key>Limit</key>
-				<integer>0</integer>
-				<key>Mask</key>
-				<data>/wD//////////////w==</data>
-				<key>OemTableId</key>
-				<data>U2FTc2R0IAA=</data>
-				<key>Replace</key>
-				<data>AAAAAFBJTkkAUElOSQ==</data>
-				<key>ReplaceMask</key>
-				<data>AAAAAP////8A/////w==</data>
-				<key>Skip</key>
-				<integer>0</integer>
-				<key>TableLength</key>
-				<integer>23390</integer>
-				<key>TableSignature</key>
-				<data>U1NEVA==</data>
-			</dict>
-			<dict>
-				<key>Base</key>
-				<string></string>
-				<key>BaseSkip</key>
-				<integer>0</integer>
-				<key>Comment</key>
-				<string>Replace unknown methods in OEM SSDT size 23390, 2 of 4</string>
-				<key>Count</key>
-				<integer>1</integer>
-				<key>Enabled</key>
-				<true/>
-				<key>Find</key>
-				<data>oABbEkhOT1QASE5PVGihAA==</data>
-				<key>Limit</key>
-				<integer>0</integer>
-				<key>Mask</key>
-				<data>/wD/////////////////AA==</data>
-				<key>OemTableId</key>
-				<data>U2FTc2R0IAA=</data>
-				<key>Replace</key>
-				<data>AA8AAFJETUEAUkRNQQBpag==</data>
-				<key>ReplaceMask</key>
-				<data>AP8AAP////8A/////wD//w==</data>
-				<key>Skip</key>
-				<integer>0</integer>
-				<key>TableLength</key>
-				<integer>23390</integer>
-				<key>TableSignature</key>
-				<data>U1NEVA==</data>
-			</dict>
-			<dict>
-				<key>Base</key>
-				<string></string>
-				<key>BaseSkip</key>
-				<integer>0</integer>
-				<key>Comment</key>
-				<string>Replace unknown methods in OEM SSDT size 23390, 3 of 4</string>
-				<key>Count</key>
-				<integer>1</integer>
-				<key>Enabled</key>
-				<true/>
-				<key>Find</key>
-				<data>oAAAWxJcLwVfU0JfUENJMFBFRzBQRUdQU0dQTwBcLwVfU0JfUENJMFBFRzBQRUdQU0dQT0hMUlMBXC8FX1NCX1BDSTBQRUcwUEVHUFNHUE9QV0VOAA==</data>
-				<key>Limit</key>
-				<integer>0</integer>
-				<key>Mask</key>
-				<data>/wAA/////////////////////////////////////////////////////////////////////////////////////////////////////////////w==</data>
-				<key>OemTableId</key>
-				<data>U2FTc2R0IAA=</data>
-				<key>Replace</key>
-				<data>AAAAkZJbElwvBl9TQl9QQ0kwWEhDX1JIVUJTU1AxX0FEUgCSWxJcLwZfU0JfUENJMFhIQ19SSFVCU1NQMl9BRFIAXC8EX1NCX1BDSTBYSENfUFM5WA==</data>
-				<key>ReplaceMask</key>
-				<data>AAAA/////////////////////////////////////////////////////////////////////////////////////////////////////////////w==</data>
-				<key>Skip</key>
-				<integer>0</integer>
-				<key>TableLength</key>
-				<integer>23390</integer>
-				<key>TableSignature</key>
-				<data>U1NEVA==</data>
-			</dict>
-			<dict>
-				<key>Base</key>
-				<string></string>
-				<key>BaseSkip</key>
-				<integer>0</integer>
-				<key>Comment</key>
-				<string>Replace unknown methods in OEM SSDT size 23390, 4 of 4</string>
-				<key>Count</key>
-				<integer>1</integer>
-				<key>Enabled</key>
-				<true/>
-				<key>Find</key>
-				<data>oAAAWxJcLwVfU0JfUENJMFBFRzBQRUdQU0dQTwBcLwVfU0JfUENJMFBFRzBQRUdQU0dQT0hMUlMBXC8FX1NCX1BDSTBQRUcwUEVHUFNHUE9QV0VOAVsiRExQV1wvBV9TQl9QQ0kwUEVHMFBFR1BTR1BPSExSUwBbIkRMSFI=</data>
-				<key>Limit</key>
-				<integer>0</integer>
-				<key>Mask</key>
-				<data>/wAA//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8=</data>
-				<key>OemTableId</key>
-				<data>U2FTc2R0IAA=</data>
-				<key>Replace</key>
-				<data>AAAAkZJbElwvBV9TQl9QQ0kwWEhDX1JIVUJfUFMwAJJbElwvBl9TQl9QQ0kwWEhDX1JIVUJTU1AxX0FEUgCgPlsSXC8GX1NCX1BDSTBYSENfUkhVQlNTUDJfQURSAFsiRExQV1wvBF9TQl9QQ0kwWEhDX1BTOVgAAAAAAAA=</data>
-				<key>ReplaceMask</key>
-				<data>AAAA//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8AAAAAAAA=</data>
-				<key>Skip</key>
-				<integer>0</integer>
-				<key>TableLength</key>
-				<integer>23390</integer>
-				<key>TableSignature</key>
-				<data>U1NEVA==</data>
-			</dict>
-			<dict>
-				<key>Base</key>
 				<string>\_SB_.PCI0.EHC1._PRW</string>
 				<key>BaseSkip</key>
 				<integer>0</integer>
@@ -775,7 +475,7 @@
 				<key>Skip</key>
 				<integer>0</integer>
 				<key>TableLength</key>
-				<integer>67704</integer>
+				<integer>0</integer>
 				<key>TableSignature</key>
 				<data>RFNEVA==</data>
 			</dict>
@@ -805,7 +505,7 @@
 				<key>Skip</key>
 				<integer>0</integer>
 				<key>TableLength</key>
-				<integer>67704</integer>
+				<integer>0</integer>
 				<key>TableSignature</key>
 				<data>RFNEVA==</data>
 			</dict>
@@ -835,7 +535,7 @@
 				<key>Skip</key>
 				<integer>0</integer>
 				<key>TableLength</key>
-				<integer>67704</integer>
+				<integer>0</integer>
 				<key>TableSignature</key>
 				<data>RFNEVA==</data>
 			</dict>
@@ -865,7 +565,7 @@
 				<key>Skip</key>
 				<integer>0</integer>
 				<key>TableLength</key>
-				<integer>67704</integer>
+				<integer>0</integer>
 				<key>TableSignature</key>
 				<data>RFNEVA==</data>
 			</dict>
@@ -951,12 +651,10 @@
 			</dict>
 			<key>PciRoot(0x0)/Pci(0x1c,0x5)/Pci(0x0,0x0)</key>
 			<dict>
+				<key>brcmfx-alldrv</key>
+				<data>AQAAAA==</data>
 				<key>brcmfx-country</key>
 				<string>#a</string>
-				<key>brcmfx-delay</key>
-				<integer>15000</integer>
-				<key>brcmfx-driver</key>
-				<integer>2</integer>
 			</dict>
 			<key>PciRoot(0x0)/Pci(0x1f,0x0)</key>
 			<dict>
@@ -1161,6 +859,24 @@
 				<true/>
 				<key>ExecutablePath</key>
 				<string>Contents/MacOS/AirportBrcmFixup</string>
+				<key>MaxKernel</key>
+				<string>25.9.9</string>
+				<key>MinKernel</key>
+				<string>12.0.0</string>
+				<key>PlistPath</key>
+				<string>Contents/Info.plist</string>
+			</dict>
+			<dict>
+				<key>Arch</key>
+				<string>x86_64</string>
+				<key>BundlePath</key>
+				<string>HibernationFixup.kext</string>
+				<key>Comment</key>
+				<string></string>
+				<key>Enabled</key>
+				<true/>
+				<key>ExecutablePath</key>
+				<string>Contents/MacOS/HibernationFixup</string>
 				<key>MaxKernel</key>
 				<string>25.9.9</string>
 				<key>MinKernel</key>
@@ -1439,7 +1155,7 @@
 			<key>ShowPicker</key>
 			<true/>
 			<key>TakeoffDelay</key>
-			<integer>2000000</integer>
+			<integer>0</integer>
 			<key>Timeout</key>
 			<integer>5</integer>
 		</dict>
@@ -1561,6 +1277,11 @@
 				<key>run-efi-updater</key>
 				<string>No</string>
 			</dict>
+			<key>E09B9297-7928-4440-9AAB-D1F8536FBF0A</key>
+			<dict>
+				<key>hbfx-patch-pci</key>
+				<string>XHC</string>
+			</dict>
 		</dict>
 		<key>Delete</key>
 		<dict>
@@ -1583,6 +1304,10 @@
 				<string>csr-active-config</string>
 				<string>prev-lang:kbd</string>
 				<string>run-efi-updater</string>
+			</array>
+			<key>E09B9297-7928-4440-9AAB-D1F8536FBF0A</key>
+			<array>
+				<string>hbfx-patch-pci</string>
 			</array>
 		</dict>
 		<key>LegacyOverwrite</key>
@@ -1902,7 +1627,7 @@
 			<key>IgnoreInvalidFlexRatio</key>
 			<true/>
 			<key>ReleaseUsbOwnership</key>
-			<true/>
+			<false/>
 			<key>ReloadOptionRoms</key>
 			<false/>
 			<key>RequestBootVarRouting</key>

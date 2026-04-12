@@ -1,0 +1,680 @@
+When we disassemble ACPI tables we get some unknown methods. There are 2 ACPI tables that have this issue:
+- DSDT
+- SSDT4 (length 23390)
+
+
+
+DSDT:
+    iASL Warning: There were 16 external control methods found during
+    disassembly, but only 7 were resolved (9 unresolved). [...]
+
+    External (_SB_.PCI0.I2C0.SHUB.PS0X, MethodObj)    // Warning: Unknown method, guessing 0 arguments
+    External (_SB_.PCI0.I2C0.SHUB.PS3X, MethodObj)    // Warning: Unknown method, guessing 0 arguments
+    External (_SB_.PCI0.PAUD.PUAM, MethodObj)    // Warning: Unknown method, guessing 0 arguments
+    External (_SB_.PCI0.RP05.PEGP.EPON, MethodObj)    // Warning: Unknown method, guessing 0 arguments
+    External (_SB_.PCI0.XHC_.DUAM, MethodObj)    // Warning: Unknown method, guessing 0 arguments
+    External (_SB_.TPM_.PTS_, MethodObj)    // Warning: Unknown method, guessing 1 arguments
+    External (PS0X, MethodObj)    // Warning: Unknown method, guessing 0 arguments
+    External (PS2X, MethodObj)    // Warning: Unknown method, guessing 0 arguments
+    External (PS3X, MethodObj)    // Warning: Unknown method, guessing 0 arguments
+
+SSDT4:
+    iASL Warning: There were 11 external control methods found during
+    disassembly, but only 8 were resolved (3 unresolved). [...]
+
+    External (_SB_.PCI0.PEG0.PEGP.SGPO, MethodObj)    // Warning: Unknown method, guessing 2 arguments
+    External (HDOS, MethodObj)    // Warning: Unknown method, guessing 0 arguments
+    External (HNOT, MethodObj)    // Warning: Unknown method, guessing 1 arguments
+
+
+
+Let's disassemble those ACPI tables using a combination of ASL and AML code:
+> iasl -p dsdt_HEX -e ssdt.dat ssdt1.dat ssdt2.dat ssdt3.dat ssdt4.dat -l -d dsdt.dat
+> iasl -p ssdt4_HEX -e dsdt.dat ssdt.dat ssdt1.dat ssdt2.dat ssdt3.dat -l -d ssdt4.dat
+
+
+
+Let's start to analyze DSDT
+
+Let's start with the 1st unknown method:
+    External (_SB_.PCI0.I2C0.SHUB.PS0X, MethodObj)    // Warning: Unknown method, guessing 0 arguments
+
+We have to find instances of this Method call within the DSDT itself.
+The compiler guess there are 0 arguments, so we have to call the Method with empty round brackets "()"
+Also, we have a full path with multiple dots, meaning we don't have to search just for "PS0X" but add at least the parent device.
+
+So our Find sequence would be: "SHUB.PS0X ()"
+
+Back to Notepad++
+Inside "dsdt.dsl" file
+Search > Find...
+Find what: "SHUB.PS0X ()"
+Match case: check
+Search Mode: Normal
+Find All in Current Document
+
+There will be 1 result!
+Double click on it
+
+                    ^^SHUB.PS0X ()
+
+This Method call is inside an If code block
+
+                If (CondRefOf (\_SB.PCI0.I2C0.SHUB.PS0X))
+                {
+                    ^^SHUB.PS0X ()
+                }
+
+This basically tells the compiler if there is Method PS0X inside \_SB.PCI0.I2C0.SHUB, then run it. But this method does not exist anywhere!!!
+So we can simply remove this entire code block!
+
+Let's jump into "dsdt_HEX.dsl" file and search for "^^SHUB.PS0X ()"
+Inside "dsdt_HEX.dsl" file
+Search > Find...
+Find what: "^^SHUB.PS0X ()"
+Match case: check
+Search Mode: Normal
+Find All in Current Document
+
+Double click on the result
+
+We need to find the PkgLength of this "If ([...])" code block"
+
+    9073: A0 26 5B 12 5C 2F 05 5F 53 42 5F 50 43 49 30 49  // .&[.\/._SB_PCI0I
+
+As per ACPI spec:
+DefIfElse := IfOp PkgLength Predicate TermList DefElse
+A0 // If ---> IfOp
+26 // \x26 ---> PkgLength ---> 0x26/38 is <=63 bytes, so no other byte(s) following expected
+
+So we know that this entire If code block is 1 + 38 = 39 bytes length!
+
+Let's write this info down and jump to the next unknown method
+
+
+
+
+
+                If (CondRefOf (\_SB.PCI0.I2C0.SHUB.PS0X))
+                {
+                    ^^SHUB.PS0X ()
+                } // 39 bytes
+
+
+
+
+
+    External (_SB_.PCI0.I2C0.SHUB.PS3X, MethodObj)    // Warning: Unknown method, guessing 0 arguments
+
+Back to Notepad++
+Inside "dsdt.dsl" file
+Search > Find...
+Find what: "SHUB.PS3X ()"
+Match case: check
+Search Mode: Normal
+Find All in Current Document
+
+Double click on the result
+
+                    ^^SHUB.PS3X ()
+
+This Method call is inside an If code block
+
+                If (CondRefOf (\_SB.PCI0.I2C0.SHUB.PS3X))
+                {
+                    ^^SHUB.PS3X ()
+                }
+
+Let's jump into "dsdt_HEX.dsl" file and search for "^^SHUB.PS3X ()"
+Inside "dsdt_HEX.dsl" file
+Search > Find...
+Find what: "^^SHUB.PS3X ()"
+Match case: check
+Search Mode: Normal
+Find All in Current Document
+
+Double click on the result
+
+We need to find the PkgLength of this "If ([...])" code block"
+
+    90A8: A0 26 5B 12 5C 2F 05 5F 53 42 5F 50 43 49 30 49  // .&[.\/._SB_PCI0I
+
+As per ACPI spec:
+DefIfElse := IfOp PkgLength Predicate TermList DefElse
+A0 // If ---> IfOp
+26 // \x26 ---> PkgLength ---> 0x26/38 is <=63 bytes, so no other byte(s) following expected
+
+So we know that this entire If code block is 1 + 38 = 39 bytes length!
+
+Let's write this info down and jump to the next unknown method
+
+
+
+
+
+                If (CondRefOf (\_SB.PCI0.I2C0.SHUB.PS3X))
+                {
+                    ^^SHUB.PS3X ()
+                } // 39 bytes
+
+
+
+
+
+    External (_SB_.PCI0.PAUD.PUAM, MethodObj)    // Warning: Unknown method, guessing 0 arguments
+
+Back to Notepad++
+Inside "dsdt.dsl" file
+Search > Find...
+Find what: "PAUD.PUAM ()"
+Match case: check
+Search Mode: Normal
+Find All in Current Document
+
+Double click on the result
+
+            \_SB.PCI0.PAUD.PUAM ()
+
+This Method call is inside an If code block
+
+        If (CondRefOf (\_SB.PCI0.PAUD.PUAM))
+        {
+            \_SB.PCI0.PAUD.PUAM ()
+        }
+
+Let's jump into "dsdt_HEX.dsl" file and search for "PAUD.PUAM ()"
+Inside "dsdt_HEX.dsl" file
+Search > Find...
+Find what: "PAUD.PUAM ()"
+Match case: check
+Search Mode: Normal
+Find All in Current Document
+
+Double click on the result
+
+We need to find the PkgLength of this "If ([...])" code block"
+
+    CB9B: A0 2A 5B 12 5C 2F 04 5F 53 42 5F 50 43 49 30 50  // .*[.\/._SB_PCI0P
+
+As per ACPI spec:
+DefIfElse := IfOp PkgLength Predicate TermList DefElse
+A0 // If ---> IfOp
+2A // \x2A ---> PkgLength ---> 0x2A/42 is <=63 bytes, so no other byte(s) following expected
+
+So we know that this entire If code block is 1 + 42 = 43 bytes length!
+
+Let's write this info down and jump to the next unknown method
+
+
+
+
+
+        If (CondRefOf (\_SB.PCI0.PAUD.PUAM))
+        {
+            \_SB.PCI0.PAUD.PUAM ()
+        } // 43 bytes
+
+
+
+
+
+Let's continue this pattern until the end!
+We will have the following results:
+
+
+
+
+
+            If (CondRefOf (\_SB.PCI0.RP05.PEGP.EPON))
+            {
+                \_SB.PCI0.RP05.PEGP.EPON ()
+            } // 51 bytes
+
+
+
+
+
+            If (CondRefOf (\_SB.PCI0.XHC.DUAM))
+            {
+                \_SB.PCI0.XHC.DUAM ()
+            } // 43 bytes
+
+
+
+
+
+        If (CondRefOf (\_SB.TPM.PTS))
+        {
+            \_SB.TPM.PTS (Arg0)
+        } // 36 bytes
+
+
+
+
+
+9 search results for " PS0X ()"!
+
+                If (CondRefOf (\_SB.PCI0.XHC.PS0X))
+                {
+                    PS0X ()
+                } // 28 bytes
+
+                    If (CondRefOf (\_SB.PCI0.XHC.RHUB.PS0X))
+                    {
+                        PS0X ()
+                    } // 32 bytes
+
+                If (CondRefOf (\_SB.PCI0.I2C0.PS0X))
+                {
+                    PS0X ()
+                } // 28 bytes
+
+                If (CondRefOf (\_SB.PCI0.I2C1.PS0X))
+                {
+                    PS0X ()
+                } // 28 bytes
+
+                If (CondRefOf (\_SB.PCI0.SDHC.PS0X))
+                {
+                    PS0X ()
+                } // 28 bytes
+
+                If (CondRefOf (\_SB.PCI0.I2C0.SHUB.PS0X))
+                {
+                    PS0X ()
+                } // 32 bytes
+
+                If (CondRefOf (\_SB.PCI0.I2C1.TPD7.PS0X))
+                {
+                    PS0X ()
+                } // 32 bytes
+
+                If (CondRefOf (\_SB.PCI0.I2C1.TPD8.PS0X))
+                {
+                    PS0X ()
+                } // 32 bytes
+
+                If (CondRefOf (\_SB.PCI0.SDHC.WI01.PS0X))
+                {
+                    PS0X ()
+                } // 32 bytes
+
+
+
+
+
+                    If (CondRefOf (\_SB.PCI0.XHC.RHUB.PS2X))
+                    {
+                        PS2X ()
+                    } // 32 bytes
+
+
+
+
+
+5 search results for " PS3X ()"!
+
+                If (CondRefOf (\_SB.PCI0.XHC.PS3X))
+                {
+                    PS3X ()
+                } // 28 bytes
+
+                    If (CondRefOf (\_SB.PCI0.XHC.RHUB.PS3X))
+                    {
+                        PS3X ()
+                    } // 32 bytes
+
+                If (CondRefOf (\_SB.PCI0.I2C0.PS3X))
+                {
+                    PS3X ()
+                } // 28 bytes
+
+                If (CondRefOf (\_SB.PCI0.I2C0.SHUB.PS3X))
+                {
+                    PS3X ()
+                } // 32 bytes
+
+                If (CondRefOf (\_SB.PCI0.SDHC.WI01.PS3X))
+                {
+                    PS3X ()
+                } // 32 bytes
+
+
+
+
+
+As we can see we have multiple instances for the same PkgLength:
+28 bytes: x6
+32 bytes: x9
+36 bytes: x1
+39 bytes: x2
+43 bytes: x2
+51 bytes: x1
+
+We need to remove x21 code blocks from the DSDT.
+Moreover, we MUST update the "PkgLength" value to reflect the removed code not only for the current Method/Scope/Device, but also for ALL parent Method(s)/Scope(s)/Device(s)!
+
+To achieve this long task in a quicker way, let's do this:
+Back to Notepad++
+Inside "dsdt.dsl"
+Ctrl+Home
+Edit > Column Editor...
+Number to Insert
+Dec
+Initial number: 1
+Increase by: 1
+Repeat: 1
+Leading: Zeros
+OK
+
+
+
+
+Let's start searching for the first unknown Method
+
+Search > Find...
+Find what: "If (CondRefOf (\_SB.PCI0.I2C0.SHUB.PS0X))"
+Match case: check
+Search Mode: Normal
+
+Find All in Current Document
+
+Double click on the 2nd result
+
+10756                If (CondRefOf (\_SB.PCI0.I2C0.SHUB.PS0X))
+10757                {
+10758                    ^^SHUB.PS0X ()
+10759                }
+
+Let's copy this result and paste it in a new text file
+File > New
+Edit > Paste
+
+Let's follow this search rule, copy and paste the resulting lines to remove in the new text file
+Inside the new text file:
+Edit > Line Operations > Sort Lines Lexicographically Ascending
+Search > Replace...
+
+Find what: "\}"
+Replace with: "\}\r\n"
+Search Mode: Regular expression
+
+Replace All
+
+Search > Find...
+Find what: "^[0-9]+[ ]+\{"
+Search Mode: Regular expression
+
+Find All in Current Document
+
+Right click on the search results window > Find in this search results...
+Find what: "[ ]+"
+Search only in found lines: check
+Search Mode: Regular expression
+
+Find All
+
+Let's keep in mind the Line number of the 1st result: 08745
+Double click on the 1st result.
+Let's check at the bottom right the 1st value of the "Sel" section: 16
+
+The parent section will have 12 (16 - 4) whitespace characters from the beginning of the line!
+
+We need to find the parent Method/Scope/Device because we MUST change the PkgLength
+
+Back to "dsdt.dsl"
+
+Search > Find...
+Find what: "^.*$\r\n[0-9]+[ ]{12}\{\r\n"
+Search Mode: Regular expression
+
+Find All in Current Document
+
+We have to search for the result immediately before 08745!
+
+08592            Method (_PS0, 0, Serialized)  // _PS0: Power State 0
+08593            {
+
+Double click on this result
+
+Edit > Copy
+
+Jump back to the new text file tab
+
+Paste the file above the searched result
+
+
+
+
+
+Search > Find...
+Find what: "^[0-9]+[ ]+\{"
+Search Mode: Regular expression
+
+Find All in Current Document
+
+Right click on the search results window > Find in this search results...
+Find what: "[ ]+"
+Search Mode: Regular expression
+
+Find All
+
+Let's keep in mind the Line number of the 1st result: 08593
+Double click on the 1st result.
+Let's check at the bottom right the 1st value of the "Sel" section: 12
+
+The parent section will have 8 (12 - 4) whitespace characters from the beginning of the line!
+
+Back to "dsdt.dsl"
+
+Search > Find...
+Find what: "^.*$\r\n[0-9]+[ ]{8}\{\r\n"
+Search Mode: Regular expression
+
+Find All in Current Document
+
+We have to search for the result immediately before 08593!
+
+08338        Device (XHC)
+08339        {
+
+Double click on this result
+
+Edit > Copy
+
+Jump back to the new text file tab
+
+Paste the file above the searched result
+
+
+
+
+
+Search > Find...
+Find what: "^[0-9]+[ ]+\{"
+Search Mode: Regular expression
+
+Find All in Current Document
+
+Right click on the search results window > Find in this search results...
+Find what: "[ ]+"
+Search Mode: Regular expression
+
+Find All
+
+Let's keep in mind the Line number of the 1st result: 08339
+Double click on the 1st result.
+Let's check at the bottom right the 1st value of the "Sel" section: 8
+
+The parent section will have 4 (8 - 4) whitespace characters from the beginning of the line!
+
+Back to "dsdt.dsl"
+
+Search > Find...
+Find what: "^.*$\r\n[0-9]+[ ]{4}\{\r\n"
+Search Mode: Regular expression
+
+Find All in Current Document
+
+We have to search for the result immediately before 08339!
+
+08336    Scope (_SB.PCI0)
+08337    {
+
+Double click on this result
+
+Edit > Copy
+
+Jump back to the new text file tab
+
+Paste the file above the searched result
+
+
+
+
+
+
+This is the the final result for the 1st of out of 21 block codes to modify:
+
+08336    Scope (_SB.PCI0)
+08337    {
+08338        Device (XHC)
+08339        {
+08592            Method (_PS0, 0, Serialized)  // _PS0: Power State 0
+08593            {
+08744                If (CondRefOf (\_SB.PCI0.XHC.PS0X))
+08745                {
+08746                    PS0X ()
+08747                }
+
+
+
+
+
+
+###########################################################################################################
+
+Follow the above pattern for the rest of the code block to remove!
+
+Save this new text file
+File > Save > "Pattern_DSDT.txt" > Save
+
+
+
+Let's add the length in bytes of the code to remove as a comment
+
+We have a total of 39 PkgLength Find/Replace sequences to create!
+
+How to create them?
+
+Let's search for the top most piece of code
+
+08336    Scope (_SB.PCI0)
+
+Back to "dsdt.dsl"
+Search > Incremental Search > "08336    Scope (_SB.PCI0)"
+
+As we can see "Scope (_SB.PCI0)" is just behind "Device (XHC)" so we can join 2 Find/Replace sequences into one!
+
+Search > Find...
+Find what: "Scope (_SB.PCI0)"
+Match case: check
+Search Mode: Normal
+
+Find All in Current Document
+
+There will be multiple results, our specific "Scope (_SB.PCI0)" is the 2nd result from the beginning of the file
+
+Back to "dsdt_HEX.dsl" file
+
+Search > Find...
+Find what: "Scope (_SB.PCI0)"
+Match case: check
+Search Mode: Normal
+
+Find All in Current Document
+
+Double click on the 2nd result
+
+We have to create our HEX Find/Replace sequence including "Scope (_SB.PCI0)" and "Device (XHC)"
+
+    Scope (_SB.PCI0)
+    {
+
+    6969: 10 4F B8 2E 5F 53 42 5F 50 43 49 30              // .O.._SB_PCI0
+
+        Device (XHC)
+        {
+
+    6975: 5B 82 42 B8 58 48 43 5F                          // [.B.XHC_
+
+
+Create a new file, Shift click on Notepad++ to create a New file in a new Notepad++ instance
+
+Find: "10 4F B8 2E 5F 53 42 5F 50 43 49 30 5B 82 42 B8 58 48 43 5F"
+
+As per ACPI spec:
+
+DefScope := ScopeOp PkgLength NameString TermList
+
+10 ---> ScopeOp
+
+PkgLength can be of different length based on the most significant nybble of the 1st byte:
+- "0-3" ---> no other following byte
+- "4?" ---> 1 following byte
+- "8?" ---> 2 following bytes
+- "C?" ---> 3 following bytes
+
+4F B8 ---> PkgLength
+
+To encode the PkgLength value (if there're following bytes) we have to read the following bytes from right to left adding the least significant nybble of the 1st byte
+In this case: B8 F ---> 0xB8F = 2959 bytes
+
+Based on the findings inside Pattern_DSDT.txt we need to remove 152 bytes from the PkgLength
+2959 - 152 = 2807
+
+2807 = 0xAF7
+
+We take the least significant nybble (7) and put in next to the initial most significant nybble of the 1st byte: 47
+Then following byte is AF
+So, we encode the new PkgLength as: "47 AF"
+
+Same with "Device (XHC)"
+
+DefDevice := DeviceOp PkgLength NameString TermList
+
+5B 82 ---> DeviceOp
+42 B8 ---> PkgLength
+
+We need to remove 152 bytes from this PkgLength
+0xB82 = 2946 bytes
+
+2946 - 152 = 2794
+
+2794 = 0xAEA
+
+4A AE
+
+
+
+
+
+
+
+
+Final Find/Replace sequence of this 1st out of 39 PkgLength value changes is:
+   Find: "10 4F B8 2E 5F 53 42 5F 50 43 49 30 5B 82 42 B8 58 48 43 5F"
+Replace: "10 47 AF 2E 5F 53 42 5F 50 43 49 30 5B 82 4A AE 58 48 43 5F"
+
+
+
+We can put the same Find/Replace bytes into subexpressions for Hextor!
+
+   Find: "(10) 4F B8 (2E 5F 53 42 5F 50 43 49 30 5B 82) 42 B8 (58 48 43 5F)"
+Replace: "$1 47 AF $2 4A AE $3"
+
+
+
+Put this final result into the new text file (save this as "AmiBoardInfo_DSDT_Hextor.txt")!
+
+Let's follow the same rule for SSDT4!

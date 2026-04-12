@@ -1,0 +1,62 @@
+Shrink PkgLength values in advance before removing unknown method calls!
+
+
+
+   Find: "(10) 81 5B 02 (5C 2F 03 5F 53 42 5F 50 43 49 30 47 46 58 30) (14) 26 (5F 44 4F 53 01)" ##### 01,02 ---> "Scope (\_SB.PCI0.GFX0)" and "Method (_DOS, 1, NotSerialized)  // _DOS: Disable Output Switching"
+Replace: "$1 8B 58 02 $2 $3 10 $4"
+
+   Find: "(14) 4D 05 (47 4E 4F 54 02)" ############################################################### 03 ---> "Method (GNOT, 2, NotSerialized)"
+Replace: "$1 4D 04 $2"
+
+   Find: "(10) 8E 3E 02 (5C 2E 5F 53 42 5F 50 43 49 30)" ############################################# 04 ---> "Scope (\_SB.PCI0)"
+Replace: "$1 87 2E 02 $2"
+
+   Find: "(14) 4E 10 (50 47 4F 4E 09)" ############################################################### 05 ---> "Method (PGON, 1, Serialized)"
+Replace: "$1 45 10 $2"
+
+   Find: "(14) 4B 0D (50 47 4F 46 09)" ############################################################### 06 ---> "Method (PGOF, 1, Serialized)"
+Replace: "$1 42 0D $2"
+
+
+
+Remove unknown method calls!
+
+
+
+   Find: "A0 15 93 7B 68 0A 03 00 00 A0 0C 5B 12 48 44 4F 53 00 48 44 4F 53" ##### 01 ---> "If (((Arg0 & 0x03) == Zero)) { If (CondRefOf (HDOS)) { HDOS () } }"
+Replace: ""
+
+-22 bytes
+
+   Find: "A0 0D 5B 12 48 4E 4F 54 00 48 4E 4F 54 68 A1 13" ####################### 02 ---> "If (CondRefOf (HNOT)) { HNOT (Arg0) } Else"
+Replace: ""
+
+-16 bytes
+
+   Find: "47 50 50 52 50 45 47 49 {u8:0x00,0x01}" ################################ 03,04 ---> "GPPR (PEGI, Zero)" and "GPPR (PEGI, One)"
+Replace: ""
+
+-18 bytes
+
+   Find: "14 44 0F 47 50 50 52 02 {u8::237}" ##################################### 05 ---> "Method (GPPR, 2, NotSerialized)"
+Replace: ""
+
+-245 bytes
+
+
+
+
+
+
+
+
+
+
+   Find: "({ansi:'S'} {ansi:'S'} {ansi:'D'} {ansi:'T'}) {u32 a:0x00005B5E} ({u8::2} {u8:!0x01..0x1F,0x7F..0xFF:14}) {u32 b:0x00003000}"
+Replace: "$1 ${a-301} $2 ${b+1}"
+
+Find: "{ansi:'S'} {ansi:'S'} {ansi:'D'} {ansi:'T'} {u32:} {u8:}" > HEX > Extended syntax: check => << Find prev => Find next >> => Esc
+Type "58"
+
+File > Save as... > "SSDT-5A31_mod.aml" > Save
+File > Exit
