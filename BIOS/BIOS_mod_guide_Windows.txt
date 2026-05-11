@@ -18,8 +18,12 @@ Complete list of modifications:
 9) Replace bugged AMI "FileSystem" driver with "Fat" (EnhancedFatDxe from FatPkg audk [fork of tianocore EDK II project focused on security])
    Add my specific version which removes FAT32 FsVersion check during driver initialization
 10) Update "CORE_DXE" module to include "OpenCore" and "Gentoo" for automatic detection of specific bootloader paths. Plus, make all UEFI bootloader paths uppercase
-11) Update AMI SmallLogo to newer logo version
-12) Change default GIGABYTE Logo to newer AMI logo
+11) Update default AMI SmallLogo to newer logo version
+12) Update default GIGABYTE Logo to newer AMI logo version
+13) Update MyOemLogo1 (bottom text when "Full Screen LOGO Show" is set to "Enabled") to use default Microsoft Windows 10 Segoe UI Variable Static Text font!
+   Plus, add F2 to enter BIOS setup menu
+14) Update GIGABYTE CoolGUIDxe PE32 image section to prevent calling a specific function
+15) Add custom CrScreenshotDxe driver in order to take screenshots in PNG format from UEFI shell, UEFI apps and UEFI bootloaders
 
 Prerequisites:
 - Clean install of Windows 10 version 1703 or higher
@@ -39,7 +43,7 @@ We'll need this files/softwares:
 8) Original latest beta BIOS from OEM website (F10b, Fix memory compatibility) (https://www.gigabyte.com/Motherboard/GA-Z97X-SLI-rev-10/support)
 9) Intel ME v9.1 1.5MB, latest release (https://mega.nz/folder/2Q0klQpA#6o04nlV_4xqfx76tjvgi4g/file/2FdiiAIS)
 10) UEFITool NE, latest release for Windows [x64] (https://github.com/LongSoft/UEFITool/releases/latest)
-11) My OpenCorePkg fork (Windows VS2019) (which include GenSec.exe and LzmaCompress.exe) (https://github.com/leon9078/OpenCorePkg/releases/latest)
+11) My OpenCorePkg fork (Windows VS2019) (which include GenSec.exe, LzmaCompress.exe and TianoCompress.exe) (https://github.com/leon9078/OpenCorePkg/releases/latest)
 12) Intel VBIOS and BSF, latest release (https://mega.nz/folder/lLg2GLrA#SnZZd0WjHkULFHg7FESm8g/file/VeYEWICB)
 13) MMTool 5.02.0024 Mod (https://www.mediafire.com/file/t5w592roapx6wzl/MMTool_Aptio_5.02.0024_Mod.7z/file)
 14) CloneVBT (https://mega.nz/folder/lLg2GLrA#SnZZd0WjHkULFHg7FESm8g/file/4SBG1ChI)
@@ -57,12 +61,12 @@ If not already done, click on "Start" icon > select "Windows System" folder. Rig
 
 Open Command Prompt from the taskbar
 > cd Documents
-> curl -LO https://github.com/mullvad/mullvad-browser/releases/download/15.0.9/mullvad-browser-windows-x86_64-15.0.9.exe
+> curl -LO https://github.com/mullvad/mullvad-browser/releases/download/15.0.12/mullvad-browser-windows-x86_64-15.0.12.exe
 
 Click on "Start" icon > select "Documents" icon
 If not done already, right click on the "Name" column > select "Date created", then click twice on "Date created"
 
-Open "mullvad-browser-windows-x86_64-15.0.9.exe"
+Open "mullvad-browser-windows-x86_64-15.0.12.exe"
 "Installation type" > select "Advanced"
 Next >
 "Add desktop icon": uncheck
@@ -85,26 +89,26 @@ Search for "browser.download.enable_spam_prevention" and set it to "false"
 
 
 Back to CMD
-> del mullvad-browser-windows-x86_64-15.0.9.exe
-> curl -LO https://www.7-zip.org/a/7z2600-x64.exe
+> del mullvad-browser-windows-x86_64-15.0.12.exe
+> curl -LO https://www.7-zip.org/a/7z2601-x64.exe
 
 Back to File Explorer
-Right click on "7z2600-x64.exe" > "Run as administrator" > Yes
+Right click on "7z2601-x64.exe" > "Run as administrator" > Yes
 Install
 Close
 
 
 
 Back to CMD
-> del 7z2600-x64.exe
-> curl -LO https://www.python.org/ftp/python/3.14.4/python-3.14.4-amd64.exe
+> del 7z2601-x64.exe
+> curl -LO https://www.python.org/ftp/python/3.14.5/python-3.14.5-amd64.exe
 > powershell -Command "Start-Process cmd -ArgumentList """/K cd %WINDIR%\System32""" -Verb RunAs"
     "Yes"
 > reg add HKLM\SYSTEM\CurrentControlSet\Control\FileSystem /v LongPathsEnabled /t REG_DWORD /d 1 /f
 > exit
 
 Back to File Explorer
-Right click on "python-3.14.4-amd64.exe" > "Run as administrator" > Yes
+Right click on "python-3.14.5-amd64.exe" > "Run as administrator" > Yes
 "Use admin privileges when installing py.exe": check
 "Add python.exe to PATH": check
 Click on "Customize installation"
@@ -116,11 +120,11 @@ Close
 
 
 Back to CMD
-> del python-3.14.4-amd64.exe
-> curl -LO https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.9.3/npp.8.9.3.Installer.x64.exe
+> del python-3.14.5-amd64.exe
+> curl -LO https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.9.4/npp.8.9.4.Installer.x64.exe
 
 Back to File Explorer
-Right click on "npp.8.9.3.Installer.x64.exe" > "Run as administrator" > Yes
+Right click on "npp.8.9.4.Installer.x64.exe" > "Run as administrator" > Yes
 If not already selected, set the language to "English"
 OK
 Next >
@@ -128,7 +132,7 @@ I Agree
 Next >
 Next >
 Install
-"Run Notepad++ v8.9.3": uncheck
+"Run Notepad++ v8.9.4": uncheck
 Finish
 
 
@@ -229,7 +233,7 @@ File > Exit
 
 
 Back to CMD
-> del npp.8.9.3.Installer.x64.exe
+> del npp.8.9.4.Installer.x64.exe
 > curl -LO https://github.com/digitalw0lf/hextor/releases/download/v0.15/HextorSetup.exe
 
 Back to File Explorer
@@ -462,8 +466,8 @@ Close File Explorer's "WIN32" window
 Back to CMD
 > move "Intel ME System Tools v9.1 r7\Flash Image Tool\WIN32\Build\outimage.bin" .
 > rmdir /s /q "Intel ME System Tools v9.1 r7"
-> curl -LO https://github.com/LongSoft/UEFITool/releases/download/A73/UEFITool_NE_A73_win64.zip
-> tar -xf UEFITool_NE_A73_win64.zip
+> curl -LO https://github.com/LongSoft/UEFITool/releases/download/A74/UEFITool_NE_A74_win64.zip
+> tar -xf UEFITool_NE_A74_win64.zip
 
 
 
@@ -504,7 +508,7 @@ So now we want to update this module with our updated data (which, in my case, i
 
 Back to UEFITool
 Click above on "Compressed section" and check on the right "Compression algorithm", it says "None". We can extract the module "As is".
-There are usually different types of compression algorithms for section files (https://github.com/LongSoft/UEFITool/blob/A73/common/basetypes.h#L131-L142)
+There are usually different types of compression algorithms for section files (https://github.com/LongSoft/UEFITool/blob/A74/common/basetypes.h#L130-L141)
 If we have a module with a "Compression algorithm" different than "None", we need to uncompress with a specific tool.
 
 Click on "821D110C-D0A3-4CF7-AEF3-E28088491704" and take note of the following info:
@@ -516,8 +520,8 @@ Click on "821D110C-D0A3-4CF7-AEF3-E28088491704" and take note of the following i
 
 We have to find the section type and ffs type, so we can use that info later.
 
-File Types: https://github.com/LongSoft/UEFITool/blob/A73/common/ffs.cpp#L284-L299
-Section Types: https://github.com/LongSoft/UEFITool/blob/A73/common/ffs.cpp#L307-L323
+File Types: https://github.com/LongSoft/UEFITool/blob/A74/common/ffs.cpp#L344-L359
+Section Types: https://github.com/LongSoft/UEFITool/blob/A74/common/ffs.cpp#L367-L383
 
 In UEFITool check the "Subtype" value of the "File" type, it says "Freeform"
 Double check on the link above the result: EFI_FV_FILETYPE_FREEFORM
@@ -527,7 +531,7 @@ And so on, till the end of the module.
 
 
 
-In (https://github.com/LongSoft/UEFITool/blob/A73/common/ffs.h#L328-L335)
+In (https://github.com/LongSoft/UEFITool/blob/A74/common/ffs.h#L330-L337)
 "FFS_ATTRIB_CHECKSUM" is bit 6h (0x40)
 
 In (https://uefi.org/specs/PI/1.9/V3_Code_Definitions.html#efi-ffs-file-header)
@@ -545,11 +549,11 @@ File > Save selection as... > "Updated_512_KiB.bin" > Save
 File > Exit
 
 Back to CMD
-> curl -LO https://github.com/leon9078/OpenCorePkg/releases/download/1.0.7/OpenCore-1.0.7-Windows-VS2019-RELEASE.zip
-> 7z e OpenCore-1.0.7-Windows-VS2019-RELEASE.zip Utilities/BaseTools/GenSec.exe
+> curl -LO https://github.com/leon9078/OpenCorePkg/releases/download/1.0.8/OpenCore-1.0.8-Windows-VS2019-RELEASE.zip
+> 7z e OpenCore-1.0.8-Windows-VS2019-RELEASE.zip Utilities/BaseTools/GenSec.exe
 > GenSec -o Updated_512_KiB.raw -s EFI_SECTION_RAW Updated_512_KiB.bin
 > GenSec -o Updated_512_KiB.com -s EFI_SECTION_COMPRESSION -c PI_NONE Updated_512_KiB.raw
-> 7z e OpenCore-1.0.7-Windows-VS2019-RELEASE.zip Utilities/BaseTools/GenFfs.exe
+> 7z e OpenCore-1.0.8-Windows-VS2019-RELEASE.zip Utilities/BaseTools/GenFfs.exe
 > GenFfs -o Updated_512_KiB.ffs -t EFI_FV_FILETYPE_FREEFORM -g "821D110C-D0A3-4CF7-AEF3-E28088491704" -i Updated_512_KiB.com
 > del Updated_512_KiB.com Updated_512_KiB.raw Updated_512_KiB.bin
 
@@ -702,7 +706,7 @@ File > Save selection as... > "Setup.lzma" > Save
 File > Exit
 
 Back to CMD
-> 7z e OpenCore-1.0.7-Windows-VS2019-RELEASE.zip Utilities/BaseTools/LzmaCompress.exe
+> 7z e OpenCore-1.0.8-Windows-VS2019-RELEASE.zip Utilities/BaseTools/LzmaCompress.exe
 > LzmaCompress -d -o Setup_Uncompressed.bin Setup.lzma
 > del Setup.lzma
 
@@ -758,7 +762,7 @@ We already found the Setup module above. I will explain how to make the edit, th
 Copy the HEX sequence between curly braces in "OneOf Prompt" line
 
 Back to Hextor
-Search > Find/Replace > Ctrl-V => Find next >> => << Find prev => Find next >> => Esc
+Search > Find/Replace... > Ctrl-V => Find next >> => << Find prev => Find next >> => Esc
 Search > Go To address... > +0x4 > OK
 Type "00"
 Search > Go To address... > +0xD > OK
@@ -799,7 +803,7 @@ We can see it has interesting elements:
 As we did before, copy the HEX sequence between curly braces in "Numeric Prompt" line
 
 Back to Hextor
-Search > Find/Replace > Ctrl+V => Find next >> => Find next >> => Esc
+Search > Find/Replace... > Ctrl+V => Find next >> => Find next >> => Esc
 Search > Go To address... > +0x5 > OK
 Type "05"
 File > Save as... > "Setup_Uncompressed_ACPI_Debug_Timeout_5.bin" > Save
@@ -823,7 +827,7 @@ Click on "DXE dependency section", right click "Hex view...", select the first 1
 
 Back to File Explorer
 Drag again "Setup.ffs" into Hextor icon while holding Shift
-Search > Find/Replace > Ctrl-V > HEX => Find next >> => << Find prev => Esc
+Search > Find/Replace... > Ctrl-V > HEX => Find next >> => << Find prev => Esc
 
 Back to UEFITool
 Check on the right: "Full size: 16h (22)"
@@ -1639,7 +1643,7 @@ DISKPART> exit
 
 
 
-On the other hand macOS, by default, will NOT mount any GPT partition with the EFI Partition type GUID (C12A7328-F81F-11D2-BA4B-00A0C93EC93B)
+On the other hand macOS, by default, will NOT mount any GPT partition with the EFI Partition type GUID (C12A7428-F81F-11D2-BA4B-00A0C93EC93B)
 But if the user try to mount the ESP from macOS environment, the OS will automatically add at least one of those trashy files/folders:
 
 - ._*
@@ -1713,8 +1717,8 @@ message will popup. That's fine, it will not fix anything and that volume will n
 
 
 Back to CMD
-> curl -LO https://github.com/leon9078/OpenCorePkg/releases/download/1.0.7/OpenCore-1.0.7-Darwin-XCODE5-RELEASE.zip
-> 7z e OpenCore-1.0.7-Darwin-XCODE5-RELEASE.zip X64/EFI/OC/Drivers/Fat_NO_FsVersion_check.efi
+> curl -LO https://github.com/leon9078/OpenCorePkg/releases/download/1.0.8/OpenCore-1.0.8-Darwin-XCODE5-RELEASE.zip
+> 7z e OpenCore-1.0.8-Darwin-XCODE5-RELEASE.zip X64/EFI/OC/Drivers/Fat_NO_FsVersion_check.efi
 > GenSec -o Fat_NO_FsVersion_check.pe32 -s EFI_SECTION_PE32 Fat_NO_FsVersion_check.efi
 > GenSec -o Fat.ui -s EFI_SECTION_USER_INTERFACE -n "Fat"
 > GenSec -o Fat_NO_FsVersion_check.com -s EFI_SECTION_COMPRESSION -c PI_NONE Fat_NO_FsVersion_check.pe32 Fat.ui
@@ -1959,7 +1963,7 @@ to this:
 "Suse Boot Manager"     {17+3}  (20) ->  "\EFI\SUSE\ELILO.EFI"               {19+1} (20)
 "Windows Boot Manager"  {20+4}  (24) ->  "\EFI\MICROSOFT\BOOT\BOOTMGFW.EFI"  {32+4} (36)
 
-########## BEGIN EXPLANATION ##########
+########## BEGINNING EXPLANATION ##########
 
 For the modified "Gentoo" entry I'm defining "GENTOO.EFI" instead of the traditional "grubx64.efi". This is because I want to use OpenCore bootloader instead of the traditional GRUB 2 bootloader when using Gentoo!
 More over, to make a clear distinction for the end user between booting macOS (through OpenCore) and booting Gentoo (also through OpenCore),
@@ -2152,7 +2156,7 @@ Updated "CORE_DXE_mod.ffs" file will be used later to replace the original versi
 
 
 
-The very last thing I want to do is updating both the AMI SmallLogo, and the GIGABYTE Logo
+Now I want to update both the AMI SmallLogo and the GIGABYTE Logo
 To do this we will use the AMI logos from ZimaCube N100 BIOS!
 
 Let's start with the AMI SmallLogo
@@ -2327,15 +2331,337 @@ So we just need to add a "Compressed section" and forget about creating a "LzmaC
 
 Click on "Compressed section", check on the right: "Compression algorithm: None"
 
-File > Quit
-
 Back to CMD
 > GenSec -o Logo_mod.raw -s EFI_SECTION_RAW Logo_mod.bmp
 > GenSec -o Logo_mod.com -s EFI_SECTION_COMPRESSION -c PI_NONE Logo_mod.raw
 > GenFfs -o Logo_mod.ffs -t EFI_FV_FILETYPE_FREEFORM -g "7BB28B99-61BB-11D5-9A5D-0090273FC14D" -s -i Logo_mod.com
-> del Logo_mod.com Logo_mod.raw Logo_mod.bmp GenFfs.exe GenSec.exe LzmaCompress.exe ZCN-01.ROM "ZimaCube N100 BIOS 01.zip"
+> del Logo_mod.com Logo_mod.raw Logo_mod.bmp LzmaCompress.exe ZCN-01.ROM "ZimaCube N100 BIOS 01.zip"
 
 Updated "Logo_mod.ffs" file will be used later to replace the original version!
+
+
+
+
+
+
+
+
+
+
+Let's move on to the MyOemLogo1
+We want to update the JPEG with our updated version which include the default Microsoft Windows 10 Segoe UI Variable Static Text font.
+I also added "F2" to the list of keys to enter BIOS setup menu.
+
+Back to UEFITool
+Alt+2
+
+MyOemLogo1 is inside this GUID: 86EE84E1-3375-41A1-AFBA-847BD29663AA
+
+Action > Search... > GUID > "86EE84E1-3375-41A1-AFBA-847BD29663AA" > Header only > OK
+
+Double click on the result, it will select an unknown GUID which is "MyOemLogo1"
+Let's check on the right the "Subtype", it says "Freeform"
+Let's also check:
+- Attributes: 40h
+- Data checksum: 46h, valid
+
+Expand the unknown GUID, there will be a "Compressed section"
+Click on "Compressed section", check on the right:
+- Offset: 18h
+- Header size: 9h (9)
+- Compression algorithm: Tiano
+
+We need to uncompress it with EDK2 BaseTool TianoCompress!
+
+Expand "Compressed section", there will be 2 sections:
+- "Logo"
+- "UI section"
+
+We are interested in "Logo"
+
+Click on "Logo", check on the right:
+- Subtype GUID: 7BB28B99-61BB-11D5-9A5D-0090273FC14D
+
+Extract this module with MMTool
+
+Back to CMD
+> start /b /min /wait MMTool mod_bios_tmp.fd /ec 86EE84E1-3375-41A1-AFBA-847BD29663AA MyOemLogo1.ffs
+
+Back to File Explorer
+Drag "MyOemLogo1.ffs" into Hextor icon while holding Shift
+
+We need to go to the beginning of "Compressed section" body.
+Let's calculate Offset + Header size. 0x18 + 0x09 = 0x21
+
+Search > Go To address... > 0x21 > OK
+
+Back to UEFITool
+Click on "Compressed section", check Body size: 1C71h (7281)
+
+Back to Hextor
+Edit > Select Range... > Range end: +7281
+File > Save selection as... > "MyOemLogo1.tiano" > Save
+File > Exit
+
+Back to CMD
+> 7z e OpenCore-1.0.8-Windows-VS2019-RELEASE.zip Utilities/BaseTools/TianoCompress.exe
+> TianoCompress -d -o MyOemLogo1_Uncompressed.bin MyOemLogo1.tiano
+> del MyOemLogo1.tiano TianoCompress.exe MyOemLogo1.ffs
+
+Back to UEFITool
+Click on Logo, check on the right:
+- Header size: 14h (20)
+- Body size: 1E55h (7765)
+
+File > Quit
+
+Back to File Explorer
+Drag "MyOemLogo1_Uncompressed.bin" into Hextor icon while holding Shift
+Search > Go To address... > 20 > OK
+Edit > Select Range... > Range end: +7765
+File > Save selection as... > "MyOemLogo1.jpg" > Save
+File > Exit
+
+Open Mullvad Browser and drag "MyOemLogo1.jpg" into it to view the image!
+Quit Mullvad Browser
+
+Now grab my copy of "MyOemLogo1_mod.jpg" inside Miscellaneous/BIOS_mod/
+
+Back to CMD
+> curl -LJO https://github.com/leon9078/Z97X-SLI_Monterey/raw/refs/heads/master/Miscellaneous/BIOS_mod/MyOemLogo1_mod.jpg
+> GenSec -o MyOemLogo1_mod.frfrm -s EFI_SECTION_FREEFORM_SUBTYPE_GUID -g "7BB28B99-61BB-11D5-9A5D-0090273FC14D" MyOemLogo1_mod.jpg
+> GenSec -o MyOemLogo1_mod.ui -s EFI_SECTION_USER_INTERFACE -n "MyOemLogo1"
+> GenSec -o MyOemLogo1_mod.com -s EFI_SECTION_COMPRESSION -c TIANO MyOemLogo1_mod.frfrm MyOemLogo1_mod.ui
+> GenFfs -o MyOemLogo1_mod.ffs -t EFI_FV_FILETYPE_FREEFORM -g "86EE84E1-3375-41A1-AFBA-847BD29663AA" -s -i MyOemLogo1_mod.com
+> del MyOemLogo1_mod.com MyOemLogo1_mod.ui MyOemLogo1_mod.frfrm MyOemLogo1_Uncompressed.bin
+
+Updated "MyOemLogo1_mod.ffs" file will be used later to replace the original version!
+
+
+
+
+
+
+
+
+
+
+Now I want to modify GIGABYTE CoolGUIDxe PE32 image section to prevent calling a specific function
+
+########## BEGINNING EXPLANATION ##########
+
+I noticed that whenever I enter BIOS setup menu (using either DEL or F2 key) for the first time, the UEFI module responsible for interacting in this specific environment is called CoolGUIDxe.
+This module is GIGABYTE's specific implementation of the (UEFI) BIOS GUI environment.
+
+This CoolGUIDxe module goes into action ONLY if the user try to enter BIOS setup menu. To prove this, I discovered inside UEFITool that CoolGUIDxe module
+(10A0D4D6-BB54-48E1-919F-78D3074A787F GUID) has a "DXE dependency section" with Parsed expression:
+TRUE
+END
+
+As per UEFI Platform Initialization Specification (https://uefi.org/specs/PI/1.9/V2_DXE_Dispatcher.html#id7), Dependency Expression Opcode for TRUE is 0x06, FALSE 0x07
+
+I simply rebuilt this module replacing "TRUE" (0x06) with "FALSE" (0x07), flash it and reboot and this time, whenever I tried to enter BIOS setup menu (DEL/F2 key), I noticed something new:
+- if CSM is enabled (booting using Legacy mode), there is an underscore that continues to blink and nothing happens until I physically reboot the PC by pressing the Reset key
+- If CSM is disabled (booting in pure UEFI only mode), entering BIOS setup menu is completely skipped and the first Boot option will be executed
+
+By setting DXE dependency section FALSE, we are pushes a boolean FALSE onto the stack. So it's the same behavior as this driver is been removed all together from the BIOS image.
+So we have to leave this DXE dependency section unchanged!
+
+
+Furthermore, I discovered that 10A0D4D6-BB54-48E1-919F-78D3074A787F UEFI module (CoolGUIDxe) interact with another UEFI module: 12FD2744-8332-4A87-B220-1EFACC7D6ED7!
+I tried to analyze the content of this new module in UEFITool and discovered that it's a Freeform module.
+This Freeform module contains only a Raw section.
+The body of this Raw section has a size of 4096 bytes (exactly 4 KiB) and, looking at its content, it contains only FF so it's basically empty
+
+Now whenever CoolGUIDxe is involved (so whenever the user tries to enter BIOS setup menu), the content of this new unknown UEFI module get's populated with some data.
+
+So what I wanted to do is reverse-engineer CoolGUIDxe PE32 image section to understand a little bit how it works.
+For this I used Hex-Rays IDA Pro with efiXplorer plugin.
+
+Back to UEFITool
+Expand "10A0D4D6-BB54-48E1-919F-78D3074A787F"
+Click on "Compressed section", it says "Compression algorithm: None". Great!
+Expand "Compressed section", right click on PE32 image section > Extract body > [default name is fine] > Save
+
+CoolGUIDxe will save specific user settings inside BIOS setup menu GUI into a NVRAM UEFI variable called "CoolConsole" with "46FE2754-75ED-40DB-A395-032D70994457" GUID
+and create a corresponding "CoolConCRC" UEFI variable with the same GUID.
+
+And the content of "CoolConsole" UEFI variable is duplicated at the very beginning of 12FD2744-8332-4A87-B220-1EFACC7D6ED7 Raw section module, replacing this original empty section (FF only).
+
+
+
+This create an issue: if the user want to revert its BIOS GUI customizations, all it has to do is delete these 2 UEFI variables:
+- CoolConsole
+- CoolConCRC
+
+both with 46FE2754-75ED-40DB-A395-032D70994457 GUID
+
+
+But if the content is duplicated inside the Raw section of that module, that would not always happen. In other words, it may happen that those customized BIOS GUI settings will remain
+even after the UEFI variables deletion...
+
+
+So what I want to do is prevent dealing with that module!
+
+Back to UEFITool
+Action > Search... > GUID > "12FD2744-8332-4A87-B220-1EFACC7D6ED7" > Header only > OK
+
+In the Search tab right click > Copy
+
+Open Notepad++
+Edit > Paste
+
+GUID pattern "12FD2744-8332-4A87-B220-1EFACC7D6ED7" found as "4427FD123283874AB2201EFACC7D6ED7" in 12FD2744-8332-4A87-B220-1EFACC7D6ED7 at header-offset 00h
+
+Copy the "found as" value and paste it in a new Notepad++ tab
+Search > Replace...
+Find what: (..)
+Replace with: \1\x20
+Search Mode: Regular expression
+
+Replace All
+
+[Replace All: 16 occurrences were replaced in entire file]
+
+Find what: [ ]$
+Replace with: [empty]
+Search Mode: Regular expression
+
+Replace All
+
+[Replace All: 1 occurrence were replaced in entire file]
+
+Close Replace window
+
+Edit > Select All
+Edit > Copy
+
+Back to IDA Pro
+Search > Sequence of bytes...
+String: 44 27 FD 12 32 83 87 4A B2 20 1E FA CC 7D 6E D7
+Find all occurrences: check
+OK
+
+Double click on the only result
+Right click on that line > List cross references to...
+
+As we can see we have 3 cross references and they are inside the function called "sub_18001E998"
+
+Click OK to jump into that function
+
+Our goal is to prevent calling this function!
+
+On the left inside Graph overview let's click on the top to go to the beginning of this function
+Right click on "sub_18001E998" and (again) select "List cross references to..."
+
+This function is called 3 times:
+- x2 inside "sub_18001ED4C"
+- x1 inside "sub_18001F088"
+
+We just have to prevent calling "sub_18001E998" inside "sub_18001ED4C"
+
+Click OK, it will jump into "sub_18001ED4C" function
+
+There will be x2 "jz      short loc_18001F073" which means Jump if Zero to "loc_18001F073" which is the last section of the function before the return.
+In order to skip the 2 calls to "sub_18001E998" we want to edit the code in order to jump unconditionally to the end of the function
+
+We want to change the "jz      short loc_18001F073" which is above the other one. So click anywhere in the whitespace inside
+
+loc_18001EFF1:
+cmp     sil, bl
+jz      short loc_18001F073
+
+section
+
+Click on the "Hex View-1" tab on the right and take note of the highlighted HEX bytes sequence
+
+40 3A F3 // cmp     sil, bl
+
+Then the following HEX bytes sequence
+
+74 7D // jz      short loc_18001F073
+
+So this will be the Assembly HEX bytes sequence:
+
+40 3A F3 // cmp     sil, bl
+74 7D    // jz      short loc_18001F073
+
+We want to change "jz short" with "jmp short". So change x86 opcode 74 (JZ rel8) with x86 opcode EB (JMP rel8)
+
+So our initial code, now becomes:
+
+40 3A F3 // cmp     sil, bl
+EB 7D    // jmp     short loc_18001F073
+
+########## END EXPLANATION ##########
+
+
+
+
+
+
+
+
+Back to CMD
+> start /b /min /wait MMTool mod_bios_tmp.fd /ec 10A0D4D6-BB54-48E1-919F-78D3074A787F CoolGUIDxe.ffs
+
+Back to File Explorer
+Drag "CoolGUIDxe.ffs" into Hextor icon while holding Shift
+Search > Find/Replace...
+Find: "(40 3A F3) 74 (7D)" > HEX > Extended syntax: check
+
+Expand "Replace" section
+Replace with: "$1 EB $2"
+Hex: check
+Ask each replace: uncheck
+
+Replace All > [Search pattern replaced 1 time(s)] > OK > Esc
+
+Now we need to calculate the new "Data checksum" value:
+We change 1 byte from 74 to EB, so we have added: 0x77
+
+So we have to remove 0x77 from the current Data checksum value!
+
+Search > Go To address... > 0x11 > OK
+Edit > Select Range... > Range end: +1 > Select
+Operations > Modify with expression: x-0x77 > OK
+File > Save as... > "CoolGUIDxe_mod.ffs" > Save
+File > Exit
+
+Back to CMD
+> del CoolGUIDxe.ffs
+
+Updated "CoolGUIDxe_mod.ffs" file will be used later to replace the original version!
+
+
+
+
+
+
+
+
+The very last thing I want to do is add CrScreenshotDxe driver from OpenCore project!
+
+It's a slightly modified version with the following changes:
+- changed keyboard shortcut from F10 to F6. This is because F10 is already mapped to "Save & Exit" inside my specific firmware BIOS menu. F6 is the only function key that is not mapped
+- revert commit "CrScreenshotDxe: Work around TPL-related ASSERT within firmware compiled to assert". This creates 2 issues:
+  1) it creates issues when I try to take a screenshot from the early AMI SmallLogo (by pressing F6). Then, if I don't press anything, it should boot the first UEFI entry in the BootOrder but it won't! It will just hang up there...
+  2) it creates issues when I try to take a screenshot from the early AMI SmallLogo (by pressing F6) and then immediately (within 5 seconds) press F12 to enter UEFI Boot Menu. Here if I try to select another UEFI entry to boot then keyboard will not work at all (need to issue Ctrl+Alt+End) to force reboot...
+
+Back to CMD
+> 7z e OpenCore-1.0.8-Darwin-XCODE5-RELEASE.zip X64/EFI/OC/Drivers/CrScreenshotDxe.depex
+> 7z e OpenCore-1.0.8-Darwin-XCODE5-RELEASE.zip X64/EFI/OC/Drivers/CrScreenshotDxe.efi
+> GenSec -o CrScreenshotDxe.dpx -s EFI_SECTION_DXE_DEPEX CrScreenshotDxe.depex
+> GenSec -o CrScreenshotDxe.pe32 -s EFI_SECTION_PE32 CrScreenshotDxe.efi
+> GenSec -o CrScreenshotDxe.ui -s EFI_SECTION_USER_INTERFACE -n "CrScreenshotDxe"
+> GenSec -o CrScreenshotDxe.com -s EFI_SECTION_COMPRESSION -c PI_NONE CrScreenshotDxe.pe32 CrScreenshotDxe.ui
+> GenFfs -o CrScreenshotDxe.ffs -t EFI_FV_FILETYPE_DRIVER -g "91867CFC-F80C-4BC4-94CC-E9E3ED88BC84" -s -i CrScreenshotDxe.com
+> del GenFfs.exe GenSec.exe CrScreenshotDxe.com CrScreenshotDxe.ui CrScreenshotDxe.pe32 CrScreenshotDxe.efi CrScreenshotDxe.dpx CrScreenshotDxe.depex
+
+Updated "CrScreenshotDxe.ffs" file will be used later to be added in the modded BIOS!
+
+
+
 
 
 
@@ -2364,11 +2690,14 @@ Back to CMD
 > start /b /min /wait MMTool mod_bios_tmp.fd /r 821D110C-D0A3-4CF7-AEF3-E28088491704 Updated_512_KiB.ffs
 > start /b /min /wait MMTool mod_bios_tmp.fd /r B1DA0ADF-4F77-4070-A88E-BFFE1C60529A AMITSE_ACPI_Debug_Timeout_5.ffs
 > start /b /min /wait MMTool mod_bios_tmp.fd /r 63819805-67BB-46EF-AA8D-1524A19A01E4 SmallLogo_mod.ffs
+> start /b /min /wait MMTool mod_bios_tmp.fd /r 10A0D4D6-BB54-48E1-919F-78D3074A787F CoolGUIDxe_mod.ffs
+> start /b /min /wait MMTool mod_bios_tmp.fd /r 86EE84E1-3375-41A1-AFBA-847BD29663AA MyOemLogo1_mod.ffs
 > start /b /min /wait MMTool mod_bios_tmp.fd /r 7BB28B99-61BB-11D5-9A5D-0090273FC14D Logo_mod.ffs
+> start /b /min /wait MMTool mod_bios_tmp.fd /i 91867CFC-F80C-4BC4-94CC-E9E3ED88BC84 CrScreenshotDxe.ffs 02:01-00
 > start /b /min /wait MMTool mod_bios_tmp.fd /r 2D27C618-7DCD-41F5-BB10-21166BE7E143 BiosAc_fix.ffs
 > start /b /min /wait MMTool mod_bios_tmp.fd /r D1E59F50-E8C3-4545-BF61-11F002233C97 TxtPeiAp_fix.ffs
 > move mod_bios_tmp.fd Z97XSLI.fd
-> del Logo_mod.ffs SmallLogo_mod.ffs CORE_DXE_mod.ffs Fat_NO_FsVersion_check.ffs TxtPeiAp_fix.ffs BiosAc_fix.ffs Final_SSDT-5A31_mod.ffs AmiBoardInfo_mod.ffs Defaults_ACPI_Debug_Timeout_5.ffs AMITSE_ACPI_Debug_Timeout_5.ffs Setup_ACPI_Debug_Timeout_5.ffs Updated_512_KiB.ffs
+> del CrScreenshotDxe.ffs CoolGUIDxe_mod.ffs MyOemLogo1_mod.ffs Logo_mod.ffs SmallLogo_mod.ffs CORE_DXE_mod.ffs Fat_NO_FsVersion_check.ffs TxtPeiAp_fix.ffs BiosAc_fix.ffs Final_SSDT-5A31_mod.ffs AmiBoardInfo_mod.ffs Defaults_ACPI_Debug_Timeout_5.ffs AMITSE_ACPI_Debug_Timeout_5.ffs Setup_ACPI_Debug_Timeout_5.ffs Updated_512_KiB.ffs
 
 We have finished editing the BIOS! The last step is to create the report of it
 
@@ -2389,7 +2718,7 @@ Back to CMD
 > reg delete HKCU\SOFTWARE\QtProject /f
 > reg delete HKCU\SOFTWARE\Intel\FlashImageTool /f
 > attrib -r MMTool.exe
-> del MMTool.exe "MMTool Aptio 5.02.0024 Mod.7z" UEFITool.exe UEFITool_NE_A73_win64.zip
+> del MMTool.exe "MMTool Aptio 5.02.0024 Mod.7z" UEFITool.exe UEFITool_NE_A74_win64.zip
 > exit
 
 We now have 3 files:

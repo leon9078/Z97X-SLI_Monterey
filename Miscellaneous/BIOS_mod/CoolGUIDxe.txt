@@ -1,0 +1,79 @@
+Differences (inside BIOS region) before and after entering BIOS (DEL/F2 key) for the first time:
+- EfiFirmwareFileSystem2Guid
+  - NVRAM | NVAR store (of course!)
+
+   - Changed
+    - DefaultBootOrder
+    - BootOrder1
+    - Boot0001 ---> Invalid
+    - Boot0004
+    - Boot0006
+    - MonoticCounter
+    - EasyTuneSetupAddress
+    - Profile-2
+    - BootOrder
+
+   - Added
+    - MonoticCounter
+    - BootOrder
+    - DefaultBootOrder
+    - BootOrder1
+    - Boot0004
+    - Boot0006
+    - EasyTuneSetupAddress
+
+    - CoolConsole (Link) ---> NEW
+    - CoolConCRC (Link) ----> NEW
+    - CoolConsole (Data) ---> NEW
+    - CoolConCRC (Data) ----> NEW
+
+    - MonoticCounter
+    - EasyTuneSetupAddress
+    - Boot0004
+    - Boot0006
+    - Profile-2
+
+- EfiFirmwareFileSystem2Guid
+  - 12FD2744-8332-4A87-B220-1EFACC7D6ED7 ---> It is all FF, then get populated with some entries, the goal is to leave this Freeform module as all "FF"!
+
+
+
+
+
+"17088572-377F-44EF-8F4E-B09FFF46A070" (Microcode):
+- header-offset: 00h
+- body-offset: MULTIPLE VALUES!
+
+
+
+"12FD2744-8332-4A87-B220-1EFACC7D6ED7" (CoolGUIDxe put changes here):
+- header-offset 00h MUST BE THERE!
+- body-offset:
+    - BDRDXE
+    - CoolGUIDxe ---> override "FF" with specific pattern
+    - 56E14F88-234B-4C34-B204-299670447247 (Gigabyte BiosDataRecord)
+        - BDRSMM
+
+"04 12 64 19 00 15 00 00 00 00 00 00 01 05 07 0C 24 09 15 17" ---> do NOT create this directly inside "12FD2744-8332-4A87-B220-1EFACC7D6ED7", it corrupt entries inside Smart Tweak Mode > "Home" tab
+
+
+
+
+
+
+
+12FD2744-8332-4A87-B220-1EFACC7D6ED7
+
+
+GUID pattern "12FD2744-8332-4A87-B220-1EFACC7D6ED7" found as "44 27 FD 12 32 83 87 4A B2 20 1E FA CC 7D 6E D7" in 10A0D4D6-BB54-48E1-919F-78D3074A787F/.../PE32 image section at body-offset 2FC30h
+
+sub_18001E998 (+65, +E6, +137) // 3 results inside this function
+
+
+
+sub_18001E998 is called 3 times in 2 different functions:
+- sub_18001ED4C+2C2	call    sub_18001E998
+- sub_18001ED4C+31F	call    sub_18001E998
+- sub_18001F088+6E	call    sub_18001E998 
+
+Hextor Find/Replace: (40 3A F3) 74 (7D) ---> $1 EB $2

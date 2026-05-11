@@ -1137,7 +1137,7 @@
 			<key>ShowPicker</key>
 			<false/>
 			<key>TakeoffDelay</key>
-			<integer>0</integer>
+			<integer>3000000</integer>
 			<key>Timeout</key>
 			<integer>5</integer>
 		</dict>
@@ -1368,9 +1368,9 @@
 			<key>GraphicsInputMirroring</key>
 			<true/>
 			<key>KeyInitialDelay</key>
-			<integer>0</integer>
+			<integer>50</integer>
 			<key>KeySubsequentDelay</key>
-			<integer>8</integer>
+			<integer>7</integer>
 			<key>PointerDwellClickTimeout</key>
 			<integer>0</integer>
 			<key>PointerDwellDoubleClickTimeout</key>
@@ -1424,6 +1424,8 @@
 				<string></string>
 				<key>Enabled</key>
 				<true/>
+				<key>HideVerbose</key>
+				<false/>
 				<key>LoadEarly</key>
 				<false/>
 				<key>Path</key>
@@ -1436,10 +1438,40 @@
 				<string>HFS+ Driver</string>
 				<key>Enabled</key>
 				<true/>
+				<key>HideVerbose</key>
+				<true/>
 				<key>LoadEarly</key>
 				<false/>
 				<key>Path</key>
 				<string>HfsPlus.efi</string>
+			</dict>
+			<dict>
+				<key>Arguments</key>
+				<string></string>
+				<key>Comment</key>
+				<string></string>
+				<key>Enabled</key>
+				<true/>
+				<key>HideVerbose</key>
+				<false/>
+				<key>LoadEarly</key>
+				<false/>
+				<key>Path</key>
+				<string>OpenUsbKbDxe.efi</string>
+			</dict>
+			<dict>
+				<key>Arguments</key>
+				<string></string>
+				<key>Comment</key>
+				<string></string>
+				<key>Enabled</key>
+				<true/>
+				<key>HideVerbose</key>
+				<false/>
+				<key>LoadEarly</key>
+				<false/>
+				<key>Path</key>
+				<string>CrScreenshotDxe.efi</string>
 			</dict>
 		</array>
 		<key>Input</key>
@@ -1449,9 +1481,9 @@
 			<key>KeyForgetThreshold</key>
 			<integer>7</integer>
 			<key>KeySupport</key>
-			<true/>
+			<false/>
 			<key>KeySupportMode</key>
-			<string>Auto</string>
+			<string>V2</string>
 			<key>KeySwap</key>
 			<false/>
 			<key>PointerSupport</key>
@@ -1470,11 +1502,11 @@
 			<key>ConsoleMode</key>
 			<string></string>
 			<key>DirectGopRendering</key>
-			<false/>
+			<true/>
 			<key>ForceResolution</key>
 			<false/>
 			<key>GopBurstMode</key>
-			<false/>
+			<true/>
 			<key>GopPassThrough</key>
 			<string>Disabled</string>
 			<key>IgnoreTextInGraphics</key>

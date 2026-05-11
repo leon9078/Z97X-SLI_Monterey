@@ -12,7 +12,7 @@ So, IF you want to use macOS than FORGET this guide and just use BIOS/Z97XSLI.fd
 
 
 Complete list of modifications:
-1) Delete "MERecoveryDxe" module using MMTool
+1) Update "MERecoveryDxe" module by changing Depex expression from TRUE to FALSE
 2) Use "me_cleaner" python tool with "-S" switch (code removal + HAP/AltMeDisable bit)
 
 Prerequisites:
@@ -48,7 +48,7 @@ Back to CMD
 
 
 
-We want to delete "MERecoveryDxe" module, otherwise Intel ME is not really neutralized after using "me_cleaner" tool (It should be a GIGABYTE only thing)
+We want to update "MERecoveryDxe" module by changing Depex expression from TRUE to FALSE, otherwise Intel ME is not really neutralized after using "me_cleaner" tool (It should be a GIGABYTE only thing)
 
 Grab your copy of the modded BIOS (Z97XSLI.fd), either:
 - locally
@@ -59,39 +59,78 @@ Grab your copy of the modded BIOS (Z97XSLI.fd), either:
 
 
 
+> curl -LO https://github.com/LongSoft/UEFITool/releases/download/A74/UEFITool_NE_A74_win64.zip
+> tar -xf UEFITool_NE_A74_win64.zip
 > explorer .
 
-Open MMTool.exe
-     Load Image > [select Libraries > Documents\ME_cleaner folder] > "Z97XSLI.fd" > Open
-         Delete > Volume Index: 02:01-00, File Index: 5C, Source size: 0000470D > Delete
-Save Image as.. > "tmp" > Save
-Close
+Open UEFITool.exe
+File > Open image file... > "Z97XSLI.fd" > Open
+Action > Search... > Text > "MERecoveryDxe", "Unicode": check > OK
+
+There will be 1 result inside MERecoveryDxe/.../UI section
+Double click on it, it will select "UI section"
+
+Click on "MERecoveryDxe" and check this important infos on the right:
+- File GUID: F1FCD66F-8966-441E-909C-77F211AB9C3E
+- Attributes: 40h
+- Data checksum: 78h, valid
+
+Now click on DXE dependency section and check this important infos on the right:
+- Offset: 18h
+- Header size: 4h (4)
+- Parsed expression:
+  TRUE
+  END
+
+Quit UEFITool
+
+Back to CMD
+> start /b /min /wait MMTool Z97XSLI.fd /ec F1FCD66F-8966-441E-909C-77F211AB9C3E MERecoveryDxe.ffs
+
+Back to File Explorer
+Drag "MERecoveryDxe.ffs" into Hextor icon while holding Shift
+
+We need to go to the beginning of DXE dependency section body.
+Offset + Header size. 0x18 + 0x04 = 0x1C
+
+Search > Go To address... > 0x1C > OK
+
+As per UEFI PI spec (https://uefi.org/specs/PI/1.9/V1_PEI_Foundation.html#dependency-expression-opcode-summary), 0x06 value means TRUE, we want to change this to FALSE, 0x07
+
+Type "07"
+
+Now we must update the Data checksum, we've added +0x01, we need to remove 0x01 from that value
+
+Search > Go To address... > 0x11 > OK
+Edit > Select Range... > Range end: +1
+Operations > Modify with expression: x-1
+File > Save as... > "C:\Users\Leonardo\Documents\ME_cleaner\MERecoveryDxe_mod.ffs" > Save
+File > Exit
+
+Back to CMD
+> start /b /min /wait MMTool Z97XSLI.fd /r F1FCD66F-8966-441E-909C-77F211AB9C3E MERecoveryDxe_mod.ffs
+
+
 
 
 
 Now we want to actually neutralize Intel ME with "me_cleaner" tool!!!
 
-Back to CMD
-
-> del Z97XSLI.fd
 > curl -LJO https://github.com/corna/me_cleaner/archive/refs/heads/master.zip
 > tar -xf me_cleaner-master.zip
-> move tmp.fd me_cleaner-master\
+> move Z97XSLI.fd me_cleaner-master\
 > start cmd /k cd me_cleaner-master\
-> python me_cleaner.py -S -O Z97XSLI_no_ME.fd tmp.fd
+> python me_cleaner.py -S -O Z97XSLI_no_ME.fd Z97XSLI.fd
 > move Z97XSLI_no_ME.fd ..
 > exit
 > rmdir /s /q me_cleaner-master
-> del me_cleaner-master.zip
+> del me_cleaner-master.zip MERecoveryDxe_mod.ffs MERecoveryDxe.ffs
 
 
 
 
 
 We have finished neutralizing Intel ME! Now, we want to create the report
-
-> curl -LO https://github.com/LongSoft/UEFITool/releases/download/A73/UEFITool_NE_A73_win64.zip
-> tar -xf UEFITool_NE_A73_win64.zip
 
 Back to File Explorer
 Open UEFITool.exe
@@ -106,13 +145,13 @@ Back to CMD
 
 Back to File Explorer
 Open MMTool.exe
-Load Image > "Z97XSLI_no_ME.fd" > Open
+Load Image > [select Libraries > Documents folder > ME_cleaner folder] > "Z97XSLI_no_ME.fd" > Open
 Create Report > OK
 Close
 
 Back to CMD
 > attrib -r MMTool.exe
-> del MMTool.exe "MMTool Aptio 5.02.0024 Mod.7z" UEFITool.exe UEFITool_NE_A73_win64.zip
+> del MMTool.exe "MMTool Aptio 5.02.0024 Mod.7z" UEFITool.exe UEFITool_NE_A74_win64.zip
 > exit
 
 We now have 3 files:

@@ -1,0 +1,11 @@
+
+In UEFI mode, the message is: "Press <DEL> or <F2> to enter setup."
+In Legacy mode, the message (JPEG/BMP) is: "DEL : BIOS SETUP \ Q-FLASH    F9 : SYSTEM INFORMATION    F12 : BOOT MENU    END : Q-FLASH"
+
+7BB28B99-61BB-11D5-9A5D-0090273FC14D - MyOemLogo1
+
+Segoe UI Variable Static Text Semibold AND Segoe UI Variable Static Text Semilight
+
+45 pixels, 45 pixels, 46 pixels, 45 pixels, 45 pixels
+
+5 pixels e allineare i box gialli
