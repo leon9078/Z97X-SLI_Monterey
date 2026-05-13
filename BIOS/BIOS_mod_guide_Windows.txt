@@ -2655,7 +2655,7 @@ Back to CMD
 > GenSec -o CrScreenshotDxe.pe32 -s EFI_SECTION_PE32 CrScreenshotDxe.efi
 > GenSec -o CrScreenshotDxe.ui -s EFI_SECTION_USER_INTERFACE -n "CrScreenshotDxe"
 > GenSec -o CrScreenshotDxe.com -s EFI_SECTION_COMPRESSION -c PI_NONE CrScreenshotDxe.pe32 CrScreenshotDxe.ui
-> GenFfs -o CrScreenshotDxe.ffs -t EFI_FV_FILETYPE_DRIVER -g "91867CFC-F80C-4BC4-94CC-E9E3ED88BC84" -s -i CrScreenshotDxe.com
+> GenFfs -o CrScreenshotDxe.ffs -t EFI_FV_FILETYPE_DRIVER -g "91867CFC-F80C-4BC4-94CC-E9E3ED88BC84" -s -i CrScreenshotDxe.dpx -i CrScreenshotDxe.com
 > del GenFfs.exe GenSec.exe CrScreenshotDxe.com CrScreenshotDxe.ui CrScreenshotDxe.pe32 CrScreenshotDxe.efi CrScreenshotDxe.dpx CrScreenshotDxe.depex
 
 Updated "CrScreenshotDxe.ffs" file will be used later to be added in the modded BIOS!

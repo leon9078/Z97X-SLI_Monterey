@@ -1133,11 +1133,11 @@
 			<key>PickerVariant</key>
 			<string>Auto</string>
 			<key>PollAppleHotKeys</key>
-			<true/>
+			<false/>
 			<key>ShowPicker</key>
-			<true/>
+			<false/>
 			<key>TakeoffDelay</key>
-			<integer>0</integer>
+			<integer>1000000</integer>
 			<key>Timeout</key>
 			<integer>5</integer>
 		</dict>
@@ -1368,7 +1368,7 @@
 			<key>GraphicsInputMirroring</key>
 			<true/>
 			<key>KeyInitialDelay</key>
-			<integer>50</integer>
+			<integer>0</integer>
 			<key>KeySubsequentDelay</key>
 			<integer>7</integer>
 			<key>PointerDwellClickTimeout</key>
@@ -1445,34 +1445,6 @@
 				<key>Path</key>
 				<string>HfsPlus.efi</string>
 			</dict>
-			<dict>
-				<key>Arguments</key>
-				<string></string>
-				<key>Comment</key>
-				<string></string>
-				<key>Enabled</key>
-				<true/>
-				<key>HideVerbose</key>
-				<false/>
-				<key>LoadEarly</key>
-				<false/>
-				<key>Path</key>
-				<string>OpenUsbKbDxe.efi</string>
-			</dict>
-			<dict>
-				<key>Arguments</key>
-				<string></string>
-				<key>Comment</key>
-				<string></string>
-				<key>Enabled</key>
-				<true/>
-				<key>HideVerbose</key>
-				<false/>
-				<key>LoadEarly</key>
-				<false/>
-				<key>Path</key>
-				<string>CrScreenshotDxe.efi</string>
-			</dict>
 		</array>
 		<key>Input</key>
 		<dict>
@@ -1481,9 +1453,9 @@
 			<key>KeyForgetThreshold</key>
 			<integer>7</integer>
 			<key>KeySupport</key>
-			<false/>
+			<true/>
 			<key>KeySupportMode</key>
-			<string>V2</string>
+			<string>V1</string>
 			<key>KeySwap</key>
 			<false/>
 			<key>PointerSupport</key>
