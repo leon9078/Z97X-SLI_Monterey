@@ -312,6 +312,8 @@ v
 w
 y
 
+# printf "\x01" | dd of=/dev/sdX1 bs=1 seek=42 count=1
+# sync
 # systemctl poweroff
 
 Unplug Arch USB drive.
@@ -364,13 +366,15 @@ Cmd+N
 
 Make sure Ethernet cable is connected for this following command, then disconnect it
 
-# printf '\33c\e[3J' && curl -Ls https://github.com/leon9078/Z97X-SLI_Monterey/raw/refs/heads/master/Instructions.txt | tail -n 108
+# printf '\33c\e[3J' && curl -Ls https://github.com/leon9078/Z97X-SLI_Monterey/raw/refs/heads/master/Instructions.txt | tail -n 128
 
 Let's first handle "Pro" and "Novel" profiles, which already have "ShowWindowSettingsNameInTitle" set, we just need to set it as true!
 
 Pro:
 
 # printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
+-c "Add 'Window Settings:Pro:CommandString' string \"printf \'\\\33c\\\e[3J\'\"" \
+-c "Add 'Window Settings:Pro:RunCommandAsShell' bool" \
 -c "Add 'Window Settings:Pro:ShowActiveProcessArgumentsInTitle' bool" \
 -c "Add 'Window Settings:Pro:ShowActiveProcessArgumentsInTabTitle' bool" \
 -c "Set 'Window Settings:Pro:ShowWindowSettingsNameInTitle' 1" \
@@ -379,6 +383,8 @@ Pro:
 Novel:
 
 # printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
+-c "Add 'Window Settings:Novel:CommandString' string \"printf \'\\\33c\\\e[3J\'\"" \
+-c "Add 'Window Settings:Novel:RunCommandAsShell' bool" \
 -c "Add 'Window Settings:Novel:ShowActiveProcessArgumentsInTitle' bool" \
 -c "Add 'Window Settings:Novel:ShowActiveProcessArgumentsInTabTitle' bool" \
 -c "Set 'Window Settings:Novel:ShowWindowSettingsNameInTitle' 1" \
@@ -393,6 +399,8 @@ Now start covering all other profiles!
 Basic:
 
 # printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
+-c "Add 'Window Settings:Basic:CommandString' string \"printf \'\\\33c\\\e[3J\'\"" \
+-c "Add 'Window Settings:Basic:RunCommandAsShell' bool" \
 -c "Add 'Window Settings:Basic:ShowActiveProcessArgumentsInTitle' bool" \
 -c "Add 'Window Settings:Basic:ShowActiveProcessArgumentsInTabTitle' bool" \
 -c "Add 'Window Settings:Basic:ShowWindowSettingsNameInTitle' bool 1" \
@@ -401,6 +409,8 @@ Basic:
 Grass:
 
 # printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
+-c "Add 'Window Settings:Grass:CommandString' string \"printf \'\\\33c\\\e[3J\'\"" \
+-c "Add 'Window Settings:Grass:RunCommandAsShell' bool" \
 -c "Add 'Window Settings:Grass:ShowActiveProcessArgumentsInTitle' bool" \
 -c "Add 'Window Settings:Grass:ShowActiveProcessArgumentsInTabTitle' bool" \
 -c "Add 'Window Settings:Grass:ShowWindowSettingsNameInTitle' bool 1" \
@@ -409,6 +419,8 @@ Grass:
 Ocean:
 
 # printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
+-c "Add 'Window Settings:Ocean:CommandString' string \"printf \'\\\33c\\\e[3J\'\"" \
+-c "Add 'Window Settings:Ocean:RunCommandAsShell' bool" \
 -c "Add 'Window Settings:Ocean:ShowActiveProcessArgumentsInTitle' bool" \
 -c "Add 'Window Settings:Ocean:ShowActiveProcessArgumentsInTabTitle' bool" \
 -c "Add 'Window Settings:Ocean:ShowWindowSettingsNameInTitle' bool 1" \
@@ -417,6 +429,8 @@ Ocean:
 Homebrew:
 
 # printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
+-c "Add 'Window Settings:Homebrew:CommandString' string \"printf \'\\\33c\\\e[3J\'\"" \
+-c "Add 'Window Settings:Homebrew:RunCommandAsShell' bool" \
 -c "Add 'Window Settings:Homebrew:ShowActiveProcessArgumentsInTitle' bool" \
 -c "Add 'Window Settings:Homebrew:ShowActiveProcessArgumentsInTabTitle' bool" \
 -c "Add 'Window Settings:Homebrew:ShowWindowSettingsNameInTitle' bool 1" \
@@ -425,6 +439,8 @@ Homebrew:
 Man Page:
 
 # printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
+-c "Add 'Window Settings:Man Page:CommandString' string \"printf \'\\\33c\\\e[3J\'\"" \
+-c "Add 'Window Settings:Man Page:RunCommandAsShell' bool" \
 -c "Add 'Window Settings:Man Page:ShowActiveProcessArgumentsInTitle' bool" \
 -c "Add 'Window Settings:Man Page:ShowActiveProcessArgumentsInTabTitle' bool" \
 -c "Add 'Window Settings:Man Page:ShowWindowSettingsNameInTitle' bool 1" \
@@ -433,6 +449,8 @@ Man Page:
 Red Sands:
 
 # printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
+-c "Add 'Window Settings:Red Sands:CommandString' string \"printf \'\\\33c\\\e[3J\'\"" \
+-c "Add 'Window Settings:Red Sands:RunCommandAsShell' bool" \
 -c "Add 'Window Settings:Red Sands:ShowActiveProcessArgumentsInTitle' bool" \
 -c "Add 'Window Settings:Red Sands:ShowActiveProcessArgumentsInTabTitle' bool" \
 -c "Add 'Window Settings:Red Sands:ShowWindowSettingsNameInTitle' bool 1" \
@@ -441,6 +459,8 @@ Red Sands:
 Solid Colors:
 
 # printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
+-c "Add 'Window Settings:Solid Colors:CommandString' string \"printf \'\\\33c\\\e[3J\'\"" \
+-c "Add 'Window Settings:Solid Colors:RunCommandAsShell' bool" \
 -c "Add 'Window Settings:Solid Colors:ShowActiveProcessArgumentsInTitle' bool" \
 -c "Add 'Window Settings:Solid Colors:ShowActiveProcessArgumentsInTabTitle' bool" \
 -c "Add 'Window Settings:Solid Colors:ShowWindowSettingsNameInTitle' bool 1" \
@@ -449,6 +469,8 @@ Solid Colors:
 Silver Aerogel:
 
 # printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
+-c "Add 'Window Settings:Silver Aerogel:CommandString' string \"printf \'\\\33c\\\e[3J\'\"" \
+-c "Add 'Window Settings:Silver Aerogel:RunCommandAsShell' bool" \
 -c "Add 'Window Settings:Silver Aerogel:ShowActiveProcessArgumentsInTitle' bool" \
 -c "Add 'Window Settings:Silver Aerogel:ShowActiveProcessArgumentsInTabTitle' bool" \
 -c "Add 'Window Settings:Silver Aerogel:ShowWindowSettingsNameInTitle' bool 1" \
