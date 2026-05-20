@@ -7,12 +7,13 @@ In a macOS environment:
 - Install latest Python version for macOS x64
 - Download macOS Monterey full installer using "installinstallmacos.py" (https://github.com/munki/macadmin-scripts)
 - Download GPT fdisk (gdisk) tool
+- Download my fork of UefiVarTool
 - Download latest Arch Linux ISO
 
 Make sure internet connection is available and latest Python version has been installed
 
 % cd ~/Music
-% curl -LJO https://github.com/munki/macadmin-scripts/archive/refs/heads/main.zip
+% curl -JO https://codeload.github.com/munki/macadmin-scripts/zip/refs/heads/main
 % unzip -q macadmin-scripts-main.zip
 % cd macadmin-scripts-main
 % pip3 install xattr
@@ -64,13 +65,17 @@ w
 y
 
 % sudo newfs_msdos -v EFI /dev/rdiskXs1
-% curl -LJO https://github.com/leon9078/Z97X-SLI_Monterey/archive/refs/heads/master.zip
+% curl -JO https://codeload.github.com/leon9078/Z97X-SLI_Monterey/zip/refs/heads/master
 % unzip -q Z97X-SLI_Monterey-master.zip
 % mv Z97X-SLI_Monterey-master/EFI{_USB,}
 % sudo diskutil mount nobrowse /dev/diskXs1
 % cp -R Z97X-SLI_Monterey-master/EFI /Volumes/EFI/
 % sudo sync
 % diskutil umount /dev/diskXs1
+% sudo -s
+# printf "\x01" | dd of=/dev/diskXs1 bs=1 seek=42 count=1
+# sync
+# exit
 % diskutil eject /dev/diskX
 
 Unplug USB flash drive
@@ -78,8 +83,9 @@ Unplug USB flash drive
 Reboot macOS into Recovery mode
 
 Click on Apple logo > Riavvia
-Press and hold Win+R (equivalent Cmd+R Apple shortcut combo)
-It will take a while, then it will load into Recovery mode!
+At AMI SmallLogo, press and hold 'Esc'/'Zero' key until OC Picker show up
+Press 'Spacebar' key to show Auxiliary entries, then select "Recovery 12.7.6 (dmg)"
+It will take a while, then it will load Recovery mode!
 
 Type Cmd+Shift+T to quickly enter Terminal
 
@@ -94,13 +100,14 @@ Plug again the previous 16+ USB flash drive
 # diskutil umount /dev/diskXs2
 # diskutil eject /dev/diskX
 
-Unplug macOS Monterey USB drive
+Unplug macOS Monterey USB flash drive
 
 Click on Apple logo > Riavvia
 
-Login, then download latest Arch Linux installer ISO from their official website
+Login, then download my fork of UefiVarTool and latest Arch Linux installer ISO from their official website
 
 % cd ~/Music
+% curl -LO https://github.com/leon9078/UefiVarTool/releases/download/1.0.0/uvt.efi
 % curl -O https://it.mirrors.cicku.me/archlinux/iso/latest/{archlinux-x86_64.iso,sha256sums.txt}
 % shasum -a 256 archlinux-x86_64.iso | grep --color=yes "<paste SHA-256 of archlinux-x86_64.iso>"
 
@@ -137,11 +144,15 @@ y
 % cp /Volumes/$ARCHFSLABEL/{shellx64.efi,EFI/BOOT/BOOTx64.EFI}
 % cp Z97X-SLI_Monterey-master/BIOS/BIOS_settings.nsh /Volumes/$ARCHFSLABEL/EFI/BOOT/
 % mkdir /Volumes/$ARCHFSLABEL/EFI/TOOLS/
-% cp Z97X-SLI_Monterey-master/EFI/TOOLS/uvt.efi /Volumes/$ARCHFSLABEL/EFI/TOOLS/
+% cp uvt.efi /Volumes/$ARCHFSLABEL/EFI/TOOLS/
 % printf '@echo -off\r\nARCH-BOOTx64.EFI\r\n' | perl -0777pe 's/(.)/$1\x00/gs;s/^/\xFF\xFE/' > /Volumes/$ARCHFSLABEL/EFI/BOOT/startup.nsh
 % unset ARCHFSLABEL
 % sudo sync
 % diskutil umount /dev/diskXs1
+% sudo -s
+# printf "\x01" | dd of=/dev/diskXs1 bs=1 seek=42 count=1
+# sync
+# exit
 % diskutil eject /dev/diskX
 % rm -r Z97X-SLI_Monterey-master
 
@@ -157,20 +168,16 @@ Flash my mod BIOS using flashrom and a CH341A_SPI to USB in a Linux environment 
 
 Start with the backup BIOS (B_BIOS):
 
-# flashrom --chip 'MX25L6473E' --programmer ch341a_spi --erase
-# flashrom --chip 'MX25L6473E' --programmer ch341a_spi --read B_BIOS_read_after_erase.bin
+# flashrom --chip 'MX25L6473E' --programmer ch341a_spi --erase && flashrom --chip 'MX25L6473E' --programmer ch341a_spi --read B_BIOS_read_after_erase.bin
 # echo && sha256sum FF_8MiB.bin B_BIOS_read_after_erase.bin && echo
-# flashrom --chip 'MX25L6473E' --programmer ch341a_spi --noverify --write Z97XSLI.fd
-# flashrom --chip 'MX25L6473E' --programmer ch341a_spi --read B_BIOS_read_after_reprogram.bin
+# flashrom --chip 'MX25L6473E' --programmer ch341a_spi --noverify --write Z97XSLI.fd && flashrom --chip 'MX25L6473E' --programmer ch341a_spi --read B_BIOS_read_after_reprogram.bin
 # echo && sha256sum Z97XSLI.fd B_BIOS_read_after_reprogram.bin && echo
 
 Now, move on to the main BIOS (M_BIOS):
 
-# flashrom --chip 'MX25L6473E' --programmer ch341a_spi --erase
-# flashrom --chip 'MX25L6473E' --programmer ch341a_spi --read M_BIOS_read_after_erase.bin
+# flashrom --chip 'MX25L6473E' --programmer ch341a_spi --erase && flashrom --chip 'MX25L6473E' --programmer ch341a_spi --read M_BIOS_read_after_erase.bin
 # echo && sha256sum FF_8MiB.bin M_BIOS_read_after_erase.bin && echo
-# flashrom --chip 'MX25L6473E' --programmer ch341a_spi --noverify --write Z97XSLI.fd
-# flashrom --chip 'MX25L6473E' --programmer ch341a_spi --read M_BIOS_read_after_reprogram.bin
+# flashrom --chip 'MX25L6473E' --programmer ch341a_spi --noverify --write Z97XSLI.fd && flashrom --chip 'MX25L6473E' --programmer ch341a_spi --read M_BIOS_read_after_reprogram.bin
 # echo && sha256sum Z97XSLI.fd M_BIOS_read_after_reprogram.bin && echo
 
 Unplug power cable again.
@@ -185,19 +192,18 @@ Select "Load optimized defaults then reboot"
 After reboot, a new WARNING will appear saying "No bootable device is detected."
 
 Plug Arch USB drive to the target PC
-Press the reset button, F12, Arch USB, at UEFI Shell press ESC key (within 5 seconds) to skip "startup.nsh" (which will otherwise load Arch systemd-boot)
+Press Ctrl-Alt-Del, F12, Arch USB, at UEFI Shell press Esc key (within 5 seconds) to skip "startup.nsh" (which will otherwise load Arch systemd-boot)
 At UEFI Shell prompt, we can simply type "bios_settings". UEFI Shell is case-insensitive, so we can type "bios_settings" instead of "BIOS_settings"
 Also we can omit typing the script extension ".nsh"
 
 Shell> bios_settings
 
 After reboot, quickly unplug USB flash drive, wait for "No bootable device is detected." message. Plug again the Arch USB flash drive.
-Ctrl-Alt-Del, F12, Arch USB, at UEFI Shell press ESC key (within 5 seconds)
+Ctrl-Alt-Del, F12, Arch USB, at UEFI Shell press Esc key (within 5 seconds)
 
 Go to this website on another device: https://time.is/UTC
 
-Shell> date <month>/<day>/<year>
-Shell> time <hours>:<minutes>:<seconds>
+Shell> date 01/01/2022
 Shell> reset -s
 
 Unplug Arch USB installer, attach empty SATA Samsung SSD
@@ -259,6 +265,7 @@ Type Cmd+Shift+T to quickly enter Terminal
 # diskutil list
 # newfs_apfs -v 'Macintosh HD' /dev/rdiskXs2
 # diskutil mount nobrowse /dev/$(diskutil list | grep 'Macintosh HD' | awk '{printf $NF}')
+# cat /dev/null > .bash_history && history -c && exit
 
 Cmd+Q to quit Terminal
 
@@ -275,7 +282,7 @@ Type Cmd+Shift+T to quickly enter Terminal
 
 Plug Ethernet cable now!
 
-# curl -LJO https://github.com/leon9078/Z97X-SLI_Monterey/archive/refs/heads/master.zip
+# curl -JO --retry 5 https://codeload.github.com/leon9078/Z97X-SLI_Monterey/zip/refs/heads/master
 
 Unplug Ethernet cable now!
 
@@ -285,9 +292,9 @@ Unplug Ethernet cable now!
 # cp -R Z97X-SLI_Monterey-master/EFI_Target/OC /Volumes/EFI/EFI/
 # sync
 # diskutil umount /dev/diskXs1
+# printf "\x01" | dd of=/dev/diskXs1 bs=1 seek=42 count=1
+# sync
 # rm -r Z97X-SLI_Monterey-master*
-
-Cmd+Q to quit Terminal
 
 Click on Apple logo > Spegni
 
@@ -312,8 +319,6 @@ v
 w
 y
 
-# printf "\x01" | dd of=/dev/sdX1 bs=1 seek=42 count=1
-# sync
 # systemctl poweroff
 
 Unplug Arch USB drive.
@@ -334,17 +339,19 @@ In macOS open Terminal once
 
 Cmd+Q to quit Terminal
 
+
 Reboot macOS into Recovery mode
 
 Click on Apple logo > Riavvia
-After initial American Megatrends Inc screen, press and hold Win+R (equivalent Cmd+R Apple shortcut combo)
+At AMI SmallLogo, press and hold 'Esc'/'Zero' key until OC Picker show up
+Press 'Spacebar' key to show Auxiliary entries, then select "Recovery 12.7.6 (dmg)"
 It will take a while, then it will load Recovery mode!
 
 Type Cmd+Shift+T to quickly enter Terminal
 
 # diskutil list
 # mount | grep " /Volumes/"
-# dd if=/dev/rdiskX of=/Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Music/.ESP.img bs=1m skip=1 count=600 conv=notrunc status=progress
+# dd if=/dev/rdiskX of=/Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Music/.ESP.img bs=1m skip=1 count=600 conv=notrunc
 # sync
 # cp /Volumes/Macintosh\ HD/etc/zshrc /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/.zshrc
 # perl -i -pe 's/(^PS1=).*/$1"%~ %# "/' /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/.zshrc
@@ -366,7 +373,7 @@ Cmd+N
 
 Make sure Ethernet cable is connected for this following command, then disconnect it
 
-# printf '\33c\e[3J' && curl -Ls https://github.com/leon9078/Z97X-SLI_Monterey/raw/refs/heads/master/Instructions.txt | tail -n 128
+# printf '\33c\e[3J' && curl -s https://raw.githubusercontent.com/leon9078/Z97X-SLI_Monterey/refs/heads/master/Instructions.txt | tail -n 128
 
 Let's first handle "Pro" and "Novel" profiles, which already have "ShowWindowSettingsNameInTitle" set, we just need to set it as true!
 
@@ -478,8 +485,6 @@ Silver Aerogel:
 
 # plutil -convert binary1 /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 # rm -r /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/.zsh_*
-
-Cmd+Q to quit Terminal
 
 Click on Apple Logo > Riavvia
 
