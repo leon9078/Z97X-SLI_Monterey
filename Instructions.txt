@@ -6,7 +6,7 @@ Prerequirements:
 In a macOS environment:
 - Download macOS Monterey full installer using "mist-cli" (https://github.com/ninxsoft/mist-cli/releases/latest)
 - Download GPT fdisk (gdisk) tool
-- Download my fork of UefiVarTool (uvt.efi)
+- Download my fork of UefiVarTool
 - Download latest Arch Linux ISO
 
 Before proceeding make sure internet connection is available!
@@ -197,8 +197,6 @@ Shell> bios_settings
 After reboot, quickly unplug USB flash drive, wait for "No bootable device is detected." message. Plug again the Arch USB flash drive.
 Ctrl-Alt-Del, F12, Arch USB, at UEFI Shell press Esc key (within 5 seconds)
 
-Go to this website on another device: https://time.is/UTC
-
 Shell> date 04/01/2026
 Shell> reset -s
 
@@ -342,7 +340,7 @@ Cmd+Q to quit Terminal
 Reboot macOS into Recovery mode
 
 Click on Apple logo > Riavvia
-At AMI SmallLogo, press and hold 'Esc'/'Zero' key until OC Picker show up
+During AMI SmallLogo timeout, press and hold 'Esc' or 'Zero' key until OpenCore Picker show up
 Press 'Spacebar' key to show Auxiliary entries, then select "Recovery 12.7.6 (dmg)"
 It will take a while, then it will load Recovery mode!
 
@@ -362,13 +360,17 @@ Type Cmd+Shift+T to quickly enter Terminal
 
 Now manually set some Apple Terminal preferences to my taste in the target OS!
 
-At this point it's better to open a new Terminal window and copy/paste the following long commands!
+# plutil -convert xml1 /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+
+
+
+Now at this point it's better to open a new Terminal window and copy/paste the following long commands!
 
 Cmd+N to open a new Terminal window
 
 Make sure Ethernet cable is connected for this following command, then disconnect it
 
-# printf '\33c\e[3J' && curl -s --retry 5 https://raw.githubusercontent.com/leon9078/Z97X-SLI_Monterey/refs/heads/master/Instructions.txt | tail -n 141
+# printf '\33c\e[3J' && curl -s --retry 5 https://raw.githubusercontent.com/leon9078/Z97X-SLI_Monterey/refs/heads/master/Instructions.txt | tail -n 191
 
 Let's first handle "Pro" and "Novel" profiles, which already have "ShowWindowSettingsNameInTitle" set, we just need to set it as true!
 
@@ -381,7 +383,12 @@ Pro:
 -c "Add 'Window Settings:Pro:ShowActiveProcessInTabTitle' bool" \
 -c "Add 'Window Settings:Pro:ShowRepresentedURLInTitle' bool" \
 -c "Add 'Window Settings:Pro:ShowRepresentedURLInTabTitle' bool" \
--c "Set 'Window Settings:Pro:ShowWindowSettingsNameInTitle' 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+-c "Set 'Window Settings:Pro:ShowWindowSettingsNameInTitle' 1" \
+-c "Add 'Window Settings:Pro:noWarnProcesses' array" \
+-c "Add 'Window Settings:Pro:noWarnProcesses:0:ProcessName' string \"screen\"" \
+-c "Add 'Window Settings:Pro:noWarnProcesses:1:ProcessName' string \"tmux\"" \
+-c "Add 'Window Settings:Pro:noWarnProcesses:2:ProcessName' string \"login\"" \
+-c "Add 'Window Settings:Pro:noWarnProcesses:3:ProcessName' string \"zsh\"" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 
 Novel:
 
@@ -392,7 +399,12 @@ Novel:
 -c "Add 'Window Settings:Novel:ShowActiveProcessInTabTitle' bool" \
 -c "Add 'Window Settings:Novel:ShowRepresentedURLInTitle' bool" \
 -c "Add 'Window Settings:Novel:ShowRepresentedURLInTabTitle' bool" \
--c "Set 'Window Settings:Novel:ShowWindowSettingsNameInTitle' 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+-c "Set 'Window Settings:Novel:ShowWindowSettingsNameInTitle' 1" \
+-c "Add 'Window Settings:Novel:noWarnProcesses' array" \
+-c "Add 'Window Settings:Novel:noWarnProcesses:0:ProcessName' string \"screen\"" \
+-c "Add 'Window Settings:Novel:noWarnProcesses:1:ProcessName' string \"tmux\"" \
+-c "Add 'Window Settings:Novel:noWarnProcesses:2:ProcessName' string \"login\"" \
+-c "Add 'Window Settings:Novel:noWarnProcesses:3:ProcessName' string \"zsh\"" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 
 
 
@@ -409,7 +421,12 @@ Basic:
 -c "Add 'Window Settings:Basic:ShowActiveProcessInTabTitle' bool" \
 -c "Add 'Window Settings:Basic:ShowRepresentedURLInTitle' bool" \
 -c "Add 'Window Settings:Basic:ShowRepresentedURLInTabTitle' bool" \
--c "Add 'Window Settings:Basic:ShowWindowSettingsNameInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+-c "Add 'Window Settings:Basic:ShowWindowSettingsNameInTitle' bool 1" \
+-c "Add 'Window Settings:Basic:noWarnProcesses' array" \
+-c "Add 'Window Settings:Basic:noWarnProcesses:0:ProcessName' string \"screen\"" \
+-c "Add 'Window Settings:Basic:noWarnProcesses:1:ProcessName' string \"tmux\"" \
+-c "Add 'Window Settings:Basic:noWarnProcesses:2:ProcessName' string \"login\"" \
+-c "Add 'Window Settings:Basic:noWarnProcesses:3:ProcessName' string \"zsh\"" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 
 Grass:
 
@@ -420,7 +437,12 @@ Grass:
 -c "Add 'Window Settings:Grass:ShowActiveProcessInTabTitle' bool" \
 -c "Add 'Window Settings:Grass:ShowRepresentedURLInTitle' bool" \
 -c "Add 'Window Settings:Grass:ShowRepresentedURLInTabTitle' bool" \
--c "Add 'Window Settings:Grass:ShowWindowSettingsNameInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+-c "Add 'Window Settings:Grass:ShowWindowSettingsNameInTitle' bool 1" \
+-c "Add 'Window Settings:Grass:noWarnProcesses' array" \
+-c "Add 'Window Settings:Grass:noWarnProcesses:0:ProcessName' string \"screen\"" \
+-c "Add 'Window Settings:Grass:noWarnProcesses:1:ProcessName' string \"tmux\"" \
+-c "Add 'Window Settings:Grass:noWarnProcesses:2:ProcessName' string \"login\"" \
+-c "Add 'Window Settings:Grass:noWarnProcesses:3:ProcessName' string \"zsh\"" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 
 Ocean:
 
@@ -431,7 +453,12 @@ Ocean:
 -c "Add 'Window Settings:Ocean:ShowActiveProcessInTabTitle' bool" \
 -c "Add 'Window Settings:Ocean:ShowRepresentedURLInTitle' bool" \
 -c "Add 'Window Settings:Ocean:ShowRepresentedURLInTabTitle' bool" \
--c "Add 'Window Settings:Ocean:ShowWindowSettingsNameInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+-c "Add 'Window Settings:Ocean:ShowWindowSettingsNameInTitle' bool 1" \
+-c "Add 'Window Settings:Ocean:noWarnProcesses' array" \
+-c "Add 'Window Settings:Ocean:noWarnProcesses:0:ProcessName' string \"screen\"" \
+-c "Add 'Window Settings:Ocean:noWarnProcesses:1:ProcessName' string \"tmux\"" \
+-c "Add 'Window Settings:Ocean:noWarnProcesses:2:ProcessName' string \"login\"" \
+-c "Add 'Window Settings:Ocean:noWarnProcesses:3:ProcessName' string \"zsh\"" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 
 Homebrew:
 
@@ -442,7 +469,12 @@ Homebrew:
 -c "Add 'Window Settings:Homebrew:ShowActiveProcessInTabTitle' bool" \
 -c "Add 'Window Settings:Homebrew:ShowRepresentedURLInTitle' bool" \
 -c "Add 'Window Settings:Homebrew:ShowRepresentedURLInTabTitle' bool" \
--c "Add 'Window Settings:Homebrew:ShowWindowSettingsNameInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+-c "Add 'Window Settings:Homebrew:ShowWindowSettingsNameInTitle' bool 1" \
+-c "Add 'Window Settings:Homebrew:noWarnProcesses' array" \
+-c "Add 'Window Settings:Homebrew:noWarnProcesses:0:ProcessName' string \"screen\"" \
+-c "Add 'Window Settings:Homebrew:noWarnProcesses:1:ProcessName' string \"tmux\"" \
+-c "Add 'Window Settings:Homebrew:noWarnProcesses:2:ProcessName' string \"login\"" \
+-c "Add 'Window Settings:Homebrew:noWarnProcesses:3:ProcessName' string \"zsh\"" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 
 Man Page:
 
@@ -453,7 +485,12 @@ Man Page:
 -c "Add 'Window Settings:Man Page:ShowActiveProcessInTabTitle' bool" \
 -c "Add 'Window Settings:Man Page:ShowRepresentedURLInTitle' bool" \
 -c "Add 'Window Settings:Man Page:ShowRepresentedURLInTabTitle' bool" \
--c "Add 'Window Settings:Man Page:ShowWindowSettingsNameInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+-c "Add 'Window Settings:Man Page:ShowWindowSettingsNameInTitle' bool 1" \
+-c "Add 'Window Settings:Man Page:noWarnProcesses' array" \
+-c "Add 'Window Settings:Man Page:noWarnProcesses:0:ProcessName' string \"screen\"" \
+-c "Add 'Window Settings:Man Page:noWarnProcesses:1:ProcessName' string \"tmux\"" \
+-c "Add 'Window Settings:Man Page:noWarnProcesses:2:ProcessName' string \"login\"" \
+-c "Add 'Window Settings:Man Page:noWarnProcesses:3:ProcessName' string \"zsh\"" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 
 Red Sands:
 
@@ -464,7 +501,12 @@ Red Sands:
 -c "Add 'Window Settings:Red Sands:ShowActiveProcessInTabTitle' bool" \
 -c "Add 'Window Settings:Red Sands:ShowRepresentedURLInTitle' bool" \
 -c "Add 'Window Settings:Red Sands:ShowRepresentedURLInTabTitle' bool" \
--c "Add 'Window Settings:Red Sands:ShowWindowSettingsNameInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+-c "Add 'Window Settings:Red Sands:ShowWindowSettingsNameInTitle' bool 1" \
+-c "Add 'Window Settings:Red Sands:noWarnProcesses' array" \
+-c "Add 'Window Settings:Red Sands:noWarnProcesses:0:ProcessName' string \"screen\"" \
+-c "Add 'Window Settings:Red Sands:noWarnProcesses:1:ProcessName' string \"tmux\"" \
+-c "Add 'Window Settings:Red Sands:noWarnProcesses:2:ProcessName' string \"login\"" \
+-c "Add 'Window Settings:Red Sands:noWarnProcesses:3:ProcessName' string \"zsh\"" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 
 Solid Colors:
 
@@ -475,7 +517,12 @@ Solid Colors:
 -c "Add 'Window Settings:Solid Colors:ShowActiveProcessInTabTitle' bool" \
 -c "Add 'Window Settings:Solid Colors:ShowRepresentedURLInTitle' bool" \
 -c "Add 'Window Settings:Solid Colors:ShowRepresentedURLInTabTitle' bool" \
--c "Add 'Window Settings:Solid Colors:ShowWindowSettingsNameInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+-c "Add 'Window Settings:Solid Colors:ShowWindowSettingsNameInTitle' bool 1" \
+-c "Add 'Window Settings:Solid Colors:noWarnProcesses' array" \
+-c "Add 'Window Settings:Solid Colors:noWarnProcesses:0:ProcessName' string \"screen\"" \
+-c "Add 'Window Settings:Solid Colors:noWarnProcesses:1:ProcessName' string \"tmux\"" \
+-c "Add 'Window Settings:Solid Colors:noWarnProcesses:2:ProcessName' string \"login\"" \
+-c "Add 'Window Settings:Solid Colors:noWarnProcesses:3:ProcessName' string \"zsh\"" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 
 Silver Aerogel:
 
@@ -486,11 +533,16 @@ Silver Aerogel:
 -c "Add 'Window Settings:Silver Aerogel:ShowActiveProcessInTabTitle' bool" \
 -c "Add 'Window Settings:Silver Aerogel:ShowRepresentedURLInTitle' bool" \
 -c "Add 'Window Settings:Silver Aerogel:ShowRepresentedURLInTabTitle' bool" \
--c "Add 'Window Settings:Silver Aerogel:ShowWindowSettingsNameInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+-c "Add 'Window Settings:Silver Aerogel:ShowWindowSettingsNameInTitle' bool 1" \
+-c "Add 'Window Settings:Silver Aerogel:noWarnProcesses' array" \
+-c "Add 'Window Settings:Silver Aerogel:noWarnProcesses:0:ProcessName' string \"screen\"" \
+-c "Add 'Window Settings:Silver Aerogel:noWarnProcesses:1:ProcessName' string \"tmux\"" \
+-c "Add 'Window Settings:Silver Aerogel:noWarnProcesses:2:ProcessName' string \"login\"" \
+-c "Add 'Window Settings:Silver Aerogel:noWarnProcesses:3:ProcessName' string \"zsh\"" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 
 # plutil -convert binary1 /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 # rm -r /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/.zsh_*
-# history -c && exit (to both Terminal windows)
+# history -c && kill -9 $$ (to both Terminal windows)
 
 Cmd+Q to quit Terminal
 
