@@ -11,6 +11,8 @@ In a macOS environment:
 
 Before proceeding make sure internet connection is available!
 
+Download macOS Monterey full installer using "mist-cli"
+
 % cd ~/Music
 % curl -LO https://github.com/ninxsoft/mist-cli/releases/download/v2.2/mist-cli.2.2.pkg
 % pkgutil --expand-full mist-cli.2.2.pkg mist-cli.2.2/
@@ -92,7 +94,7 @@ Plug again the previous 16+ USB flash drive
 
 Unplug macOS Monterey USB flash drive
 
-# > .bash_history && history -c && exit
+# history -c && kill -9 $$
 
 Cmq+Q to quit Terminal
 
@@ -197,7 +199,7 @@ Ctrl-Alt-Del, F12, Arch USB, at UEFI Shell press Esc key (within 5 seconds)
 
 Go to this website on another device: https://time.is/UTC
 
-Shell> date 01/01/2022
+Shell> date 04/01/2026
 Shell> reset -s
 
 Unplug Arch USB installer, attach empty SATA Samsung SSD
@@ -259,7 +261,7 @@ Type Cmd+Shift+T to quickly enter Terminal
 # diskutil list
 # newfs_apfs -v 'Macintosh HD' /dev/rdiskXs2
 # diskutil mount nobrowse /dev/$(diskutil list | grep 'Macintosh HD' | awk '{printf $NF}')
-# > .bash_history && history -c && exit
+# history -c && kill -9 $$
 
 Cmd+Q to quit Terminal
 
@@ -281,15 +283,15 @@ Plug Ethernet cable now!
 Unplug Ethernet cable now!
 
 # unzip -q Z97X-SLI_Monterey-master.zip
+# mv Z97X-SLI_Monterey-master/EFI{_Target,}
 # diskutil mount nobrowse /dev/diskXs1
-# mkdir /Volumes/EFI/EFI/
-# cp -R Z97X-SLI_Monterey-master/EFI_Target/OC /Volumes/EFI/EFI/
+# cp -R Z97X-SLI_Monterey-master/EFI /Volumes/EFI/
 # sync
 # diskutil umount /dev/diskXs1
 # rm -r Z97X-SLI_Monterey-master*
 # printf "\x01" | dd of=/dev/diskXs1 bs=1 seek=42 count=1
 # sync
-# > .bash_history && history -c && exit
+# history -c && kill -9 $$
 
 Cmq+Q to quit Terminal
 
@@ -360,39 +362,37 @@ Type Cmd+Shift+T to quickly enter Terminal
 
 Now manually set some Apple Terminal preferences to my taste in the target OS!
 
-# plutil -convert xml1 /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
-
-
-
-Now at this point it's better to open a new Terminal window and copy/paste the following long commands!
+At this point it's better to open a new Terminal window and copy/paste the following long commands!
 
 Cmd+N to open a new Terminal window
 
 Make sure Ethernet cable is connected for this following command, then disconnect it
 
-# printf '\33c\e[3J' && curl -s --retry 5 https://raw.githubusercontent.com/leon9078/Z97X-SLI_Monterey/refs/heads/master/Instructions.txt | tail -n 131
+# printf '\33c\e[3J' && curl -s --retry 5 https://raw.githubusercontent.com/leon9078/Z97X-SLI_Monterey/refs/heads/master/Instructions.txt | tail -n 141
 
 Let's first handle "Pro" and "Novel" profiles, which already have "ShowWindowSettingsNameInTitle" set, we just need to set it as true!
 
 Pro:
 
 # printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
--c "Add 'Window Settings:Pro:CommandString' string \"printf \'\\\33c\\\e[3J\'\"" \
--c "Add 'Window Settings:Pro:RunCommandAsShell' bool" \
--c "Add 'Window Settings:Pro:ShowActiveProcessArgumentsInTitle' bool" \
--c "Add 'Window Settings:Pro:ShowActiveProcessArgumentsInTabTitle' bool" \
--c "Set 'Window Settings:Pro:ShowWindowSettingsNameInTitle' 1" \
--c "Add 'Window Settings:Pro:ShowRepresentedURLPathInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+-c "Add 'Window Settings:Pro:CommandString' string \"login -fpql leonardo /bin/zsh -l\"" \
+-c "Add 'Window Settings:Pro:RunCommandAsShell' bool 1" \
+-c "Add 'Window Settings:Pro:ShowActiveProcessInTitle' bool" \
+-c "Add 'Window Settings:Pro:ShowActiveProcessInTabTitle' bool" \
+-c "Add 'Window Settings:Pro:ShowRepresentedURLInTitle' bool" \
+-c "Add 'Window Settings:Pro:ShowRepresentedURLInTabTitle' bool" \
+-c "Set 'Window Settings:Pro:ShowWindowSettingsNameInTitle' 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 
 Novel:
 
 # printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
--c "Add 'Window Settings:Novel:CommandString' string \"printf \'\\\33c\\\e[3J\'\"" \
--c "Add 'Window Settings:Novel:RunCommandAsShell' bool" \
--c "Add 'Window Settings:Novel:ShowActiveProcessArgumentsInTitle' bool" \
--c "Add 'Window Settings:Novel:ShowActiveProcessArgumentsInTabTitle' bool" \
--c "Set 'Window Settings:Novel:ShowWindowSettingsNameInTitle' 1" \
--c "Add 'Window Settings:Novel:ShowRepresentedURLPathInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+-c "Add 'Window Settings:Novel:CommandString' string \"login -fpql leonardo /bin/zsh -l\"" \
+-c "Add 'Window Settings:Novel:RunCommandAsShell' bool 1" \
+-c "Add 'Window Settings:Novel:ShowActiveProcessInTitle' bool" \
+-c "Add 'Window Settings:Novel:ShowActiveProcessInTabTitle' bool" \
+-c "Add 'Window Settings:Novel:ShowRepresentedURLInTitle' bool" \
+-c "Add 'Window Settings:Novel:ShowRepresentedURLInTabTitle' bool" \
+-c "Set 'Window Settings:Novel:ShowWindowSettingsNameInTitle' 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 
 
 
@@ -403,86 +403,94 @@ Now start covering all other profiles!
 Basic:
 
 # printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
--c "Add 'Window Settings:Basic:CommandString' string \"printf \'\\\33c\\\e[3J\'\"" \
--c "Add 'Window Settings:Basic:RunCommandAsShell' bool" \
--c "Add 'Window Settings:Basic:ShowActiveProcessArgumentsInTitle' bool" \
--c "Add 'Window Settings:Basic:ShowActiveProcessArgumentsInTabTitle' bool" \
--c "Add 'Window Settings:Basic:ShowWindowSettingsNameInTitle' bool 1" \
--c "Add 'Window Settings:Basic:ShowRepresentedURLPathInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+-c "Add 'Window Settings:Basic:CommandString' string \"login -fpql leonardo /bin/zsh -l\"" \
+-c "Add 'Window Settings:Basic:RunCommandAsShell' bool 1" \
+-c "Add 'Window Settings:Basic:ShowActiveProcessInTitle' bool" \
+-c "Add 'Window Settings:Basic:ShowActiveProcessInTabTitle' bool" \
+-c "Add 'Window Settings:Basic:ShowRepresentedURLInTitle' bool" \
+-c "Add 'Window Settings:Basic:ShowRepresentedURLInTabTitle' bool" \
+-c "Add 'Window Settings:Basic:ShowWindowSettingsNameInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 
 Grass:
 
 # printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
--c "Add 'Window Settings:Grass:CommandString' string \"printf \'\\\33c\\\e[3J\'\"" \
--c "Add 'Window Settings:Grass:RunCommandAsShell' bool" \
--c "Add 'Window Settings:Grass:ShowActiveProcessArgumentsInTitle' bool" \
--c "Add 'Window Settings:Grass:ShowActiveProcessArgumentsInTabTitle' bool" \
--c "Add 'Window Settings:Grass:ShowWindowSettingsNameInTitle' bool 1" \
--c "Add 'Window Settings:Grass:ShowRepresentedURLPathInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+-c "Add 'Window Settings:Grass:CommandString' string \"login -fpql leonardo /bin/zsh -l\"" \
+-c "Add 'Window Settings:Grass:RunCommandAsShell' bool 1" \
+-c "Add 'Window Settings:Grass:ShowActiveProcessInTitle' bool" \
+-c "Add 'Window Settings:Grass:ShowActiveProcessInTabTitle' bool" \
+-c "Add 'Window Settings:Grass:ShowRepresentedURLInTitle' bool" \
+-c "Add 'Window Settings:Grass:ShowRepresentedURLInTabTitle' bool" \
+-c "Add 'Window Settings:Grass:ShowWindowSettingsNameInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 
 Ocean:
 
 # printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
--c "Add 'Window Settings:Ocean:CommandString' string \"printf \'\\\33c\\\e[3J\'\"" \
--c "Add 'Window Settings:Ocean:RunCommandAsShell' bool" \
--c "Add 'Window Settings:Ocean:ShowActiveProcessArgumentsInTitle' bool" \
--c "Add 'Window Settings:Ocean:ShowActiveProcessArgumentsInTabTitle' bool" \
--c "Add 'Window Settings:Ocean:ShowWindowSettingsNameInTitle' bool 1" \
--c "Add 'Window Settings:Ocean:ShowRepresentedURLPathInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+-c "Add 'Window Settings:Ocean:CommandString' string \"login -fpql leonardo /bin/zsh -l\"" \
+-c "Add 'Window Settings:Ocean:RunCommandAsShell' bool 1" \
+-c "Add 'Window Settings:Ocean:ShowActiveProcessInTitle' bool" \
+-c "Add 'Window Settings:Ocean:ShowActiveProcessInTabTitle' bool" \
+-c "Add 'Window Settings:Ocean:ShowRepresentedURLInTitle' bool" \
+-c "Add 'Window Settings:Ocean:ShowRepresentedURLInTabTitle' bool" \
+-c "Add 'Window Settings:Ocean:ShowWindowSettingsNameInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 
 Homebrew:
 
 # printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
--c "Add 'Window Settings:Homebrew:CommandString' string \"printf \'\\\33c\\\e[3J\'\"" \
--c "Add 'Window Settings:Homebrew:RunCommandAsShell' bool" \
--c "Add 'Window Settings:Homebrew:ShowActiveProcessArgumentsInTitle' bool" \
--c "Add 'Window Settings:Homebrew:ShowActiveProcessArgumentsInTabTitle' bool" \
--c "Add 'Window Settings:Homebrew:ShowWindowSettingsNameInTitle' bool 1" \
--c "Add 'Window Settings:Homebrew:ShowRepresentedURLPathInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+-c "Add 'Window Settings:Homebrew:CommandString' string \"login -fpql leonardo /bin/zsh -l\"" \
+-c "Add 'Window Settings:Homebrew:RunCommandAsShell' bool 1" \
+-c "Add 'Window Settings:Homebrew:ShowActiveProcessInTitle' bool" \
+-c "Add 'Window Settings:Homebrew:ShowActiveProcessInTabTitle' bool" \
+-c "Add 'Window Settings:Homebrew:ShowRepresentedURLInTitle' bool" \
+-c "Add 'Window Settings:Homebrew:ShowRepresentedURLInTabTitle' bool" \
+-c "Add 'Window Settings:Homebrew:ShowWindowSettingsNameInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 
 Man Page:
 
 # printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
--c "Add 'Window Settings:Man Page:CommandString' string \"printf \'\\\33c\\\e[3J\'\"" \
--c "Add 'Window Settings:Man Page:RunCommandAsShell' bool" \
--c "Add 'Window Settings:Man Page:ShowActiveProcessArgumentsInTitle' bool" \
--c "Add 'Window Settings:Man Page:ShowActiveProcessArgumentsInTabTitle' bool" \
--c "Add 'Window Settings:Man Page:ShowWindowSettingsNameInTitle' bool 1" \
--c "Add 'Window Settings:Man Page:ShowRepresentedURLPathInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+-c "Add 'Window Settings:Man Page:CommandString' string \"login -fpql leonardo /bin/zsh -l\"" \
+-c "Add 'Window Settings:Man Page:RunCommandAsShell' bool 1" \
+-c "Add 'Window Settings:Man Page:ShowActiveProcessInTitle' bool" \
+-c "Add 'Window Settings:Man Page:ShowActiveProcessInTabTitle' bool" \
+-c "Add 'Window Settings:Man Page:ShowRepresentedURLInTitle' bool" \
+-c "Add 'Window Settings:Man Page:ShowRepresentedURLInTabTitle' bool" \
+-c "Add 'Window Settings:Man Page:ShowWindowSettingsNameInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 
 Red Sands:
 
 # printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
--c "Add 'Window Settings:Red Sands:CommandString' string \"printf \'\\\33c\\\e[3J\'\"" \
--c "Add 'Window Settings:Red Sands:RunCommandAsShell' bool" \
--c "Add 'Window Settings:Red Sands:ShowActiveProcessArgumentsInTitle' bool" \
--c "Add 'Window Settings:Red Sands:ShowActiveProcessArgumentsInTabTitle' bool" \
--c "Add 'Window Settings:Red Sands:ShowWindowSettingsNameInTitle' bool 1" \
--c "Add 'Window Settings:Red Sands:ShowRepresentedURLPathInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+-c "Add 'Window Settings:Red Sands:CommandString' string \"login -fpql leonardo /bin/zsh -l\"" \
+-c "Add 'Window Settings:Red Sands:RunCommandAsShell' bool 1" \
+-c "Add 'Window Settings:Red Sands:ShowActiveProcessInTitle' bool" \
+-c "Add 'Window Settings:Red Sands:ShowActiveProcessInTabTitle' bool" \
+-c "Add 'Window Settings:Red Sands:ShowRepresentedURLInTitle' bool" \
+-c "Add 'Window Settings:Red Sands:ShowRepresentedURLInTabTitle' bool" \
+-c "Add 'Window Settings:Red Sands:ShowWindowSettingsNameInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 
 Solid Colors:
 
 # printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
--c "Add 'Window Settings:Solid Colors:CommandString' string \"printf \'\\\33c\\\e[3J\'\"" \
--c "Add 'Window Settings:Solid Colors:RunCommandAsShell' bool" \
--c "Add 'Window Settings:Solid Colors:ShowActiveProcessArgumentsInTitle' bool" \
--c "Add 'Window Settings:Solid Colors:ShowActiveProcessArgumentsInTabTitle' bool" \
--c "Add 'Window Settings:Solid Colors:ShowWindowSettingsNameInTitle' bool 1" \
--c "Add 'Window Settings:Solid Colors:ShowRepresentedURLPathInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+-c "Add 'Window Settings:Solid Colors:CommandString' string \"login -fpql leonardo /bin/zsh -l\"" \
+-c "Add 'Window Settings:Solid Colors:RunCommandAsShell' bool 1" \
+-c "Add 'Window Settings:Solid Colors:ShowActiveProcessInTitle' bool" \
+-c "Add 'Window Settings:Solid Colors:ShowActiveProcessInTabTitle' bool" \
+-c "Add 'Window Settings:Solid Colors:ShowRepresentedURLInTitle' bool" \
+-c "Add 'Window Settings:Solid Colors:ShowRepresentedURLInTabTitle' bool" \
+-c "Add 'Window Settings:Solid Colors:ShowWindowSettingsNameInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 
 Silver Aerogel:
 
 # printf '\33c\e[3J' && /usr/libexec/PlistBuddy \
--c "Add 'Window Settings:Silver Aerogel:CommandString' string \"printf \'\\\33c\\\e[3J\'\"" \
--c "Add 'Window Settings:Silver Aerogel:RunCommandAsShell' bool" \
--c "Add 'Window Settings:Silver Aerogel:ShowActiveProcessArgumentsInTitle' bool" \
--c "Add 'Window Settings:Silver Aerogel:ShowActiveProcessArgumentsInTabTitle' bool" \
--c "Add 'Window Settings:Silver Aerogel:ShowWindowSettingsNameInTitle' bool 1" \
--c "Add 'Window Settings:Silver Aerogel:ShowRepresentedURLPathInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
+-c "Add 'Window Settings:Silver Aerogel:CommandString' string \"login -fpql leonardo /bin/zsh -l\"" \
+-c "Add 'Window Settings:Silver Aerogel:RunCommandAsShell' bool 1" \
+-c "Add 'Window Settings:Silver Aerogel:ShowActiveProcessInTitle' bool" \
+-c "Add 'Window Settings:Silver Aerogel:ShowActiveProcessInTabTitle' bool" \
+-c "Add 'Window Settings:Silver Aerogel:ShowRepresentedURLInTitle' bool" \
+-c "Add 'Window Settings:Silver Aerogel:ShowRepresentedURLInTabTitle' bool" \
+-c "Add 'Window Settings:Silver Aerogel:ShowWindowSettingsNameInTitle' bool 1" /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 
 # plutil -convert binary1 /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 # rm -r /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/.zsh_*
-# > .bash_history && history -c && exit
+# history -c && exit (to both Terminal windows)
 
 Cmd+Q to quit Terminal
 
