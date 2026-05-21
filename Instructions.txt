@@ -4,29 +4,19 @@ Prerequirements:
 - empty 2+ GB USB flash drive for Arch Linux
 
 In a macOS environment:
-- Install latest Python version for macOS x64
-- Download macOS Monterey full installer using "installinstallmacos.py" (https://github.com/munki/macadmin-scripts)
+- Download macOS Monterey full installer using "mist-cli" (https://github.com/ninxsoft/mist-cli/releases/latest)
 - Download GPT fdisk (gdisk) tool
-- Download my fork of UefiVarTool
+- Download my fork of UefiVarTool (uvt.efi)
 - Download latest Arch Linux ISO
 
-Make sure internet connection is available and latest Python version has been installed
+Before proceeding make sure internet connection is available!
 
 % cd ~/Music
-% curl -JO https://codeload.github.com/munki/macadmin-scripts/zip/refs/heads/main
-% unzip -q macadmin-scripts-main.zip
-% cd macadmin-scripts-main
-% pip3 install xattr
-% sudo python3 installinstallmacos.py
-[type the number of the macOS version you want to install]
-% sudo chown -R $(whoami) *
-% cp Install_macOS_12.7.4-21H1123.dmg ..
-% hdiutil attach -mountpoint mnt -nobrowse -noverify Install_macOS_12.7.4-21H1123.dmg
-% cp -R mnt/Install\ macOS\ Monterey.app /Applications/
-% sudo sync
-% hdiutil detach mnt
-% cd ..
-% rm -rf macadmin-scripts-main*
+% curl -LO https://github.com/ninxsoft/mist-cli/releases/download/v2.2/mist-cli.2.2.pkg
+% pkgutil --expand-full mist-cli.2.2.pkg mist-cli.2.2/
+% mv mist-cli.2.2/Payload/usr/local/bin/mist .
+% rm -r mist-cli.2.2*
+% sudo ./mist download installer -o /Applications/ "macOS Monterey" application
 
 Download GPT fdisk (gdisk) tool
 
@@ -83,7 +73,7 @@ Unplug USB flash drive
 Reboot macOS into Recovery mode
 
 Click on Apple logo > Riavvia
-At AMI SmallLogo, press and hold 'Esc'/'Zero' key until OC Picker show up
+During AMI SmallLogo timeout, press and hold 'Esc' or 'Zero' key until OpenCore Picker show up
 Press 'Spacebar' key to show Auxiliary entries, then select "Recovery 12.7.6 (dmg)"
 It will take a while, then it will load Recovery mode!
 
@@ -94,13 +84,17 @@ Plug again the previous 16+ USB flash drive
 # diskutil list
 # newfs_hfs -J -v Monterey_Installer /dev/rdiskXs2
 # diskutil mount nobrowse /dev/diskXs2
-# /Volumes/Macintosh\ HD/Applications/Install\ macOS\ Monterey.app/Contents/Resources/createinstallmedia --volume /Volumes/Monterey_Installer --nointeraction
+# /Volumes/Macintosh\ HD/Applications/Install\ macOS\ Monterey\ 12.7.6-21H1320.app/Contents/Resources/createinstallmedia --volume /Volumes/Monterey_Installer --nointeraction
 # sync
 # hdiutil detach /Volumes/Shared\ Support
 # diskutil umount /dev/diskXs2
 # diskutil eject /dev/diskX
 
 Unplug macOS Monterey USB flash drive
+
+# > .bash_history && history -c && exit
+
+Cmq+Q to quit Terminal
 
 Click on Apple logo > Riavvia
 
@@ -141,8 +135,9 @@ y
 % bsdtar -x -v --exclude EFI/BOOT/BOOTIA32.EFI --exclude boot/syslinux/ --exclude shellia32.efi -f archlinux-x86_64.iso -C /Volumes/$ARCHFSLABEL
 % perl -i -pe 's/(timeout).*/$1 5/;s/(beep).*/$1 off/' /Volumes/$ARCHFSLABEL/loader/loader.conf
 % mv /Volumes/$ARCHFSLABEL/EFI/BOOT/{,ARCH-}BOOTx64.EFI
-% cp /Volumes/$ARCHFSLABEL/{shellx64.efi,EFI/BOOT/BOOTx64.EFI}
+% mv /Volumes/$ARCHFSLABEL/{shellx64.efi,EFI/BOOT/BOOTx64.EFI}
 % cp Z97X-SLI_Monterey-master/BIOS/BIOS_settings.nsh /Volumes/$ARCHFSLABEL/EFI/BOOT/
+% rm -r Z97X-SLI_Monterey-master
 % mkdir /Volumes/$ARCHFSLABEL/EFI/TOOLS/
 % cp uvt.efi /Volumes/$ARCHFSLABEL/EFI/TOOLS/
 % printf '@echo -off\r\nARCH-BOOTx64.EFI\r\n' | perl -0777pe 's/(.)/$1\x00/gs;s/^/\xFF\xFE/' > /Volumes/$ARCHFSLABEL/EFI/BOOT/startup.nsh
@@ -154,7 +149,6 @@ y
 # sync
 # exit
 % diskutil eject /dev/diskX
-% rm -r Z97X-SLI_Monterey-master
 
 Unplug Arch USB drive
 Unplug power cable.
@@ -265,7 +259,7 @@ Type Cmd+Shift+T to quickly enter Terminal
 # diskutil list
 # newfs_apfs -v 'Macintosh HD' /dev/rdiskXs2
 # diskutil mount nobrowse /dev/$(diskutil list | grep 'Macintosh HD' | awk '{printf $NF}')
-# cat /dev/null > .bash_history && history -c && exit
+# > .bash_history && history -c && exit
 
 Cmd+Q to quit Terminal
 
@@ -292,9 +286,12 @@ Unplug Ethernet cable now!
 # cp -R Z97X-SLI_Monterey-master/EFI_Target/OC /Volumes/EFI/EFI/
 # sync
 # diskutil umount /dev/diskXs1
+# rm -r Z97X-SLI_Monterey-master*
 # printf "\x01" | dd of=/dev/diskXs1 bs=1 seek=42 count=1
 # sync
-# rm -r Z97X-SLI_Monterey-master*
+# > .bash_history && history -c && exit
+
+Cmq+Q to quit Terminal
 
 Click on Apple logo > Spegni
 
@@ -369,11 +366,11 @@ Now manually set some Apple Terminal preferences to my taste in the target OS!
 
 Now at this point it's better to open a new Terminal window and copy/paste the following long commands!
 
-Cmd+N
+Cmd+N to open a new Terminal window
 
 Make sure Ethernet cable is connected for this following command, then disconnect it
 
-# printf '\33c\e[3J' && curl -s https://raw.githubusercontent.com/leon9078/Z97X-SLI_Monterey/refs/heads/master/Instructions.txt | tail -n 128
+# printf '\33c\e[3J' && curl -s --retry 5 https://raw.githubusercontent.com/leon9078/Z97X-SLI_Monterey/refs/heads/master/Instructions.txt | tail -n 131
 
 Let's first handle "Pro" and "Novel" profiles, which already have "ShowWindowSettingsNameInTitle" set, we just need to set it as true!
 
@@ -485,6 +482,9 @@ Silver Aerogel:
 
 # plutil -convert binary1 /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/Library/Preferences/com.apple.Terminal.plist
 # rm -r /Volumes/Macintosh\ HD\ -\ Dati/Users/leonardo/.zsh_*
+# > .bash_history && history -c && exit
+
+Cmd+Q to quit Terminal
 
 Click on Apple Logo > Riavvia
 
