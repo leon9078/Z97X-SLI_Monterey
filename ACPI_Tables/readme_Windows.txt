@@ -2,7 +2,7 @@ This are the SSDTs needed to work with my hackintosh!
 
 I'm using the same iasl compiler version of the ACPI tables that are embedded in my BIOS: 20120711
 In order to compile/decompile, we must be on Windows.
-Download iasl compiler from here: https://github.com/acpica/acpica/raw/R07_11_12/libraries/iasl.exe
+Download iasl compiler from here: https://raw.githubusercontent.com/acpica/acpica/refs/tags/R07_11_12/libraries/iasl.exe
 
 Right click on "iasl-win-20120711.zip" > 7-Zip > Extract to "iasl-win-20120711\"
 
