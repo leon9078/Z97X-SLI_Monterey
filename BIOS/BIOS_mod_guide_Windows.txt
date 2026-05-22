@@ -34,7 +34,7 @@ We will work entirely in the Documents folder
 
 We'll need this files/softwares:
 1) Mullvad Browser, latest release for Windows (https://github.com/mullvad/mullvad-browser/releases/latest)
-2) 7-Zip, latest release for Windows [x64] (https://www.7-zip.org/)
+2) 7-Zip, latest release for Windows [x64] (https://github.com/ip7z/7zip/releases/latest)
 3) Python, latest release for Windows [x64] (https://www.python.org/)
 4) Notepad++, latest Installer release [x64] (https://github.com/notepad-plus-plus/notepad-plus-plus/releases/latest)
 5) Hextor, latest release (https://github.com/digitalw0lf/hextor/releases/latest)
@@ -51,7 +51,7 @@ We'll need this files/softwares:
 16) IFRExtractor RS, latest release for Windows (https://github.com/LongSoft/IFRExtractor-RS/releases/latest)
 17) acpidump, latest release for Windows (https://github.com/acpica/acpica/releases/latest)
 18) iasl, latest release for Windows (https://github.com/acpica/acpica/releases/latest)
-19) My OpenCorePkg fork (Darwin XCODE5) (which include Fat_NO_FsVersion_check.efi) (https://github.com/leon9078/OpenCorePkg/releases/latest)
+19) My OpenCorePkg fork (Darwin XCODE5) (which include Fat_NO_FsVersion_check.efi and modified CrScreenshotDxe.efi) (https://github.com/leon9078/OpenCorePkg/releases/latest)
 20) UEFITool 0.28.0, older release for Windows (https://github.com/LongSoft/UEFITool/releases/tag/0.28.0)
 21) ZimaCube N100 BIOS from OEM website (https://www.zimaspace.com/docs/zimacube/ZimaCube-Bios-Update-Method-.html)
 
@@ -90,7 +90,7 @@ Search for "browser.download.enable_spam_prevention" and set it to "false"
 
 Back to CMD
 > del mullvad-browser-windows-x86_64-15.0.12.exe
-> curl -LO https://www.7-zip.org/a/7z2601-x64.exe
+> curl -LO https://github.com/ip7z/7zip/releases/download/26.01/7z2601-x64.exe
 
 Back to File Explorer
 Right click on "7z2601-x64.exe" > "Run as administrator" > Yes
@@ -101,7 +101,7 @@ Close
 
 Back to CMD
 > del 7z2601-x64.exe
-> curl -LO https://www.python.org/ftp/python/3.14.5/python-3.14.5-amd64.exe
+> curl -O https://www.python.org/ftp/python/3.14.5/python-3.14.5-amd64.exe
 > powershell -Command "Start-Process cmd -ArgumentList """/K cd %WINDIR%\System32""" -Verb RunAs"
     "Yes"
 > reg add HKLM\SYSTEM\CurrentControlSet\Control\FileSystem /v LongPathsEnabled /t REG_DWORD /d 1 /f
@@ -1616,7 +1616,7 @@ No matter if the ESP of that disk has GPT attributes set, such as:
 
 ...it will ALWAYS mount that partition and create that infamous folder...
 
-The ONLY thing that prevent Windows from mounting a FAT partition is by setting FsVersion to a value other than "00 00". Ref: https://raw.githubusercontent.com/ryansturmer/thinfat32/master/fatgen103.pdf
+The ONLY thing that prevent Windows from mounting a FAT partition is by setting FsVersion to a value other than "00 00". Ref: https://raw.githubusercontent.com/ryansturmer/thinfat32/refs/heads/master/fatgen103.pdf
 
 This field is defined at offset 42 of BPB (BIOS Parameter Block), which is found at sector 0 of the partition.
 
@@ -1724,7 +1724,7 @@ Back to CMD
 > GenSec -o Fat_NO_FsVersion_check.com -s EFI_SECTION_COMPRESSION -c PI_NONE Fat_NO_FsVersion_check.pe32 Fat.ui
 
 Create the final ffs with this specific GUID: 961578FE-B6B7-44C3-AF35-6BC705CD2B1F
-GUID source: https://github.com/acidanthera/audk/blob/a77501f29dccb99679a92efb39783414ca700fb3/FatPkg/EnhancedFatDxe/Fat.inf#L18C36-L18C72
+GUID source: https://github.com/acidanthera/audk/blob/a77501f29dccb99679a92efb39783414ca700fb3/FatPkg/EnhancedFatDxe/Fat.inf#L18
 
 > GenFfs -o Fat_NO_FsVersion_check.ffs -t EFI_FV_FILETYPE_DRIVER -g "961578FE-B6B7-44C3-AF35-6BC705CD2B1F" -s -i Fat_NO_FsVersion_check.com
 > del Fat_NO_FsVersion_check.com Fat.ui Fat_NO_FsVersion_check.pe32 Fat_NO_FsVersion_check.efi
@@ -1740,10 +1740,10 @@ Updated "Fat_NO_FsVersion_check.ffs" file will be used later to replace the orig
 
 Now we want to change some default UEFI boot entries in order to add "OpenCore" and "Gentoo" to the list of recognized UEFI default boot entries in our firmware.
 
-For OpenCore, I took the string from here: https://github.com/acidanthera/OpenCorePkg/blob/1.0.7/Library/OcMainLib/OpenCoreMisc.c#L690C11-L690C19
+For OpenCore, I took the string from here: https://github.com/acidanthera/OpenCorePkg/blob/1.0.7/Library/OcMainLib/OpenCoreMisc.c#L690
 Basically it's the same as if OpenCore was launched with "LauncherOption" set to "Short"
 
-For Gentoo, I took the string from here: https://github.com/gentoo/gentoo/blob/b5513491ebdbb988de072e5af975bd309ea5b877/sys-boot/grub/files/grub.default-4#L11C19-L11C25
+For Gentoo, I took the string from here: https://github.com/gentoo/gentoo/blob/b5513491ebdbb988de072e5af975bd309ea5b877/sys-boot/grub/files/grub.default-4#L11
 
 This entries are auto-generated at runtime by the underlying firmware as Boot####, where # is an HEX value containing numbers (0-9) and uppercase HEX letters (A-F).
 This auto-generation works much like the user have created a UEFI entry from the UEFI shell with this command:
@@ -2162,7 +2162,7 @@ To do this we will use the AMI logos from ZimaCube N100 BIOS!
 Let's start with the AMI SmallLogo
 
 Back to CMD
-> curl -LJO "https://drive.google.com/uc?export=download&id=1yd8Z2fJNr69TLyy6381JzVSHP_Af0awQ"
+> curl -JO "https://drive.usercontent.google.com/download?id=1yd8Z2fJNr69TLyy6381JzVSHP_Af0awQ&export=download"
 > 7z e "ZimaCube N100 BIOS 01.zip" ZCN-01\ZCN-01\ZCN-01.ROM
 
 Back to File Explorer
@@ -2428,7 +2428,7 @@ Quit Mullvad Browser
 Now grab my copy of "MyOemLogo1_mod.jpg" inside Miscellaneous/BIOS_mod/
 
 Back to CMD
-> curl -LJO https://github.com/leon9078/Z97X-SLI_Monterey/raw/refs/heads/master/Miscellaneous/BIOS_mod/MyOemLogo1_mod.jpg
+> curl -O https://raw.githubusercontent.com/leon9078/Z97X-SLI_Monterey/refs/heads/master/Miscellaneous/BIOS_mod/MyOemLogo1_mod.jpg
 > GenSec -o MyOemLogo1_mod.frfrm -s EFI_SECTION_FREEFORM_SUBTYPE_GUID -g "7BB28B99-61BB-11D5-9A5D-0090273FC14D" MyOemLogo1_mod.jpg
 > GenSec -o MyOemLogo1_mod.ui -s EFI_SECTION_USER_INTERFACE -n "MyOemLogo1"
 > GenSec -o MyOemLogo1_mod.com -s EFI_SECTION_COMPRESSION -c TIANO MyOemLogo1_mod.frfrm MyOemLogo1_mod.ui
