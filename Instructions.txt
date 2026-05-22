@@ -64,10 +64,8 @@ y
 % cp -R Z97X-SLI_Monterey-master/EFI /Volumes/EFI/
 % sudo sync
 % diskutil umount /dev/diskXs1
-% sudo -s
-# printf "\x01" | dd of=/dev/diskXs1 bs=1 seek=42 count=1
-# sync
-# exit
+% printf "\x01" | sudo dd of=/dev/diskXs1 bs=1 seek=42 count=1
+% sudo sync
 % diskutil eject /dev/diskX
 
 Unplug USB flash drive
@@ -146,10 +144,8 @@ y
 % unset ARCHFSLABEL
 % sudo sync
 % diskutil umount /dev/diskXs1
-% sudo -s
-# printf "\x01" | dd of=/dev/diskXs1 bs=1 seek=42 count=1
-# sync
-# exit
+% printf "\x01" | sudo dd of=/dev/diskXs1 bs=1 seek=42 count=1
+% sudo sync
 % diskutil eject /dev/diskX
 
 Unplug Arch USB drive
@@ -189,7 +185,7 @@ After reboot, a new WARNING will appear saying "No bootable device is detected."
 
 Plug Arch USB drive to the target PC
 Press Ctrl-Alt-Del, F12, Arch USB, at UEFI Shell press Esc key (within 5 seconds) to skip "startup.nsh" (which will otherwise load Arch systemd-boot)
-At UEFI Shell prompt, we can simply type "bios_settings". UEFI Shell is case-insensitive, so we can type "bios_settings" instead of "BIOS_settings"
+At UEFI Shell prompt, we can simply type "bios_settings". UEFI Shell is case-insensitive when matching filenames, so we can type "bios_settings" instead of "BIOS_settings"
 Also we can omit typing the script extension ".nsh"
 
 Shell> bios_settings
@@ -263,11 +259,13 @@ Type Cmd+Shift+T to quickly enter Terminal
 
 Cmd+Q to quit Terminal
 
-Install macOS Monterey to Macintosh HD.
+Install macOS Monterey to "Macintosh HD"
 
 There will be multiple reboots in the middle.
-Reboot -> "macOS Installer" -> Reboot -> "macOS Installer" -> Reboot -> "Macintosh HD"
-When you see "Macintosh HD" inside OpenCore Boot Menu, select again "Install macOS Monterey (external)" and boot from it
+1st reboot -> "macOS Installer"
+2nd reboot -> "macOS Installer"
+3rd reboot -> "Macintosh HD"
+When you see "Macintosh HD" inside OpenCore Picker, select again "Install macOS Monterey (external)" and boot from it
 
 Type Cmd+Shift+T to quickly enter Terminal
 
@@ -370,7 +368,7 @@ Cmd+N to open a new Terminal window
 
 Make sure Ethernet cable is connected for this following command, then disconnect it
 
-# printf '\33c\e[3J' && curl -s --retry 5 https://raw.githubusercontent.com/leon9078/Z97X-SLI_Monterey/refs/heads/master/Instructions.txt | tail -n 191
+# printf '\33c\e[3J' && curl -s --retry 5 https://raw.githubusercontent.com/leon9078/Z97X-SLI_Monterey/refs/heads/master/Instructions.txt | tail -n 189
 
 Let's first handle "Pro" and "Novel" profiles, which already have "ShowWindowSettingsNameInTitle" set, we just need to set it as true!
 
