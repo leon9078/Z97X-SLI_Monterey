@@ -1,4 +1,3 @@
-
 In UEFI mode, the message is: "Press <DEL> or <F2> to enter setup."
 In Legacy mode, the message (JPEG/BMP) is: "DEL : BIOS SETUP \ Q-FLASH    F9 : SYSTEM INFORMATION    F12 : BOOT MENU    END : Q-FLASH"
 
