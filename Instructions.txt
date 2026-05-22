@@ -368,7 +368,7 @@ Cmd+N to open a new Terminal window
 
 Make sure Ethernet cable is connected for this following command, then disconnect it
 
-# printf '\33c\e[3J' && curl -s --retry 5 https://raw.githubusercontent.com/leon9078/Z97X-SLI_Monterey/refs/heads/master/Instructions.txt | tail -n 189
+# printf '\33c\e[3J' && curl -s --retry 5 https://raw.githubusercontent.com/leon9078/Z97X-SLI_Monterey/refs/heads/master/Instructions.txt | tail -n 189 | head -n 179
 
 Let's first handle "Pro" and "Novel" profiles, which already have "ShowWindowSettingsNameInTitle" set, we just need to set it as true!
 
