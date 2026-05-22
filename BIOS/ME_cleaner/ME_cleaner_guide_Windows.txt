@@ -55,7 +55,7 @@ Grab your copy of the modded BIOS (Z97XSLI.fd), either:
 > copy ..\Z97XSLI.fd .
 
 - remotely:
-> curl -LO https://github.com/leon9078/Z97X-SLI_Monterey/raw/refs/heads/master/BIOS/Z97XSLI.fd
+> curl -O https://raw.githubusercontent.com/leon9078/Z97X-SLI_Monterey/refs/heads/master/BIOS/Z97XSLI.fd
 
 
 
@@ -116,7 +116,7 @@ Back to CMD
 
 Now we want to actually neutralize Intel ME with "me_cleaner" tool!!!
 
-> curl -LJO https://github.com/corna/me_cleaner/archive/refs/heads/master.zip
+> curl -JO https://codeload.github.com/corna/me_cleaner/zip/refs/heads/master
 > tar -xf me_cleaner-master.zip
 > move Z97XSLI.fd me_cleaner-master\
 > start cmd /k cd me_cleaner-master\
