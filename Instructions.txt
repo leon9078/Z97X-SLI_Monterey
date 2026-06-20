@@ -102,8 +102,7 @@ Login, then download my fork of UefiVarTool and latest Arch Linux installer ISO 
 
 % cd ~/Music
 % curl -LO https://github.com/leon9078/UefiVarTool/releases/download/1.0.0/uvt.efi
-% curl -O https://it.mirrors.cicku.me/archlinux/iso/latest/{archlinux-x86_64.iso,sha256sums.txt}
-% shasum -a 256 archlinux-x86_64.iso | grep --color=yes "<paste SHA-256 of archlinux-x86_64.iso>"
+% curl -O https://it.mirrors.cicku.me/archlinux/iso/latest/{archlinux-x86_64.iso,sha256sums.txt} | grep "archlinux-x86_64.iso" | shasum -a 256 -c -
 
 Insert an empty 2+ GB USB flash drive
 
